@@ -6,8 +6,8 @@ import { checkValidToken } from '@/app/middleware/user/auth.middleware'
 
 const router = express.Router()
 
-router.get('/', checkValidToken, profileController.getProfile)
-router.put('/', [
+router.get('/me', checkValidToken, profileController.getProfile)
+router.put('/me', [
     checkValidToken,
     validate(profileRequest.updateProfile)
 ], profileController.updateProfile)

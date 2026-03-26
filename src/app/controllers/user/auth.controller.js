@@ -5,7 +5,11 @@ export async function login(req, res) {
     const validLogin = await authService.checkValidLoginUser(req.body)
 
     if (validLogin) {
-        res.jsonify(authService.authTokenUser(validLogin))
+        res.json({
+            code: 200,
+            message: 'Đăng nhập thành công',
+            data: authService.authTokenUser(validLogin)
+        })
     } else {
         abort(400, 'Tài khoản hoặc mật khẩu không đúng.')
     }
@@ -13,9 +17,10 @@ export async function login(req, res) {
 
 export async function register(req, res) {
     const user = await authService.registerUser(req.body)
-    res.jsonify({
+    res.json({
+        code: 200,
         message: 'Đăng ký tài khoản thành công',
-        user
+        data: user
     })
 }
 

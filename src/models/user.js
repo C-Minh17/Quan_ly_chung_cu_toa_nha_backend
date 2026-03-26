@@ -1,4 +1,4 @@
-import createModel, { STATUS_ACCOUNT } from './base'
+import createModel from './base'
 import bcrypt from 'bcrypt'
 
 const User = createModel(
@@ -12,31 +12,12 @@ const User = createModel(
         email: {
             type: String,
             lowercase: true,
-            required: function() {
-                return !this.phone
-            }
+            unique: true,
+            required: true,
         },
         phone: {
             type: String,
-            required: function() {
-                return !this.email
-            }
-        },
-        gender: {
-            type: String,
             default: ''
-        },
-        dob: {
-            type: Date,
-            default: ''
-        },
-        address: {
-            type: Date,
-            default: ''
-        },
-        avatar: {
-            type: String,
-            default: '',
         },
         password: {
             type: String,
@@ -46,11 +27,50 @@ const User = createModel(
                 return bcrypt.hashSync(value, salt)
             },
         },
-        status: {
+        role: {
             type: String,
-            enum: Object.values(STATUS_ACCOUNT),
+            enum: ['SUPER_ADMIN', 'MANAGER', 'STAFF', 'RESIDENT'],
             required: true,
-            default: STATUS_ACCOUNT.ACTIVE,
+            default: 'RESIDENT',
+        },
+        sub: {
+            type: String,
+            default: '',
+        },
+        ssoId: {
+            type: String,
+            default: '',
+        },
+        email_verified: {
+            type: Boolean,
+            default: false,
+        },
+        realm_access: {
+            roles: {
+                type: [String],
+                default: [],
+            },
+        },
+        preferred_username: {
+            type: String,
+            default: '',
+        },
+        given_name: {
+            type: String,
+            default: '',
+        },
+        family_name: {
+            type: String,
+            default: '',
+        },
+        picture: {
+            type: String,
+            default: '',
+        },
+        is_active: {
+            type: Boolean,
+            required: true,
+            default: true,
         },
         deleted: {
             type: Boolean,
@@ -63,7 +83,10 @@ const User = createModel(
             virtuals: true,
             transform(doc, ret) {
                 // eslint-disable-next-line no-unused-vars
-                const {password, deleted, ...result} = ret
+                const { password, deleted, ...result } = ret
+                const idStr = result._id.toString()
+                result.sub = idStr
+                result.ssoId = idStr
                 return result
             },
         },

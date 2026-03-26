@@ -52,7 +52,7 @@ export const updateProfile = Joi.object({
         .allow('')
         .label('Địa chỉ'),
     
-    avatar: Joi.string()
+    picture: Joi.string()
         .allow('')
         .label('Ảnh đại diện')
-}) 
+})

@@ -30,7 +30,7 @@ const Admin = createModel(
             type: Date,
             default: ''
         },
-        avatar: {
+        picture: {
             type: String,
             default: '',
         },
