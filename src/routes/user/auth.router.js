@@ -1,5 +1,5 @@
-import {Router} from 'express'
-import {asyncHandler} from '@/utils/helpers'
+import { Router } from 'express'
+import { asyncHandler } from '@/utils/helpers'
 import validate from '@/app/middleware/user/validate'
 import * as authMiddleware from '@/app/middleware/user/auth.middleware'
 import * as authRequest from '@/app/requests/user/auth.request'
@@ -25,4 +25,10 @@ authRouter.post(
     asyncHandler(authController.logout)
 )
 
-export default authRouter 
+authRouter.post(
+    '/refresh',
+    asyncHandler(validate(authRequest.refresh)),
+    asyncHandler(authController.refresh)
+)
+
+export default authRouter

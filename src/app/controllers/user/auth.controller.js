@@ -29,3 +29,19 @@ export async function logout(req, res) {
     await authService.blockToken(token)
     res.jsonify('Đăng xuất thành công.')
 }
+
+export async function refresh(req, res) {
+    const {refresh_token, refreshToken} = req.body
+    const token = refresh_token || refreshToken || getToken(req.headers)
+
+    if (!token) {
+        abort(400, 'Token là bắt buộc (truyền qua body hoặc header Authorization).')
+    }
+
+    const data = await authService.refreshAuthTokenUser(token)
+    res.json({
+        ...data,
+        code: 200,
+        message: 'Refresh token thành công'
+    })
+}

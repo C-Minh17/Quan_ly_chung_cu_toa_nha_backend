@@ -55,6 +55,12 @@ assert(!_.isEmpty(SECRET_KEY), assertMsg('SECRET_KEY'))
 export const LOGIN_EXPIRE_IN = process.env.LOGIN_EXPIRE_IN
 assert(!_.isEmpty(LOGIN_EXPIRE_IN), assertMsg('LOGIN_EXPIRE_IN'))
 
+export const ACCESS_TOKEN_EXPIRE = process.env.ACCESS_TOKEN_EXPIRE
+assert(!_.isEmpty(ACCESS_TOKEN_EXPIRE), assertMsg('ACCESS_TOKEN_EXPIRE'))
+
+export const REFRESH_TOKEN_EXPIRE_IN = process.env.REFRESH_TOKEN_EXPIRE_IN
+assert(!_.isEmpty(REFRESH_TOKEN_EXPIRE_IN), assertMsg('REFRESH_TOKEN_EXPIRE_IN'))
+
 export const REQUESTS_LIMIT_PER_MINUTE = parseInt(process.env.REQUESTS_LIMIT_PER_MINUTE, 10) || 1000
 
 export const LINK_STATIC_URL = `${APP_URL_API}/static/`

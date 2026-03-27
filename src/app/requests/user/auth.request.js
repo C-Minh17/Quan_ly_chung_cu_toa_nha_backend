@@ -21,3 +21,9 @@ export const register = Joi.object({
     role: Joi.string().valid('SUPER_ADMIN', 'MANAGER', 'STAFF', 'RESIDENT').default('RESIDENT').label('Quyền hạn'),
     password: Joi.string().required().label('Mật khẩu')
 })
+
+export const refresh = Joi.object({
+    grant_type: Joi.string().optional().label('Loại grant'),
+    refreshToken: Joi.string().optional().label('Refresh token'),
+    refresh_token: Joi.string().optional().label('Refresh token'),
+}).unknown(true)

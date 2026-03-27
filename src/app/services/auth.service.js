@@ -1,7 +1,7 @@
 import moment from 'moment'
 import jwt from 'jsonwebtoken'
-import { cache, LOGIN_EXPIRE_IN, TOKEN_TYPE } from '@/configs'
-import { abort, generateToken } from '@/utils/helpers'
+import { cache, TOKEN_TYPE, ACCESS_TOKEN_EXPIRE, REFRESH_TOKEN_EXPIRE_IN } from '@/configs'
+import { abort, generateToken, verifyToken } from '@/utils/helpers'
 import { Admin, Permission, STATUS_ACCOUNT, User } from '@/models'
 
 export const tokenBlocklist = cache.create('token-block-list')
@@ -23,7 +23,7 @@ export async function checkValidLoginAdmin({ phone, password }) {
 }
 
 export function authToken(admin) {
-    const accessToken = generateToken({ adminId: admin._id }, TOKEN_TYPE.ADMIN_AUTHORIZATION, LOGIN_EXPIRE_IN)
+    const accessToken = generateToken({ adminId: admin._id }, TOKEN_TYPE.ADMIN_AUTHORIZATION, ACCESS_TOKEN_EXPIRE)
     const decode = jwt.decode(accessToken)
     const expireIn = decode.exp - decode.iat
     return {
@@ -67,14 +67,18 @@ export async function checkValidLoginUser({ username, password }) {
 }
 
 export function authTokenUser(user) {
-    const accessToken = generateToken({ userId: user._id }, TOKEN_TYPE.USER_AUTHORIZATION, LOGIN_EXPIRE_IN)
+    const accessToken = generateToken({ userId: user._id }, TOKEN_TYPE.USER_AUTHORIZATION, ACCESS_TOKEN_EXPIRE)
     // Sử dụng chung 1 logic tạo token hoặc tự sinh token riêng
-    const refreshToken = generateToken({ userId: user._id }, TOKEN_TYPE.USER_AUTHORIZATION, '30d')
+    const refreshToken = generateToken({ userId: user._id }, TOKEN_TYPE.USER_AUTHORIZATION, REFRESH_TOKEN_EXPIRE_IN)
+
+    const decode = jwt.decode(accessToken)
+    const expireIn = decode.exp - decode.iat
 
     return {
         accessToken: accessToken,
         access_token: accessToken,
-        refresh_token: refreshToken
+        refresh_token: refreshToken,
+        expires_in: expireIn
     }
 }
 
@@ -99,4 +103,18 @@ export async function registerUser(userData) {
     const user = await User.create({ ...userData, name })
 
     return user
+}
+
+export async function refreshAuthTokenUser(refreshToken) {
+    try {
+        const { userId } = verifyToken(refreshToken, TOKEN_TYPE.USER_AUTHORIZATION)
+        const user = await User.findOne({ _id: userId, deleted: false })
+        if (!user || !user.is_active) {
+            abort(401, 'Tài khoản không tồn tại hoặc đã bị khóa.')
+        }
+
+        return authTokenUser(user)
+    } catch (error) {
+        abort(401, 'Refresh token không hợp lệ hoặc đã hết hạn.')
+    }
 }
