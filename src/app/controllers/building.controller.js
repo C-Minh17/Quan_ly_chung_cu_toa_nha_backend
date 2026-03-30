@@ -34,6 +34,24 @@ export const createBuildingController = async (req, res) => {
         })
     }
 }
+
+export const getByIdBuildingController = async (req, res) => {
+    try {
+        const data = await BuildingService.getByIdBuilding(req.params.id)
+        return res.status(200).json({
+            success: true,
+            message: 'Get building successfully',
+            data: data
+        })
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: 'Get building failed',
+            error: err.message
+        })
+    }
+}
+
 export const updateBuildingController = async (req, res) => {
     try {
         const data = req.body

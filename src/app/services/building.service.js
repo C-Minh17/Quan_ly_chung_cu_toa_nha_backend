@@ -17,6 +17,14 @@ export const createBuilding = async (data) => {
     return res
 }
 
+export const getByIdBuilding = async (id) => {
+    const res = await Building.findById(id)
+    if (!res) {
+        abort(404, 'Building not found')
+    }
+    return res
+}
+
 export const updateBuilding = async (id, data) => {
     const res = await Building.findByIdAndUpdate(id, data, { new: true })
     if (!res) {
