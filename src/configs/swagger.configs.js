@@ -426,3 +426,65 @@ export const swaggerUserPaths = {
 //         }
 //     }
 // }
+
+export const swaggerBuildingPaths = {
+    '/buildings': {
+        get: {
+            summary: 'Lấy danh sách tòa nhà',
+            tags: ['Buildings'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            responses: {
+                200: {
+                    description: 'Lấy danh sách tòa nhà thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                        name: { type: 'string', example: 'Tòa nhà A' },
+                                        address: { type: 'string', example: '123 Đường B' },
+                                        total_floors: { type: 'integer', example: 10 },
+                                        description: { type: 'string', example: 'Mô tả chi tiết tòa nhà' },
+                                        created_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        post: {
+            summary: 'Thêm mới tòa nhà',
+            tags: ['Buildings'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                name: { type: 'string', example: 'Tòa nhà A' },
+                                address: { type: 'string', example: '123 Đường B' },
+                                total_floors: { type: 'integer', example: 10 },
+                                description: { type: 'string', example: 'Mô tả chi tiết tòa nhà' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Thêm mới tòa nhà thành công' },
+                400: { description: 'Dữ liệu không hợp lệ' }
+            }
+        }
+    }
+}
