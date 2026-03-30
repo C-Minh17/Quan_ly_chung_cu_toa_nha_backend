@@ -15,6 +15,7 @@ import notFoundHandler from './handlers/not-found.handler'
 import errorHandler from './handlers/error.handler'
 
 import route from './routes'
+import { setupSwagger } from './configs/swagger'
 
 function createApp() {
     // Init app
@@ -41,6 +42,8 @@ function createApp() {
     app.use(multer({storage: multer.memoryStorage()}).any())
     app.use(formDataHandler)
     app.use(initLocalsHandler)
+
+    setupSwagger(app)
 
     route(app)
 
