@@ -486,5 +486,65 @@ export const swaggerBuildingPaths = {
                 400: { description: 'Dữ liệu không hợp lệ' }
             }
         }
+    },
+    '/buildings/{id}': {
+        put: {
+            summary: 'Cập nhật tòa nhà',
+            tags: ['Buildings'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    description: 'ID của tòa nhà',
+                    schema: { type: 'string' }
+                }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                name: { type: 'string', example: 'Tòa nhà A (Cập nhật)' },
+                                address: { type: 'string', example: '123 Đường B' },
+                                total_floors: { type: 'integer', example: 12 },
+                                description: { type: 'string', example: 'Mô tả chi tiết tòa nhà sau cập nhật' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Cập nhật tòa nhà thành công' },
+                400: { description: 'Dữ liệu không hợp lệ' },
+                404: { description: 'Không tìm thấy tòa nhà' }
+            }
+        },
+        delete: {
+            summary: 'Xóa tòa nhà',
+            tags: ['Buildings'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    description: 'ID của tòa nhà',
+                    schema: { type: 'string' }
+                }
+            ],
+            responses: {
+                200: { description: 'Xóa tòa nhà thành công' },
+                400: { description: 'ID không hợp lệ' },
+                404: { description: 'Không tìm thấy tòa nhà' }
+            }
+        }
     }
 }

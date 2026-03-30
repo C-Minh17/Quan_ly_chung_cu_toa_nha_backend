@@ -8,7 +8,9 @@ const buildingSchema = createModel(
         address: { type: String, required: true },
         total_floors: { type: Number, required: true },
         description: { type: String, required: true },
-        created_at: { type: Date, required: true },
+        created_at: {
+            type: Date, required: true, default: Date.now
+        },
     }
 )
 
