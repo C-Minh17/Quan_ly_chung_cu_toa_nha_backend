@@ -906,5 +906,45 @@ export const swaggerApartmentPaths = {
                 404: { description: 'Không tìm thấy căn hộ' }
             }
         }
+    },
+    '/apartments/{id}/status': {
+        patch: {
+            summary: 'Cập nhật trạng thái căn hộ',
+            tags: ['Apartments'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    description: 'ID của căn hộ',
+                    schema: { type: 'string' }
+                }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                status: { 
+                                    type: 'string', 
+                                    enum: ['occupied', 'vacant', 'maintenance'],
+                                    example: 'occupied' 
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Cập nhật trạng thái căn hộ thành công' },
+                400: { description: 'Dữ liệu không hợp lệ' },
+                404: { description: 'Không tìm thấy căn hộ' }
+            }
+        }
     }
 }

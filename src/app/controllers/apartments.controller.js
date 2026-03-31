@@ -86,3 +86,21 @@ export const deleteApartmentController = async (req, res) => {
         })
     }
 }
+
+export const updateStatusApartmentController = async (req, res) => {
+    try {
+        const { status } = req.body
+        const updateData = await apartmentService.updateStatusApartment(req.params.id, status)
+        return res.status(200).json({
+            success: true,
+            message: 'Update apartment status successfully',
+            data: updateData
+        })
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: 'Update apartment status failed',
+            error: err.message
+        })
+    }
+}

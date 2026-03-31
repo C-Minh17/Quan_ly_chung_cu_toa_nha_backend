@@ -21,3 +21,7 @@ export const updateItem = Joi.object({
     status: Joi.string().trim().label('Trạng thái'),
     price: Joi.number().min(0).label('Giá'),
 })
+
+export const updateStatusItem = Joi.object({
+    status: Joi.string().trim().valid('occupied', 'vacant', 'maintenance').required().label('Trạng thái'),
+})

@@ -49,6 +49,14 @@ export const updateApartment = async (id, data) => {
     return res
 }
 
+export const updateStatusApartment = async (id, status) => {
+    const res = await Apartment.findByIdAndUpdate(id, { status }, { new: true })
+    if (!res) {
+        abort(404, 'Apartment not found')
+    }
+    return res
+}
+
 export const deleteApartment = async (id) => {
     const res = await Apartment.findByIdAndDelete(id)
     if (!res) {
