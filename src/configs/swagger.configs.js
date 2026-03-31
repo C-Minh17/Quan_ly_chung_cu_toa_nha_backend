@@ -999,64 +999,65 @@ export const swaggerFloorPaths = {
                 400: { description: 'ID không hợp lệ' },
                 404: { description: 'Không tìm thấy tầng' }
             }
-        },
-        '/floors/{id}/layout': {
-            get: {
-                summary: 'Lấy sơ đồ tầng - grid căn hộ theo trạng thái',
-                tags: ['Floors'],
-                security: [
-                    { bearerAuth: [] }
-                ],
-                parameters: [
-                    {
-                        name: 'id',
-                        in: 'path',
-                        required: true,
-                        description: 'ID của tầng',
-                        schema: { type: 'string' }
-                    }
-                ],
-                responses: {
-                    200: {
-                        description: 'Lấy sơ đồ tầng thành công',
-                        content: {
-                            'application/json': {
-                                schema: {
-                                    type: 'object',
-                                    properties: {
-                                        floor: {
+        }
+    },
+    '/floors/{id}/layout': {
+        get: {
+            summary: 'Lấy sơ đồ tầng - grid căn hộ theo trạng thái',
+            tags: ['Floors'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    description: 'ID của tầng',
+                    schema: { type: 'string' }
+                }
+            ],
+            responses: {
+                200: {
+                    description: 'Lấy sơ đồ tầng thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    floor: {
+                                        type: 'object',
+                                        properties: {
+                                            _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1l' },
+                                            name: { type: 'string', example: 'Tầng 1' },
+                                            floor_number: { type: 'integer', example: 1 }
+                                        }
+                                    },
+                                    apartments: {
+                                        type: 'array',
+                                        items: {
                                             type: 'object',
                                             properties: {
-                                                _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1l' },
-                                                name: { type: 'string', example: 'Tầng 1' },
-                                                floor_number: { type: 'integer', example: 1 }
-                                            }
-                                        },
-                                        apartments: {
-                                            type: 'array',
-                                            items: {
-                                                type: 'object',
-                                                properties: {
-                                                    _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1m' },
-                                                    apartment_code: { type: 'string', example: 'A-0101' },
-                                                    status: { type: 'string', example: 'vacant' },
-                                                    area: { type: 'number', example: 75.5 },
-                                                    num_bedrooms: { type: 'integer', example: 2 },
-                                                    num_bathrooms: { type: 'integer', example: 2 }
-                                                }
+                                                _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1m' },
+                                                apartment_code: { type: 'string', example: 'A-0101' },
+                                                status: { type: 'string', example: 'vacant' },
+                                                area: { type: 'number', example: 75.5 },
+                                                num_bedrooms: { type: 'integer', example: 2 },
+                                                num_bathrooms: { type: 'integer', example: 2 }
                                             }
                                         }
                                     }
                                 }
                             }
                         }
-                    },
-                    404: { description: 'Không tìm thấy tầng' }
-                }
+                    }
+                },
+                404: { description: 'Không tìm thấy tầng' }
             }
         }
     }
 }
+
 
 export const swaggerApartmentPaths = {
     '/apartments': {
