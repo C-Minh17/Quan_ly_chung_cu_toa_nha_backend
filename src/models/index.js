@@ -9,4 +9,4 @@ export { default as UserRole } from './user-role'
 export { default as UserPermissionGroup } from './user-permission-group'
 export { default as UserPermission } from './user-permission'
 export { default as Building } from './buildings'
-
+export { default as Floor } from './floor'

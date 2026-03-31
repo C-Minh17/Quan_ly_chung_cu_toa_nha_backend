@@ -1,8 +1,8 @@
 import createModel from './base'
 
 const buildingSchema = createModel(
-    'buildings',
     'Building',
+    'buildings',
     {
         name: { type: String, required: true },
         address: { type: String, required: true },
