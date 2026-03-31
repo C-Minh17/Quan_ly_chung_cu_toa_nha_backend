@@ -51,3 +51,38 @@ export const getByIdFloorController = async (req, res) => {
         })
     }
 }
+
+export const updateFloorController = async (req, res) => {
+    try {
+        const data = req.body
+        const updateData = await floorService.updateFloor(req.params.id, data)
+        return res.status(200).json({
+            success: true,
+            message: 'Update floor successfully',
+            data: updateData
+        })
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: 'Update floor failed',
+            error: err.message
+        })
+    }
+}
+
+export const deleteFloorController = async (req, res) => {
+    try {
+        const data = await floorService.deleteFloor(req.params.id)
+        return res.status(200).json({
+            success: true,
+            message: 'Delete floor successfully',
+            data: data
+        })
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: 'Delete floor failed',
+            error: err.message
+        })
+    }
+}

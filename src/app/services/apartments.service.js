@@ -43,9 +43,13 @@ export const getByIdApartment = async (id) => {
 
 export const updateApartment = async (id, data) => {
     const res = await Apartment.findByIdAndUpdate(id, data, { new: true })
+        .populate('floor_id')
     if (!res) {
         abort(404, 'Update apartment failed')
     }
+
+    res.floor = res.floor_id
+    delete res.floor_id
     return res
 }
 

@@ -42,3 +42,24 @@ export const getByIdFloor = async (id) => {
 
     return res
 }
+
+export const updateFloor = async (id, data) => {
+    const res = await Floor.findByIdAndUpdate(id, data, { new: true })
+        .populate('building_id')
+    if (!res) {
+        abort(404, 'Floor not found')
+    }
+
+    res.building = res.building_id
+    delete res.building_id
+
+    return res
+}
+
+export const deleteFloor = async (id) => {
+    const res = await Floor.findByIdAndDelete(id)
+    if (!res) {
+        abort(404, 'Floor not found')
+    }
+    return res
+}

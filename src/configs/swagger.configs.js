@@ -930,10 +930,10 @@ export const swaggerApartmentPaths = {
                         schema: {
                             type: 'object',
                             properties: {
-                                status: { 
-                                    type: 'string', 
+                                status: {
+                                    type: 'string',
                                     enum: ['occupied', 'vacant', 'maintenance'],
-                                    example: 'occupied' 
+                                    example: 'occupied'
                                 }
                             }
                         }
