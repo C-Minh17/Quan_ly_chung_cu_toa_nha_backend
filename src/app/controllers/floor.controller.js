@@ -86,3 +86,20 @@ export const deleteFloorController = async (req, res) => {
         })
     }
 }
+
+export const getLayoutFloorController = async (req, res) => {
+    try {
+        const data = await floorService.getLayoutFloor(req.params.id)
+        return res.status(200).json({
+            success: true,
+            message: 'Get floor layout successfully',
+            data: data
+        })
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: 'Get floor layout failed',
+            error: err.message
+        })
+    }
+}

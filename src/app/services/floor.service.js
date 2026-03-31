@@ -1,4 +1,4 @@
-import { Floor, Building } from '@/models'
+import { Floor, Building, Apartment } from '@/models'
 import { abort } from '@/utils/helpers'
 
 export const getFloor = async () => {
@@ -62,4 +62,21 @@ export const deleteFloor = async (id) => {
         abort(404, 'Floor not found')
     }
     return res
+}
+
+export const getLayoutFloor = async (id) => {
+    const floor = await Floor.findById(id).lean()
+    if (!floor) {
+        abort(404, 'Floor not found')
+    }
+
+    const apartments = await Apartment.find({ floor_id: id })
+        .select('apartment_code status area num_bedrooms num_bathrooms')
+        .sort({ apartment_code: 1 })
+        .lean()
+
+    return {
+        floor,
+        apartments
+    }
 }
