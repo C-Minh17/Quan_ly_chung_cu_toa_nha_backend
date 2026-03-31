@@ -3,9 +3,9 @@ import path from 'path'
 import serveFavicon from 'serve-favicon'
 import helmet from 'helmet'
 import multer from 'multer'
-import {APP_DEBUG, NODE_ENV, PUBLIC_DIR, VIEW_DIR} from './configs'
+import { APP_DEBUG, NODE_ENV, PUBLIC_DIR, VIEW_DIR } from './configs'
 
-import {jsonify, sendMail} from './handlers/response.handler'
+import { jsonify, sendMail } from './handlers/response.handler'
 import corsHandler from './handlers/cors.handler'
 import httpRequestHandler from './handlers/http-request.handler'
 import limiter from './handlers/rate-limit.handler'
@@ -36,10 +36,13 @@ function createApp() {
     app.use(serveFavicon(path.join(PUBLIC_DIR, 'favicon.ico')))
     app.use('/static', express.static(PUBLIC_DIR))
     app.use(limiter)
-    app.use(helmet())
+    app.use(helmet({
+        hsts: false,
+        contentSecurityPolicy: false,
+    }))
     app.use(express.json())
-    app.use(express.urlencoded({extended: true}))
-    app.use(multer({storage: multer.memoryStorage()}).any())
+    app.use(express.urlencoded({ extended: true }))
+    app.use(multer({ storage: multer.memoryStorage() }).any())
     app.use(formDataHandler)
     app.use(initLocalsHandler)
 

@@ -33,16 +33,30 @@ const swaggerDocument = {
 }
 
 export const setupSwagger = (app) => {
-    // Expose JSON config
-    app.get('/api-docs/swagger.json', (req, res) => res.json(swaggerDocument))
+    // Expose JSON config — tự detect host từ request
+    app.get('/docs/swagger.json', (req, res) => {
+        const protocol = req.protocol  // http hoặc https
+        const host = req.get('host')   // 192.168.7.100:3456
+
+        const dynamicDoc = {
+            ...swaggerDocument,
+            servers: [
+                {
+                    url: `${protocol}://${host}`,
+                    description: 'Current Server',
+                }
+            ]
+        }
+        res.json(dynamicDoc)
+    })
 
     const options = {
         explorer: true,
         customCss: '.swagger-ui .topbar { display: none }',
         swaggerOptions: {
-            url: '/api-docs/swagger.json'
+            url: '/docs/swagger.json'
         }
     }
 
-    app.use('/api-docs', swaggerUi.serveFiles(swaggerDocument, options), swaggerUi.setup(swaggerDocument, options))
+    app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options))
 }
