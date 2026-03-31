@@ -710,3 +710,201 @@ export const swaggerFloorPaths = {
         }
     }
 }
+
+export const swaggerApartmentPaths = {
+    '/apartments': {
+        get: {
+            summary: 'Lấy danh sách căn hộ',
+            tags: ['Apartments'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            responses: {
+                200: {
+                    description: 'Lấy danh sách căn hộ thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1m' },
+                                        apartment_code: { type: 'string', example: 'A-0101' },
+                                        area: { type: 'number', example: 75.5 },
+                                        num_bedrooms: { type: 'integer', example: 2 },
+                                        num_bathrooms: { type: 'integer', example: 2 },
+                                        apartment_type: { type: 'string', example: 'Tiêu chuẩn' },
+                                        status: { type: 'string', example: 'Trống' },
+                                        price: { type: 'number', example: 15000000 },
+                                        floor: {
+                                            type: 'object',
+                                            properties: {
+                                                _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1l' },
+                                                name: { type: 'string', example: 'Tầng 1' },
+                                                floor_number: { type: 'integer', example: 1 },
+                                                building_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                                description: { type: 'string', example: 'Mô tả chi tiết tầng 1' },
+                                                created_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' },
+                                                updated_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' }
+                                            }
+                                        },
+                                        created_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        post: {
+            summary: 'Thêm mới căn hộ',
+            tags: ['Apartments'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                apartment_code: { type: 'string', example: 'A-0101' },
+                                floor_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1l' },
+                                area: { type: 'number', example: 75.5 },
+                                num_bedrooms: { type: 'integer', example: 2 },
+                                num_bathrooms: { type: 'integer', example: 2 },
+                                apartment_type: { type: 'string', example: 'Tiêu chuẩn' },
+                                status: { type: 'string', example: 'Trống' },
+                                price: { type: 'number', example: 15000000 }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Thêm mới căn hộ thành công' },
+                400: { description: 'Dữ liệu không hợp lệ' }
+            }
+        }
+    },
+    '/apartments/{id}': {
+        get: {
+            summary: 'Lấy thông tin chi tiết căn hộ',
+            tags: ['Apartments'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    description: 'ID của căn hộ',
+                    schema: { type: 'string' }
+                }
+            ],
+            responses: {
+                200: {
+                    description: 'Lấy thông tin căn hộ thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1m' },
+                                    apartment_code: { type: 'string', example: 'A-0101' },
+                                    area: { type: 'number', example: 75.5 },
+                                    num_bedrooms: { type: 'integer', example: 2 },
+                                    num_bathrooms: { type: 'integer', example: 2 },
+                                    apartment_type: { type: 'string', example: 'Tiêu chuẩn' },
+                                    status: { type: 'string', example: 'Trống' },
+                                    price: { type: 'number', example: 15000000 },
+                                    floor: {
+                                        type: 'object',
+                                        properties: {
+                                            _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1l' },
+                                            name: { type: 'string', example: 'Tầng 1' },
+                                            floor_number: { type: 'integer', example: 1 },
+                                            building_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                            description: { type: 'string', example: 'Mô tả chi tiết tầng 1' },
+                                            created_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' },
+                                            updated_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' }
+                                        }
+                                    },
+                                    created_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' }
+                                }
+                            }
+                        }
+                    }
+                },
+                400: { description: 'ID không hợp lệ' },
+                404: { description: 'Không tìm thấy căn hộ' }
+            }
+        },
+        put: {
+            summary: 'Cập nhật căn hộ',
+            tags: ['Apartments'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    description: 'ID của căn hộ',
+                    schema: { type: 'string' }
+                }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                apartment_code: { type: 'string', example: 'A-0101' },
+                                floor_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1l' },
+                                area: { type: 'number', example: 75.5 },
+                                num_bedrooms: { type: 'integer', example: 2 },
+                                num_bathrooms: { type: 'integer', example: 2 },
+                                apartment_type: { type: 'string', example: 'Tiêu chuẩn' },
+                                status: { type: 'string', example: 'Đang bảo trì' },
+                                price: { type: 'number', example: 15000000 }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Cập nhật căn hộ thành công' },
+                400: { description: 'Dữ liệu không hợp lệ' },
+                404: { description: 'Không tìm thấy căn hộ' }
+            }
+        },
+        delete: {
+            summary: 'Xóa căn hộ',
+            tags: ['Apartments'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    description: 'ID của căn hộ',
+                    schema: { type: 'string' }
+                }
+            ],
+            responses: {
+                200: { description: 'Xóa căn hộ thành công' },
+                400: { description: 'ID không hợp lệ' },
+                404: { description: 'Không tìm thấy căn hộ' }
+            }
+        }
+    }
+}
