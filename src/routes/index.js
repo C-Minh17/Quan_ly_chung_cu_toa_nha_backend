@@ -8,9 +8,9 @@ import apartmentRouter from './apartments.router'
 
 function route(app) {
     app.use('/admin', admin)
+    app.use('/user', userProfileRouter)
     app.use('/user', user)
     app.use('/auth', userAuthRouter)
-    app.use('/user', userProfileRouter)
     app.use('/buildings', buildingRouter)
     app.use('/floors', floorRouter)
     app.use('/apartments', apartmentRouter)

@@ -36,7 +36,10 @@ function createApp() {
     app.use(serveFavicon(path.join(PUBLIC_DIR, 'favicon.ico')))
     app.use('/static', express.static(PUBLIC_DIR))
     app.use(limiter)
-    app.use(helmet())
+    app.use(helmet({
+        hsts: false,
+        contentSecurityPolicy: false,
+    }))
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
     app.use(multer({ storage: multer.memoryStorage() }).any())

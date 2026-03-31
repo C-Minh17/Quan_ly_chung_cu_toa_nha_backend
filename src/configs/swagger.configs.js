@@ -150,6 +150,237 @@ export const swaggerUserPaths = {
                 200: { description: 'Cập nhật thông tin thành công' }
             }
         }
+    },
+    '/user': {
+        get: {
+            summary: 'Lấy danh sách tất cả người dùng',
+            tags: ['User'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            responses: {
+                200: {
+                    description: 'Lấy danh sách người dùng thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        _id: { type: 'string', example: '69c63db01d715244de4e7f84' },
+                                        name: { type: 'string', example: 'Nhân Viên Nguyễn' },
+                                        email: { type: 'string', example: 'nhanvien@gmail.com' },
+                                        phone: { type: 'string', example: '0987654321' },
+                                        role: { type: 'string', example: 'STAFF' },
+                                        sub: { type: 'string', example: '69c63db01d715244de4e7f84' },
+                                        ssoId: { type: 'string', example: '69c63db01d715244de4e7f84' },
+                                        email_verified: { type: 'boolean', example: false },
+                                        realm_access: {
+                                            type: 'object',
+                                            properties: {
+                                                roles: {
+                                                    type: 'array',
+                                                    items: { type: 'string' },
+                                                    example: ['STAFF']
+                                                }
+                                            }
+                                        },
+                                        preferred_username: { type: 'string', example: 'nhanvien' },
+                                        given_name: { type: 'string', example: 'Nhân Viên' },
+                                        family_name: { type: 'string', example: 'Nguyễn' },
+                                        picture: { type: 'string', example: '' },
+                                        is_active: { type: 'boolean', example: true },
+                                        created_at: { type: 'string', format: 'date-time', example: '2026-03-27T08:20:00.186Z' },
+                                        updated_at: { type: 'string', format: 'date-time', example: '2026-03-27T08:20:00.186Z' }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        post: {
+            summary: 'Tạo người dùng mới',
+            tags: ['User'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                given_name: { type: 'string', example: 'Nhân' },
+                                family_name: { type: 'string', example: 'Viên' },
+                                preferred_username: { type: 'string', example: 'nhanvien' },
+                                email: { type: 'string', example: 'nhanvien@gmail.com' },
+                                phone: { type: 'string', example: '0987654321' },
+                                role: { type: 'string', example: 'STAFF' },
+                                password: { type: 'string', example: 'Password@123' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Tạo người dùng thành công' }
+            }
+        }
+    },
+    '/user/{id}': {
+        get: {
+            summary: 'Lấy thông tin người dùng theo ID',
+            tags: ['User'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: {
+                200: {
+                    description: 'Lấy thông tin người dùng thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    _id: { type: 'string', example: '69c63db01d715244de4e7f84' },
+                                    name: { type: 'string', example: 'Nhân Viên Nguyễn' },
+                                    email: { type: 'string', example: 'nhanvien@gmail.com' },
+                                    phone: { type: 'string', example: '0987654321' },
+                                    role: { type: 'string', example: 'STAFF' },
+                                    sub: { type: 'string', example: '69c63db01d715244de4e7f84' },
+                                    ssoId: { type: 'string', example: '69c63db01d715244de4e7f84' },
+                                    email_verified: { type: 'boolean', example: false },
+                                    realm_access: {
+                                        type: 'object',
+                                        properties: {
+                                            roles: {
+                                                type: 'array',
+                                                items: { type: 'string' },
+                                                example: ['STAFF']
+                                            }
+                                        }
+                                    },
+                                    preferred_username: { type: 'string', example: 'nhanvien' },
+                                    given_name: { type: 'string', example: 'Nhân Viên' },
+                                    family_name: { type: 'string', example: 'Nguyễn' },
+                                    picture: { type: 'string', example: '' },
+                                    is_active: { type: 'boolean', example: true },
+                                    created_at: { type: 'string', format: 'date-time', example: '2026-03-27T08:20:00.186Z' },
+                                    updated_at: { type: 'string', format: 'date-time', example: '2026-03-27T08:20:00.186Z' }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        put: {
+            summary: 'Cập nhật thông tin người dùng theo ID',
+            tags: ['User'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                name: { type: 'string', example: 'Nhân Viên Nguyễn' },
+                                preferred_username: { type: 'string', example: 'nhanvien' },
+                                email: { type: 'string', example: 'nhanvien@gmail.com' },
+                                phone: { type: 'string', example: '0987654321' },
+                                role: { type: 'string', example: 'STAFF' },
+                                is_active: { type: 'boolean', example: true },
+                                picture: { type: 'string', example: '' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Cập nhật người dùng thành công' }
+            }
+        },
+        delete: {
+            summary: 'Xóa người dùng theo ID',
+            tags: ['User'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: {
+                200: { description: 'Xóa người dùng thành công' }
+            }
+        }
+    },
+    '/user/password': {
+        patch: {
+            summary: 'Đổi mật khẩu người dùng hiện tại',
+            tags: ['User'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                new_password: { type: 'string', example: 'NewPassword@123' },
+                                confirm_password: { type: 'string', example: 'NewPassword@123' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Đổi mật khẩu thành công' }
+            }
+        }
+    },
+    '/user/{id}/password': {
+        patch: {
+            summary: 'Đổi mật khẩu cho user khác theo ID',
+            tags: ['User'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                new_password: { type: 'string', example: 'NewPassword@123' },
+                                confirm_password: { type: 'string', example: 'NewPassword@123' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Đổi mật khẩu thành công' }
+            }
+        }
     }
 }
 
