@@ -486,5 +486,227 @@ export const swaggerBuildingPaths = {
                 400: { description: 'Dữ liệu không hợp lệ' }
             }
         }
+    },
+    '/buildings/{id}': {
+        get: {
+            summary: 'Lấy thông tin chi tiết tòa nhà',
+            tags: ['Buildings'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    description: 'ID của tòa nhà',
+                    schema: { type: 'string' }
+                }
+            ],
+            responses: {
+                200: {
+                    description: 'Lấy thông tin tòa nhà thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                    name: { type: 'string', example: 'Tòa nhà A' },
+                                    address: { type: 'string', example: '123 Đường B' },
+                                    total_floors: { type: 'integer', example: 10 },
+                                    description: { type: 'string', example: 'Mô tả chi tiết tòa nhà' },
+                                    created_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' }
+                                }
+                            }
+                        }
+                    }
+                },
+                400: { description: 'ID không hợp lệ' },
+                404: { description: 'Không tìm thấy tòa nhà' }
+            }
+        },
+        put: {
+            summary: 'Cập nhật tòa nhà',
+            tags: ['Buildings'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    description: 'ID của tòa nhà',
+                    schema: { type: 'string' }
+                }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                name: { type: 'string', example: 'Tòa nhà A (Cập nhật)' },
+                                address: { type: 'string', example: '123 Đường B' },
+                                total_floors: { type: 'integer', example: 12 },
+                                description: { type: 'string', example: 'Mô tả chi tiết tòa nhà sau cập nhật' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Cập nhật tòa nhà thành công' },
+                400: { description: 'Dữ liệu không hợp lệ' },
+                404: { description: 'Không tìm thấy tòa nhà' }
+            }
+        },
+        delete: {
+            summary: 'Xóa tòa nhà',
+            tags: ['Buildings'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    description: 'ID của tòa nhà',
+                    schema: { type: 'string' }
+                }
+            ],
+            responses: {
+                200: { description: 'Xóa tòa nhà thành công' },
+                400: { description: 'ID không hợp lệ' },
+                404: { description: 'Không tìm thấy tòa nhà' }
+            }
+        }
+    }
+}
+
+export const swaggerFloorPaths = {
+    '/floors': {
+        get: {
+            summary: 'Lấy danh sách tầng',
+            tags: ['Floors'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            responses: {
+                200: {
+                    description: 'Lấy danh sách tầng thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1l' },
+                                    name: { type: 'string', example: 'Tầng 1' },
+                                    floor_number: { type: 'integer', example: 1 },
+                                    building: {
+                                        type: 'object',
+                                        properties: {
+                                            _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                            name: { type: 'string', example: 'Tòa nhà A' },
+                                            address: { type: 'string', example: '123 Đường B' },
+                                            total_floors: { type: 'integer', example: 10 },
+                                            description: { type: 'string', example: 'Mô tả chi tiết tòa nhà' },
+                                            created_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' },
+                                            updated_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' }
+                                        }
+                                    },
+                                    description: { type: 'string', example: 'Mô tả chi tiết tầng 1' },
+                                    created_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' },
+                                    updated_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' }
+                                }
+                            }
+                        }
+                    }
+                },
+                404: { description: 'Không tìm thấy tầng' }
+            }
+        },
+        post: {
+            summary: 'Thêm mới tầng',
+            tags: ['Floors'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                name: { type: 'string', example: 'Tầng 1' },
+                                floor_number: { type: 'integer', example: 1 },
+                                building_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                description: { type: 'string', example: 'Mô tả chi tiết tầng 1' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Thêm mới tầng thành công' },
+                400: { description: 'Dữ liệu không hợp lệ' }
+            }
+        }
+    },
+    '/floors/{id}': {
+        get: {
+            summary: 'Lấy thông tin chi tiết tầng',
+            tags: ['Floors'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    description: 'ID của tầng',
+                    schema: { type: 'string' }
+                }
+            ],
+            responses: {
+                200: {
+                    description: 'Lấy thông tin tầng thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1l' },
+                                    name: { type: 'string', example: 'Tầng 1' },
+                                    floor_number: { type: 'integer', example: 1 },
+                                    building: {
+                                        type: 'object',
+                                        properties: {
+                                            _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                            name: { type: 'string', example: 'Tòa nhà A' },
+                                            address: { type: 'string', example: '123 Đường B' },
+                                            total_floors: { type: 'integer', example: 10 },
+                                            description: { type: 'string', example: 'Mô tả chi tiết tòa nhà' },
+                                            created_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' },
+                                            updated_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' }
+                                        }
+                                    },
+                                    description: { type: 'string', example: 'Mô tả chi tiết tầng 1' },
+                                    created_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' },
+                                    updated_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' }
+                                }
+                            }
+                        }
+                    }
+                },
+                400: { description: 'ID không hợp lệ' },
+                404: { description: 'Không tìm thấy tầng' }
+            }
+        }
     }
 }
