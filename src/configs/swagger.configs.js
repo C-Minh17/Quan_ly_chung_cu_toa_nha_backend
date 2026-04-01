@@ -1296,3 +1296,240 @@ export const swaggerApartmentPaths = {
         }
     }
 }
+
+export const swaggerResidentPaths = {
+    '/residents': {
+        get: {
+            summary: 'Lấy danh sách cư dân',
+            tags: ['Residents'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            responses: {
+                200: {
+                    description: 'Lấy danh sách cư dân thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1n' },
+                                        user_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1a' },
+                                        apartment_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1b' },
+                                        id_card_number: { type: 'string', example: '012345678901' },
+                                        id_card_date: { type: 'string', format: 'date', example: '2020-01-01' },
+                                        id_card_place: { type: 'string', example: 'Hà Nội' },
+                                        id_card_front_image: { type: 'string', example: 'uploads/cccd-front.jpg' },
+                                        id_card_back_image: { type: 'string', example: 'uploads/cccd-back.jpg' },
+                                        date_of_birth: { type: 'string', format: 'date', example: '1990-01-01' },
+                                        gender: { type: 'string', example: 'male' },
+                                        permanent_address: { type: 'string', example: '123 Đường A, Quận B' },
+                                        move_in_date: { type: 'string', format: 'date', example: '2024-01-01' },
+                                        move_out_date: { type: 'string', format: 'date', example: '2025-01-01' },
+                                        resident_type: { type: 'string', example: 'tenant' },
+                                        is_primary: { type: 'boolean', example: false },
+                                        created_at: { type: 'string', format: 'date-time', example: '2025-01-01T00:00:00.000Z' },
+                                        user: {
+                                            type: 'object',
+                                            properties: {
+                                                _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1a' },
+                                                name: { type: 'string', example: 'Nguyễn Văn A' },
+                                                email: { type: 'string', example: 'nva@email.com' },
+                                                phone: { type: 'string', example: '0987654321' }
+                                            }
+                                        },
+                                        apartment: {
+                                            type: 'object',
+                                            properties: {
+                                                _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1b' },
+                                                apartment_code: { type: 'string', example: 'A-0101' },
+                                                area: { type: 'number', example: 75.5 },
+                                                status: { type: 'string', example: 'Trống' }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        post: {
+            summary: 'Tạo cư dân mới',
+            tags: ['Residents'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'multipart/form-data': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                user_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1a' },
+                                apartment_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1b' },
+                                id_card_number: { type: 'string', example: '012345678901' },
+                                id_card_date: { type: 'string', format: 'date', example: '2020-01-01' },
+                                id_card_place: { type: 'string', example: 'Hà Nội' },
+                                id_card_front_image: { type: 'string', format: 'binary' },
+                                id_card_back_image: { type: 'string', format: 'binary' },
+                                date_of_birth: { type: 'string', format: 'date', example: '1990-01-01' },
+                                gender: { type: 'string', enum: ['male', 'female', 'other'], example: 'male' },
+                                permanent_address: { type: 'string', example: '123 Đường A, Quận B' },
+                                move_in_date: { type: 'string', format: 'date', example: '2024-01-01' },
+                                move_out_date: { type: 'string', format: 'date', example: '2025-01-01' },
+                                resident_type: { type: 'string', enum: ['owner', 'tenant', 'relative'], example: 'tenant' },
+                                is_primary: { type: 'boolean', example: false }
+                            },
+                            required: ['apartment_id']
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Tạo cư dân thành công' },
+                400: { description: 'Dữ liệu không hợp lệ' }
+            }
+        }
+    },
+    '/residents/{id}': {
+        get: {
+            summary: 'Lấy thông tin cư dân theo ID',
+            tags: ['Residents'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    description: 'ID của cư dân',
+                    schema: { type: 'string' }
+                }
+            ],
+            responses: {
+                200: {
+                    description: 'Lấy thông tin cư dân thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1n' },
+                                    user_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1a' },
+                                    apartment_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1b' },
+                                    id_card_number: { type: 'string', example: '012345678901' },
+                                    id_card_date: { type: 'string', format: 'date', example: '2020-01-01' },
+                                    id_card_place: { type: 'string', example: 'Hà Nội' },
+                                    id_card_front_image: { type: 'string', example: 'uploads/cccd-front.jpg' },
+                                    id_card_back_image: { type: 'string', example: 'uploads/cccd-back.jpg' },
+                                    date_of_birth: { type: 'string', format: 'date', example: '1990-01-01' },
+                                    gender: { type: 'string', example: 'male' },
+                                    permanent_address: { type: 'string', example: '123 Đường A, Quận B' },
+                                    move_in_date: { type: 'string', format: 'date', example: '2024-01-01' },
+                                    move_out_date: { type: 'string', format: 'date', example: '2025-01-01' },
+                                    resident_type: { type: 'string', example: 'tenant' },
+                                    is_primary: { type: 'boolean', example: false },
+                                    created_at: { type: 'string', format: 'date-time', example: '2025-01-01T00:00:00.000Z' },
+                                    user: {
+                                        type: 'object',
+                                        properties: {
+                                            _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1a' },
+                                            name: { type: 'string', example: 'Nguyễn Văn A' },
+                                            email: { type: 'string', example: 'nva@email.com' },
+                                            phone: { type: 'string', example: '0987654321' }
+                                        }
+                                    },
+                                    apartment: {
+                                        type: 'object',
+                                        properties: {
+                                            _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1b' },
+                                            apartment_code: { type: 'string', example: 'A-0101' },
+                                            area: { type: 'number', example: 75.5 },
+                                            status: { type: 'string', example: 'Trống' }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                400: { description: 'ID không hợp lệ' },
+                404: { description: 'Không tìm thấy cư dân' }
+            }
+        },
+        put: {
+            summary: 'Cập nhật cư dân',
+            tags: ['Residents'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    description: 'ID của cư dân',
+                    schema: { type: 'string' }
+                }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'multipart/form-data': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                user_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1a' },
+                                apartment_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1b' },
+                                id_card_number: { type: 'string', example: '012345678901' },
+                                id_card_date: { type: 'string', format: 'date', example: '2020-01-01' },
+                                id_card_place: { type: 'string', example: 'Hà Nội' },
+                                id_card_front_image: { type: 'string', format: 'binary' },
+                                id_card_back_image: { type: 'string', format: 'binary' },
+                                date_of_birth: { type: 'string', format: 'date', example: '1990-01-01' },
+                                gender: { type: 'string', enum: ['male', 'female', 'other'], example: 'male' },
+                                permanent_address: { type: 'string', example: '123 Đường A, Quận B' },
+                                move_in_date: { type: 'string', format: 'date', example: '2024-01-01' },
+                                move_out_date: { type: 'string', format: 'date', example: '2025-01-01' },
+                                resident_type: { type: 'string', enum: ['owner', 'tenant', 'relative'], example: 'tenant' },
+                                is_primary: { type: 'boolean', example: false }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Cập nhật cư dân thành công' },
+                400: { description: 'Dữ liệu không hợp lệ' },
+                404: { description: 'Không tìm thấy cư dân' }
+            }
+        },
+        delete: {
+            summary: 'Xóa cư dân',
+            tags: ['Residents'],
+            security: [
+                { bearerAuth: [] }
+            ],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    description: 'ID của cư dân',
+                    schema: { type: 'string' }
+                }
+            ],
+            responses: {
+                200: { description: 'Xóa cư dân thành công' },
+                400: { description: 'ID không hợp lệ' },
+                404: { description: 'Không tìm thấy cư dân' }
+            }
+        }
+    }
+}
