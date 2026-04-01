@@ -5,7 +5,7 @@ const apartmentSchema = createModel(
     'Apartment',
     'apartments',
     {
-        apartment_code: { type: String, required: true },
+        apartment_code: { type: String, required: true, unique: true },
         floor_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Floor', required: true },
         area: { type: Number, required: true },
         num_bedrooms: { type: Number, required: true },

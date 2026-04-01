@@ -19,6 +19,11 @@ export const createApartment = async (data) => {
     if (!floorExists) {
         abort(404, 'floor_id not found')
     }
+    if (!data.apartment_code) {
+        const count = await Apartment.countDocuments({ floor_id: data.floor_id })
+        data.apartment_code = `${floorExists.floor_number}${String(count + 1).padStart(2, '0')}`
+    }
+
     const res = await Apartment.create(data)
     if (!res) {
         abort(400, 'Create apartment failed')

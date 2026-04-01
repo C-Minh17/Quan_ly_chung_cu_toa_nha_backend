@@ -19,6 +19,18 @@ export const createFloor = async (data) => {
     if (!buildingExists) {
         abort(404, 'building_id not found')
     }
+    const existingFloor = await Floor.findOne({ floor_number: data.floor_number, building_id: data.building_id })
+    if (existingFloor) {
+        abort(400, 'Floor already exists')
+    }
+
+    if (
+        data.floor_number <= 0 ||
+        data.floor_number > buildingExists.total_floors
+    ) {
+        abort(400, `floor_number must be between 1 and ${buildingExists.total_floors}`)
+    }
+
     const res = await Floor.create(data)
     if (!res) {
         abort(400, 'Create floor failed')
