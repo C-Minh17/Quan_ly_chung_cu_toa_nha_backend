@@ -104,3 +104,20 @@ export const updateStatusApartmentController = async (req, res) => {
         })
     }
 }
+
+export const getApartmentHistoryController = async (req, res) => {
+    try {
+        const data = await apartmentService.getApartmentHistory(req.params.id)
+        return res.status(200).json({
+            success: true,
+            message: 'Get apartment history successfully',
+            data: data
+        })
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: 'Get apartment history failed',
+            error: err.message
+        })
+    }
+}

@@ -1,4 +1,4 @@
-import { Apartment, Floor } from '@/models'
+import { Apartment, Floor, Resident } from '@/models'
 import { abort } from '@/utils/helpers'
 
 export const getApartment = async () => {
@@ -76,4 +76,13 @@ export const deleteApartment = async (id) => {
         abort(404, 'Delete apartment failed')
     }
     return res
+}
+
+export const getApartmentHistory = async (apartmentId) => {
+    const history = await Resident.find({ apartment_id: apartmentId })
+        .populate('user_id')
+        .sort({ move_in_date: -1 })
+        .lean()
+
+    return history
 }
