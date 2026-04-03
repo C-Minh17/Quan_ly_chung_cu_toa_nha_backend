@@ -1,7 +1,7 @@
 import Joi from 'joi'
 
 export const createItem = Joi.object({
-    apartment_code: Joi.string().trim().required().label('Mã căn hộ'),
+    apartment_code: Joi.string().trim().label('Mã căn hộ'),
     floor_id: Joi.string().hex().length(24).required().label('ID Tầng'),
     area: Joi.number().required().label('Diện tích'),
     num_bedrooms: Joi.number().integer().min(0).required().label('Số phòng ngủ'),

@@ -1119,7 +1119,7 @@ export const swaggerApartmentPaths = {
                         schema: {
                             type: 'object',
                             properties: {
-                                apartment_code: { type: 'string', example: 'A-0101' },
+                                apartment_code: { type: 'string', example: '101', description: 'Mã căn hộ (Tự động tạo nếu để trống theo format: Tầng + STT, VD: 101, 102)' },
                                 floor_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1l' },
                                 area: { type: 'number', example: 75.5 },
                                 num_bedrooms: { type: 'integer', example: 2 },
@@ -1127,7 +1127,8 @@ export const swaggerApartmentPaths = {
                                 apartment_type: { type: 'string', example: 'Tiêu chuẩn' },
                                 status: { type: 'string', example: 'Trống' },
                                 price: { type: 'number', example: 15000000 }
-                            }
+                            },
+                            required: ['floor_id', 'area', 'num_bedrooms', 'num_bathrooms', 'apartment_type', 'status', 'price']
                         }
                     }
                 }

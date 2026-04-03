@@ -1,4 +1,4 @@
-import { Apartment, Floor } from '@/models'
+import { Apartment, Floor, Resident } from '@/models'
 import { abort } from '@/utils/helpers'
 
 export const getApartment = async () => {
@@ -19,6 +19,11 @@ export const createApartment = async (data) => {
     if (!floorExists) {
         abort(404, 'floor_id not found')
     }
+    if (!data.apartment_code) {
+        const count = await Apartment.countDocuments({ floor_id: data.floor_id })
+        data.apartment_code = `${floorExists.floor_number}${String(count + 1).padStart(2, '0')}`
+    }
+
     const res = await Apartment.create(data)
     if (!res) {
         abort(400, 'Create apartment failed')
@@ -71,4 +76,13 @@ export const deleteApartment = async (id) => {
         abort(404, 'Delete apartment failed')
     }
     return res
+}
+
+export const getApartmentHistory = async (apartmentId) => {
+    const history = await Resident.find({ apartment_id: apartmentId })
+        .populate('user_id')
+        .sort({ move_in_date: -1 })
+        .lean()
+
+    return history
 }
