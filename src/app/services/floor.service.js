@@ -21,6 +21,16 @@ export const createFloor = async (data) => {
     if (!buildingExists) {
         abort(404, 'building_id not found')
     }
+
+    const lastFloorInBuilding = await Floor.findOne({ building_id: data.building_id }).sort({ floor_number: -1 })
+    const nextFloorNumber = (lastFloorInBuilding && lastFloorInBuilding.floor_number) ? lastFloorInBuilding.floor_number + 1 : 1
+
+    if (buildingExists.total_floors && nextFloorNumber > buildingExists.total_floors) {
+        abort(400, `Không thể tạo thêm tầng. Tòa nhà chỉ có tối đa ${buildingExists.total_floors} tầng.`)
+    }
+
+    data.floor_number = nextFloorNumber
+
     const existingFloor = await Floor.findOne({ floor_number: data.floor_number, building_id: data.building_id })
     if (existingFloor) {
         abort(400, 'Floor already exists')
@@ -34,10 +44,6 @@ export const createFloor = async (data) => {
     if (!res) {
         abort(400, 'Create floor failed')
     }
-
-    await Building.findByIdAndUpdate(data.building_id, {
-        $max: { total_floors: data.floor_number }
-    })
 
     const populated = await Floor.findById(res._id).populate('building_id').lean()
     populated.building = populated.building_id
