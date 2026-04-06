@@ -6,9 +6,11 @@ export const getFloor = async () => {
     if (!res) {
         abort(404, 'Floor not found')
     }
-    res.building = res.building_id
-    delete res.building_id
-    return res
+    return res.map(floor => {
+        floor.building = floor.building_id
+        floor.building_id = floor.building ? floor.building._id : null
+        return floor
+    })
 }
 
 export const createFloor = async (data) => {
@@ -24,21 +26,22 @@ export const createFloor = async (data) => {
         abort(400, 'Floor already exists')
     }
 
-    if (
-        data.floor_number <= 0 ||
-        data.floor_number > buildingExists.total_floors
-    ) {
-        abort(400, `floor_number must be between 1 and ${buildingExists.total_floors}`)
-    }
+    const lastFloor = await Floor.findOne().collation({ locale: 'en_US', numericOrdering: true }).sort({ id: -1 })
+    const nextId = lastFloor ? (parseInt(lastFloor.id) + 1).toString().padStart(3, '0') : '001'
+    data.id = nextId
 
     const res = await Floor.create(data)
     if (!res) {
         abort(400, 'Create floor failed')
     }
 
+    await Building.findByIdAndUpdate(data.building_id, {
+        $max: { total_floors: data.floor_number }
+    })
+
     const populated = await Floor.findById(res._id).populate('building_id').lean()
     populated.building = populated.building_id
-    delete populated.building_id
+    populated.building_id = populated.building ? populated.building._id : null
 
     return populated
 }
@@ -50,7 +53,7 @@ export const getByIdFloor = async (id) => {
     }
 
     res.building = res.building_id
-    delete res.building_id
+    res.building_id = res.building ? res.building._id : null
 
     return res
 }
@@ -63,12 +66,13 @@ export const updateFloor = async (id, data) => {
     }
 
     res.building = res.building_id
-    delete res.building_id
+    res.building_id = res.building ? res.building._id : null
 
     return res
 }
 
 export const deleteFloor = async (id) => {
+    await Apartment.deleteMany({ floor_id: id })
     const res = await Floor.findByIdAndDelete(id)
     if (!res) {
         abort(404, 'Floor not found')
