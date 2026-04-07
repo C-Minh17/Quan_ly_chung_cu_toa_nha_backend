@@ -6,9 +6,11 @@ export const getFloor = async () => {
     if (!res) {
         abort(404, 'Floor not found')
     }
-    res.building = res.building_id
-    delete res.building_id
-    return res
+    return res.map(floor => {
+        floor.building = floor.building_id
+        floor.building_id = floor.building ? floor.building._id : null
+        return floor
+    })
 }
 
 export const createFloor = async (data) => {
@@ -19,17 +21,24 @@ export const createFloor = async (data) => {
     if (!buildingExists) {
         abort(404, 'building_id not found')
     }
+
+    const lastFloorInBuilding = await Floor.findOne({ building_id: data.building_id }).sort({ floor_number: -1 })
+    const nextFloorNumber = (lastFloorInBuilding && lastFloorInBuilding.floor_number) ? lastFloorInBuilding.floor_number + 1 : 1
+
+    if (buildingExists.total_floors && nextFloorNumber > buildingExists.total_floors) {
+        abort(400, `Không thể tạo thêm tầng. Tòa nhà chỉ có tối đa ${buildingExists.total_floors} tầng.`)
+    }
+
+    data.floor_number = nextFloorNumber
+
     const existingFloor = await Floor.findOne({ floor_number: data.floor_number, building_id: data.building_id })
     if (existingFloor) {
         abort(400, 'Floor already exists')
     }
 
-    if (
-        data.floor_number <= 0 ||
-        data.floor_number > buildingExists.total_floors
-    ) {
-        abort(400, `floor_number must be between 1 and ${buildingExists.total_floors}`)
-    }
+    const lastFloor = await Floor.findOne().collation({ locale: 'en_US', numericOrdering: true }).sort({ id: -1 })
+    const nextId = lastFloor ? (parseInt(lastFloor.id) + 1).toString().padStart(3, '0') : '001'
+    data.id = nextId
 
     const res = await Floor.create(data)
     if (!res) {
@@ -38,7 +47,7 @@ export const createFloor = async (data) => {
 
     const populated = await Floor.findById(res._id).populate('building_id').lean()
     populated.building = populated.building_id
-    delete populated.building_id
+    populated.building_id = populated.building ? populated.building._id : null
 
     return populated
 }
@@ -50,7 +59,7 @@ export const getByIdFloor = async (id) => {
     }
 
     res.building = res.building_id
-    delete res.building_id
+    res.building_id = res.building ? res.building._id : null
 
     return res
 }
@@ -63,12 +72,13 @@ export const updateFloor = async (id, data) => {
     }
 
     res.building = res.building_id
-    delete res.building_id
+    res.building_id = res.building ? res.building._id : null
 
     return res
 }
 
 export const deleteFloor = async (id) => {
+    await Apartment.deleteMany({ floor_id: id })
     const res = await Floor.findByIdAndDelete(id)
     if (!res) {
         abort(404, 'Floor not found')

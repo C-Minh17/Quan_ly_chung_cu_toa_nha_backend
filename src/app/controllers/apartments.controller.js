@@ -9,9 +9,9 @@ export const getApartmentController = async (req, res) => {
             data: data
         })
     } catch (err) {
-        return res.status(500).json({
+        return res.status(err.status || 500).json({
             success: false,
-            message: 'Get apartment failed',
+            message: err.message || 'Get apartment failed',
             error: err.message
         })
     }
@@ -27,9 +27,9 @@ export const createApartmentController = async (req, res) => {
             data: createData
         })
     } catch (err) {
-        return res.status(500).json({
+        return res.status(err.status || 500).json({
             success: false,
-            message: 'Create apartment failed',
+            message: err.message || 'Create apartment failed',
             error: err.message
         })
     }
@@ -44,9 +44,9 @@ export const getByIdApartmentController = async (req, res) => {
             data: data
         })
     } catch (err) {
-        return res.status(500).json({
+        return res.status(err.status || 500).json({
             success: false,
-            message: 'Get apartment failed',
+            message: err.message || 'Get apartment failed',
             error: err.message
         })
     }
@@ -62,9 +62,9 @@ export const updateApartmentController = async (req, res) => {
             data: updateData
         })
     } catch (err) {
-        return res.status(500).json({
+        return res.status(err.status || 500).json({
             success: false,
-            message: 'Update apartment failed',
+            message: err.message || 'Update apartment failed',
             error: err.message
         })
     }
@@ -79,9 +79,9 @@ export const deleteApartmentController = async (req, res) => {
             data: data
         })
     } catch (err) {
-        return res.status(500).json({
+        return res.status(err.status || 500).json({
             success: false,
-            message: 'Delete apartment failed',
+            message: err.message || 'Delete apartment failed',
             error: err.message
         })
     }
@@ -97,9 +97,9 @@ export const updateStatusApartmentController = async (req, res) => {
             data: updateData
         })
     } catch (err) {
-        return res.status(500).json({
+        return res.status(err.status || 500).json({
             success: false,
-            message: 'Update apartment status failed',
+            message: err.message || 'Update apartment status failed',
             error: err.message
         })
     }
@@ -114,9 +114,9 @@ export const getApartmentHistoryController = async (req, res) => {
             data: data
         })
     } catch (err) {
-        return res.status(500).json({
+        return res.status(err.status || 500).json({
             success: false,
-            message: 'Get apartment history failed',
+            message: err.message || 'Get apartment history failed',
             error: err.message
         })
     }

@@ -1,4 +1,4 @@
-import { Apartment, Floor, Resident } from '@/models'
+import { Apartment, Floor, Resident, Building } from '@/models'
 import { abort } from '@/utils/helpers'
 
 export const getApartment = async () => {
@@ -6,34 +6,71 @@ export const getApartment = async () => {
     if (!res) {
         abort(404, 'Apartment not found')
     }
-    res.floor = res.floor_id
-    delete res.floor_id
-    return res
+    return res.map(apartment => {
+        apartment.floor = apartment.floor_id
+        apartment.floor_id = apartment.floor ? apartment.floor._id : null
+        apartment.building_id = apartment.floor ? apartment.floor.building_id : null
+        return apartment
+    })
 }
 
 export const createApartment = async (data) => {
-    if (!data.floor_id) {
-        abort(400, 'chuyền floor_id vào')
+    if (!data.building_id || !data.floor_id) {
+        abort(400, 'Phải truyền building_id và floor_id')
     }
-    const floorExists = await Floor.findById(data.floor_id)
-    if (!floorExists) {
-        abort(404, 'floor_id not found')
+    const [buildingExists, floorExists] = await Promise.all([
+        Building.findById(data.building_id),
+        Floor.findById(data.floor_id)
+    ])
+    if (!buildingExists) abort(404, 'building_id not found')
+    if (!floorExists) abort(404, 'floor_id not found')
+
+    if (floorExists.building_id.toString() !== data.building_id) {
+        abort(400, 'Floor is not part of this building')
     }
+
     if (!data.apartment_code) {
-        const count = await Apartment.countDocuments({ floor_id: data.floor_id })
-        data.apartment_code = `${floorExists.floor_number}${String(count + 1).padStart(2, '0')}`
+        const lastApartment = await Apartment.findOne({ floor_id: data.floor_id })
+            .sort({ apartment_code: -1 })
+            .lean()
+
+        if (lastApartment) {
+            const lastCodeSuffix = parseInt(lastApartment.apartment_code.slice(-2))
+            data.apartment_code = `${floorExists.floor_number}${String(lastCodeSuffix + 1).padStart(2, '0')}`
+        } else {
+            data.apartment_code = `${floorExists.floor_number}01`
+        }
     }
 
-    const res = await Apartment.create(data)
-    if (!res) {
-        abort(400, 'Create apartment failed')
+    const lastApartment = await Apartment.findOne().collation({ locale: 'en_US', numericOrdering: true }).sort({ id: -1 })
+    const nextId = lastApartment && lastApartment.id ? (parseInt(lastApartment.id) + 1).toString().padStart(3, '0') : '001'
+    data.id = nextId
+
+    try {
+        const res = await Apartment.create(data)
+        const populated = await Apartment.findById(res._id)
+            .populate({
+                path: 'floor_id',
+                populate: { path: 'building_id' }
+            })
+            .lean()
+
+        if (populated) {
+            populated.building_id = data.building_id
+            populated.floor = populated.floor_id
+            if (populated.floor) {
+                populated.floor.building = populated.floor.building_id
+                populated.floor.building_id = populated.floor.building ? populated.floor.building._id : null
+            }
+            populated.floor_id = populated.floor ? populated.floor._id : null
+        }
+        return populated
+    } catch (error) {
+        if (error.code === 11000) {
+            abort(400, 'Mã căn hộ này đã tồn tại trong tòa nhà này')
+        }
+        throw error
     }
-
-    const populated = await Apartment.findById(res._id).populate('floor_id').lean()
-    populated.floor = populated.floor_id
-    delete populated.floor_id
-
-    return populated
 }
 
 export const getByIdApartment = async (id) => {
@@ -41,8 +78,9 @@ export const getByIdApartment = async (id) => {
     if (!res) {
         abort(404, 'Apartment not found')
     }
+    res.building_id = res.floor ? res.floor.building_id : null
     res.floor = res.floor_id
-    delete res.floor_id
+    res.floor_id = res.floor ? res.floor._id : null
     return res
 }
 
@@ -53,8 +91,9 @@ export const updateApartment = async (id, data) => {
         abort(404, 'Update apartment failed')
     }
 
+    res.building_id = res.floor ? res.floor.building_id : null
     res.floor = res.floor_id
-    delete res.floor_id
+    res.floor_id = res.floor ? res.floor._id : null
     return res
 }
 
@@ -65,8 +104,9 @@ export const updateStatusApartment = async (id, status) => {
         abort(404, 'Apartment not found')
     }
 
+    res.building_id = res.floor ? res.floor.building_id : null
     res.floor = res.floor_id
-    delete res.floor_id
+    res.floor_id = res.floor ? res.floor._id : null
     return res
 }
 

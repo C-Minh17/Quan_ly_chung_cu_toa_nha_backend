@@ -2,6 +2,7 @@ import Joi from 'joi'
 
 export const createItem = Joi.object({
     apartment_code: Joi.string().trim().label('Mã căn hộ'),
+    building_id: Joi.string().hex().length(24).required().label('ID Tòa nhà'),
     floor_id: Joi.string().hex().length(24).required().label('ID Tầng'),
     area: Joi.number().required().label('Diện tích'),
     num_bedrooms: Joi.number().integer().min(0).required().label('Số phòng ngủ'),
@@ -13,6 +14,7 @@ export const createItem = Joi.object({
 
 export const updateItem = Joi.object({
     apartment_code: Joi.string().trim().label('Mã căn hộ'),
+    building_id: Joi.string().hex().length(24).label('ID Tòa nhà'),
     floor_id: Joi.string().hex().length(24).label('ID Tầng'),
     area: Joi.number().label('Diện tích'),
     num_bedrooms: Joi.number().integer().min(0).label('Số phòng ngủ'),
