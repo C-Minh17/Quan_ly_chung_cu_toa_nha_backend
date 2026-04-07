@@ -6,7 +6,7 @@ import buildingRouter from './building.router'
 import floorRouter from './floor.router'
 import apartmentRouter from './apartments.router'
 import residentRouter from './resident.router'
-
+import fileRouter from './file.router'
 
 function route(app) {
     app.use('/admin', admin)
@@ -17,6 +17,7 @@ function route(app) {
     app.use('/floors', floorRouter)
     app.use('/apartments', apartmentRouter)
     app.use('/residents', residentRouter)
+    app.use('/file', fileRouter)
 }
 
 
