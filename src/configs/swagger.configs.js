@@ -1534,3 +1534,134 @@ export const swaggerResidentPaths = {
         }
     }
 }
+
+export const swaggerContractsPaths = {
+    '/contracts': {
+        get: {
+            summary: 'Lấy danh sách hợp đồng',
+            tags: ['Contracts'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'q', in: 'query', schema: { type: 'string' }, description: 'Tìm kiếm' },
+                { name: 'page', in: 'query', schema: { type: 'integer', default: 1 } },
+                { name: 'per_page', in: 'query', schema: { type: 'integer', default: 50 } }
+            ],
+            responses: {
+                200: { description: 'Thành công' }
+            }
+        },
+        post: {
+            summary: 'Tạo mới hợp đồng',
+            tags: ['Contracts'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                apartment_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                resident_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                contract_code: { type: 'string', example: 'HD-001' },
+                                contract_type: { type: 'string', example: 'rent', description: 'rent hoặc purchase' },
+                                start_date: { type: 'string', format: 'date', example: '2024-01-01' },
+                                end_date: { type: 'string', format: 'date', example: '2024-12-31' },
+                                monthly_price: { type: 'number', example: 5000000 },
+                                deposit: { type: 'number', example: 10000000 },
+                                status: { type: 'string', example: 'active', description: 'active, expired, hoặc terminated' },
+                                file_url: { type: 'string', example: 'https://example.com/file.pdf' },
+                                notes: { type: 'string', example: 'Ghi chú hợp đồng' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: {
+                    description: 'Tạo thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    message: { type: 'string', example: 'Tạo hợp đồng thành công' },
+                                    data: {
+                                        type: 'object',
+                                        properties: {
+                                            _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/contracts/me': {
+        get: {
+            summary: 'Lấy các hợp đồng của tôi',
+            tags: ['Contracts'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: { description: 'Thành công' }
+            }
+        }
+    },
+    '/contracts/{id}': {
+        get: {
+            summary: 'Lấy thông tin chi tiết hợp đồng',
+            tags: ['Contracts'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: {
+                200: { description: 'Thành công' }
+            }
+        },
+        put: {
+            summary: 'Cập nhật hợp đồng',
+            tags: ['Contracts'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                end_date: { type: 'string', format: 'date', example: '2024-12-31' },
+                                monthly_price: { type: 'number', example: 5500000 },
+                                notes: { type: 'string', example: 'Ghi chú cập nhật' },
+                                status: { type: 'string', example: 'active' },
+                                file_url: { type: 'string', example: 'https://example.com/file.pdf' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Cập nhật thành công' }
+            }
+        }
+    },
+    '/contracts/{id}/terminate': {
+        patch: {
+            summary: 'Chấm dứt hợp đồng',
+            tags: ['Contracts'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: {
+                200: { description: 'Chấm dứt thành công' }
+            }
+        }
+    }
+}
