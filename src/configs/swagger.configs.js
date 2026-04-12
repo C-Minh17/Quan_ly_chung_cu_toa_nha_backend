@@ -1397,6 +1397,17 @@ export const swaggerResidentPaths = {
             }
         }
     },
+    '/residents/me': {
+        get: {
+            summary: 'Lấy thông tin cư dân của tôi',
+            tags: ['Residents'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: { description: 'Thành công' },
+                404: { description: 'Không tìm thấy hồ sơ cư dân' }
+            }
+        }
+    },
     '/residents/{id}': {
         get: {
             summary: 'Lấy thông tin cư dân theo ID',
@@ -1602,7 +1613,7 @@ export const swaggerContractsPaths = {
     },
     '/contracts/me': {
         get: {
-            summary: 'Lấy các hợp đồng của tôi',
+            summary: 'Lấy thông tin hợp đồng của tôi',
             tags: ['Contracts'],
             security: [{ bearerAuth: [] }],
             responses: {
@@ -1662,6 +1673,162 @@ export const swaggerContractsPaths = {
             responses: {
                 200: { description: 'Chấm dứt thành công' }
             }
+        }
+    }
+}
+
+export const swaggerVehiclesPaths = {
+    '/vehicles': {
+        get: {
+            summary: 'Lấy danh sách phương tiện',
+            tags: ['Vehicles'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'resident_id', in: 'query', schema: { type: 'string' }, description: 'Lọc theo ID cư dân' },
+                { name: 'vehicle_type', in: 'query', schema: { type: 'string', enum: ['motorbike', 'car', 'bicycle'] }, description: 'Lọc theo loại xe' },
+                { name: 'license_plate', in: 'query', schema: { type: 'string' }, description: 'Tìm theo biển số' }
+            ],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean' },
+                                    message: { type: 'string' },
+                                    data: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                _id: { type: 'string' },
+                                                resident_id: { type: 'string' },
+                                                resident: { type: 'object' },
+                                                license_plate: { type: 'string' },
+                                                vehicle_type: { type: 'string' },
+                                                brand: { type: 'string' },
+                                                color: { type: 'string' },
+                                                card_number: { type: 'string' },
+                                                is_active: { type: 'boolean' },
+                                                created_at: { type: 'string', format: 'date-time' }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        post: {
+            summary: 'Đăng ký phương tiện mới',
+            tags: ['Vehicles'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                resident_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                license_plate: { type: 'string', example: '29A-123.45' },
+                                vehicle_type: { type: 'string', enum: ['motorbike', 'car', 'bicycle'], example: 'motorbike' },
+                                brand: { type: 'string', example: 'Honda' },
+                                color: { type: 'string', example: 'Đen' },
+                                card_number: { type: 'string', example: 'V-001' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Đăng ký thành công' } }
+        }
+    },
+    '/vehicles/me': {
+        get: {
+            summary: 'Lấy thông tin phương tiện của tôi',
+            tags: ['Vehicles'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: { description: 'Thành công' }
+            }
+        }
+    },
+    '/vehicles/{id}': {
+        get: {
+            summary: 'Chi tiết phương tiện',
+            tags: ['Vehicles'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: {
+                200: { description: 'Thành công' }
+            }
+        },
+        put: {
+            summary: 'Cập nhật thông tin phương tiện',
+            tags: ['Vehicles'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                license_plate: { type: 'string' },
+                                vehicle_type: { type: 'string', enum: ['motorbike', 'car', 'bicycle'] },
+                                brand: { type: 'string' },
+                                color: { type: 'string' },
+                                card_number: { type: 'string' },
+                                is_active: { type: 'boolean' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Cập nhật thành công' } }
+        },
+        delete: {
+            summary: 'Hủy đăng ký phương tiện (Soft delete)',
+            tags: ['Vehicles'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Xóa thành công' } }
+        }
+    },
+    '/vehicles/{id}/status': {
+        patch: {
+            summary: 'Kích hoạt / Tạm dừng phương tiện',
+            tags: ['Vehicles'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                is_active: { type: 'boolean', example: true }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Cập nhật thành công' } }
         }
     }
 }

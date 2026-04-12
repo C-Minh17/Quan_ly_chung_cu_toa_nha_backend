@@ -8,6 +8,7 @@ import apartmentRouter from './apartments.router'
 import residentRouter from './resident.router'
 import contractRouter from './contracts.router'
 import fileRouter from './file.router'
+import vehicleRouter from './vehicles.router'
 
 function route(app) {
     app.use('/admin', admin)
@@ -20,6 +21,7 @@ function route(app) {
     app.use('/residents', residentRouter)
     app.use('/contracts', contractRouter)
     app.use('/file', fileRouter)
+    app.use('/vehicles', vehicleRouter)
 }
 
 

@@ -8,11 +8,9 @@ const transformContract = (item) => {
     const resident = item.resident_id
     const resident_user = resident?.user_id
 
-    // Ensure _id fields are string IDs
     const apartment_id = apartment?._id ? apartment._id.toString() : (item.apartment_id?._id || item.apartment_id)
     const resident_id = resident?._id ? resident._id.toString() : (item.resident_id?._id || item.resident_id)
 
-    // Inside the resident object, ensure user_id is a string ID if it was populated
     let formattedResident = resident
     if (resident && typeof resident === 'object') {
         formattedResident = {
@@ -156,12 +154,12 @@ export const terminateContract = async (id) => {
 export const getMyContracts = async (userId) => {
     const resident = await Resident.findOne({ user_id: userId }).lean()
     if (!resident) {
-        return []
+        return null
     }
-    const contracts = await Contract.find({ resident_id: resident._id })
+    const contract = await Contract.findOne({ resident_id: resident._id })
         .populate(['apartment_id'])
         .sort({ created_at: -1 })
         .lean()
 
-    return contracts.map(transformContract)
+    return transformContract(contract)
 }

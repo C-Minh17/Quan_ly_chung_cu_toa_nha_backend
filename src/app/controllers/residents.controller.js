@@ -87,3 +87,19 @@ export const deleteResident = async (req,res) => {
     }
 }
 
+export const getCurrentResident = async (req,res) => {
+    try{
+        const data = await ResidentService.getCurrentResident(req.currentUser._id)
+        return res.status(200).json({
+            success: true,
+            message: 'Get current resident successfully',
+            data: data
+        })  
+    } catch (error) {   
+        return res.status(500).json({
+            success: false,
+            message: 'Get current resident failed', 
+            data: error.message
+        })
+    }
+}

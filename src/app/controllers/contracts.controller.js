@@ -94,7 +94,7 @@ export const terminateContractController = async (req, res) => {
 
 export const getMyContractsController = async (req, res) => {
     try {
-        const userId = req.user?._id || req.user?.id
+        const userId = req.currentUser?._id || req.currentUser?.id
         if (!userId) {
             return res.status(401).json({
                 success: false,
