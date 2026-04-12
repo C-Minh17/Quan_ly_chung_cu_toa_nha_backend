@@ -154,12 +154,18 @@ export const terminateContract = async (id) => {
 export const getMyContracts = async (userId) => {
     const resident = await Resident.findOne({ user_id: userId }).lean()
     if (!resident) {
-        return null
+        return []
     }
-    const contract = await Contract.findOne({ resident_id: resident._id })
-        .populate(['apartment_id'])
+    const contracts = await Contract.find({ resident_id: resident._id })
+        .populate([
+            { path: 'apartment_id' },
+            {
+                path: 'resident_id',
+                populate: { path: 'user_id' }
+            }
+        ])
         .sort({ created_at: -1 })
         .lean()
 
-    return transformContract(contract)
+    return contracts.map(transformContract)
 }

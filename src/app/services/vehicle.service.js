@@ -147,10 +147,10 @@ export const getMyVehicles = async (userId) => {
     const resident = await Resident.findOne({ user_id: userId }).lean()
 
     if (!resident) {
-        return null
+        return []
     }
 
-    const vehicle = await Vehicle.findOne({
+    const vehicles = await Vehicle.find({
         resident_id: resident._id,
         deleted: false
     })
@@ -161,5 +161,5 @@ export const getMyVehicles = async (userId) => {
         .sort({ created_at: -1 })
         .lean()
 
-    return transformVehicle(vehicle)
+    return vehicles.map(transformVehicle)
 }
