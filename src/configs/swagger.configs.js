@@ -1832,3 +1832,140 @@ export const swaggerVehiclesPaths = {
         }
     }
 }
+
+export const swaggerFeeTypePaths = {
+    '/feeType': {
+        get: {
+            summary: 'Lấy danh sách loại phí',
+            tags: ['Fee Types'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                        name: { type: 'string', example: 'Phí quản lý' },
+                                        fee_category: { type: 'string', example: 'SERVICE' },
+                                        unit_price: { type: 'integer', example: 5000 },
+                                        unit: { type: 'string', example: 'm2' },
+                                        description: { type: 'string', example: 'Phí dịch vụ quản lý chung cư' },
+                                        is_active: { type: 'boolean', example: true }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        post: {
+            summary: 'Thêm mới loại phí',
+            tags: ['Fee Types'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                name: { type: 'string', example: 'Phí quản lý' },
+                                fee_category: { type: 'string', example: 'SERVICE' },
+                                unit_price: { type: 'integer', example: 5000 },
+                                unit: { type: 'string', example: 'm2' },
+                                description: { type: 'string', example: 'Phí dịch vụ quản lý chung cư' },
+                                is_active: { type: 'boolean', example: true }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/feeType/{id}': {
+        get: {
+            summary: 'Lấy chi tiết loại phí',
+            tags: ['Fee Types'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                    name: { type: 'string', example: 'Phí quản lý' },
+                                    fee_category: { type: 'string', example: 'SERVICE' },
+                                    unit_price: { type: 'integer', example: 5000 },
+                                    unit: { type: 'string', example: 'm2' },
+                                    description: { type: 'string', example: 'Phí dịch vụ quản lý chung cư' },
+                                    is_active: { type: 'boolean', example: true }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        put: {
+            summary: 'Cập nhật loại phí',
+            tags: ['Fee Types'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                name: { type: 'string', example: 'Phí quản lý (Cập nhật)' },
+                                fee_category: { type: 'string', example: 'SERVICE' },
+                                unit_price: { type: 'integer', example: 6000 },
+                                unit: { type: 'string', example: 'm2' },
+                                description: { type: 'string', example: 'Phí dịch vụ quản lý chung cư sau cập nhật' },
+                                is_active: { type: 'boolean', example: true }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Thành công' } }
+        },
+        delete: {
+            summary: 'Xóa loại phí',
+            tags: ['Fee Types'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/feeType/{id}/active': {
+        put: {
+            summary: 'Bật/Tắt trạng thái hoạt động của loại phí',
+            tags: ['Fee Types'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    }
+}
+
