@@ -16,3 +16,5 @@ export { default as Contract } from './contracts'
 export { default as File } from './file'
 export { default as Vehicle } from './vehicle'
 export { default as FeeTypes } from './feeTypes'
+export { default as MaintenanceRequests } from './maintenance-requests'
+
