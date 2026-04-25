@@ -169,3 +169,20 @@ export const getMaintenanceStatsController = async (req, res) => {
         })
     }
 }
+
+export const deleteMaintenanceRequestsController = async (req,res) => {
+    try {
+        const data = await maintenaceRequestsService.deleteMaintenance_requests(req.params.id, req.body)
+        return res.status(200).json({
+            success:true,
+            message:'delete successfully',
+            data:data
+        })
+    } catch (err) {
+        return res.status(err.status|| 500).json({
+            success:false,
+            message: err.message|| 'delete failed',
+            error:err.message
+        })        
+    }
+}
