@@ -1969,3 +1969,189 @@ export const swaggerFeeTypePaths = {
     }
 }
 
+export const swaggerMaintenanceRequestsPaths = {
+    '/maintenancerequests': {
+        get: {
+            summary: 'Lấy danh sách yêu cầu bảo trì',
+            tags: ['Maintenance Requests'],
+            security: [{ bearerAuth: [] }],
+            responses: { 200: { description: 'Thành công' } }
+        },
+        post: {
+            summary: 'Tạo yêu cầu bảo trì mới',
+            tags: ['Maintenance Requests'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                apartment_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                resident_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                title: { type: 'string', example: 'Hỏng vòi nước' },
+                                description: { type: 'string', example: 'Vòi nước bồn rửa mặt bị rò rỉ' },
+                                priority: { type: 'string', enum: ['low', 'medium', 'high', 'urgent'], example: 'medium' },
+                                category: { type: 'string', example: 'Plumbing' },
+                                id_front_image: { type: 'string', example: 'image_url' },
+                                id_back_image: { type: 'string', example: 'image_url' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Tạo thành công' } }
+        }
+    },
+    '/maintenancerequests/stats': {
+        get: {
+            summary: 'Thống kê yêu cầu bảo trì',
+            tags: ['Maintenance Requests'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'startDate', in: 'query', schema: { type: 'string', format: 'date' } },
+                { name: 'endDate', in: 'query', schema: { type: 'string', format: 'date' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/maintenancerequests/me': {
+        get: {
+            summary: 'Lấy danh sách yêu cầu của cư dân hiện tại',
+            tags: ['Maintenance Requests'],
+            security: [{ bearerAuth: [] }],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/maintenancerequests/{id}': {
+        get: {
+            summary: 'Lấy chi tiết yêu cầu bảo trì',
+            tags: ['Maintenance Requests'],
+            security: [{ bearerAuth: [] }],
+            parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+            responses: { 200: { description: 'Thành công' } }
+        },
+        put: {
+            summary: 'Cập nhật yêu cầu bảo trì',
+            tags: ['Maintenance Requests'],
+            security: [{ bearerAuth: [] }],
+            parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                title: { type: 'string' },
+                                description: { type: 'string' },
+                                priority: { type: 'string', enum: ['low', 'medium', 'high', 'urgent'] },
+                                category: { type: 'string' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Cập nhật thành công' } }
+        },
+        delete: {
+            summary: 'Xóa yêu cầu bảo trì',
+            tags: ['Maintenance Requests'],
+            security: [{ bearerAuth: [] }],
+            parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+            responses: { 200: { description: 'Xóa thành công' } }
+        }
+    },
+    '/maintenancerequests/{id}/assign': {
+        patch: {
+            summary: 'Giao yêu cầu cho nhân viên',
+            tags: ['Maintenance Requests'],
+            security: [{ bearerAuth: [] }],
+            parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                assigned_to: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Giao việc thành công' } }
+        }
+    },
+    '/maintenancerequests/{id}/status': {
+        patch: {
+            summary: 'Cập nhật trạng thái/tiến độ yêu cầu',
+            tags: ['Maintenance Requests'],
+            security: [{ bearerAuth: [] }],
+            parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                status: { type: 'string', enum: ['pending', 'in_progress', 'completed', 'closed', 'cancelled'], example: 'in_progress' },
+                                progress_note: { type: 'string' },
+                                back_maintenance_images: { type: 'array', items: { type: 'string' } }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Cập nhật thành công' } }
+        }
+    },
+    '/maintenancerequests/{id}/close': {
+        patch: {
+            summary: 'Đóng yêu cầu bảo trì',
+            tags: ['Maintenance Requests'],
+            security: [{ bearerAuth: [] }],
+            parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+            requestBody: {
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                closing_note: { type: 'string' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Đóng yêu cầu thành công' } }
+        }
+    },
+    '/maintenancerequests/{id}/rate': {
+        post: {
+            summary: 'Đánh giá yêu cầu bảo trì',
+            tags: ['Maintenance Requests'],
+            security: [{ bearerAuth: [] }],
+            parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                rating: { type: 'integer', minimum: 1, maximum: 5 },
+                                feedback: { type: 'string' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Đánh giá thành công' } }
+        }
+    }
+}
+
