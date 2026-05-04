@@ -4,15 +4,14 @@ export const createItem = Joi.object({
     Maintenance_Requests_code: Joi.string().trim().label('Mã sửa chữa'),
     apartment_id: Joi.string().hex().length(24).required().label('ID Căn Hộ'),
     resident_id: Joi.string().hex().length(24).required().label('ID Cư Dân'),
-    id_front_image: Joi.string().trim().optional().allow('').label('Ảnh trước'),
     title: Joi.string().trim().required().label('Tiêu đề'),
-    description: Joi.string().trim().required().label('Miêu tả'),
+    description: Joi.string().trim().optional().allow('').label('Miêu tả'),
     category: Joi.string().trim().required().label('loại'),
     priority: Joi.string().trim().required().label('Ưu tiên'),
     status: Joi.string().trim().required().label('Trạng thái'),
-    assigned_to: Joi.string().hex().length(24).required().label('Người phụ trách'),
-    rating: Joi.number().min(0).required().label('Đánh giá'),
-    feedback: Joi.string().trim().required().label('Nhận xét')
+    assigned_to: Joi.string().hex().length(24).optional().label('Người phụ trách'),
+    rating: Joi.number().min(0).optional().label('Đánh giá'),
+    feedback: Joi.string().trim().optional().allow('').label('Nhận xét')
 })
 
 export const assignItem = Joi.object({
@@ -24,7 +23,6 @@ export const updateItem = Joi.object({
     Maintenance_Requests_code: Joi.string().trim().label('Mã sửa chữa'),
     apartment_id: Joi.string().hex().length(24).label('ID Căn Hộ'),
     resident_id: Joi.string().hex().length(24).label('ID Cư Dân'),
-    id_front_image: Joi.string().trim().optional().allow('').label('Ảnh trước'),
     title: Joi.string().trim().label('Tiêu đề'),
     description: Joi.string().trim().label('Miêu tả'),
     category: Joi.string().trim().label('loại'),
@@ -36,14 +34,10 @@ export const updateItem = Joi.object({
 })
 
 export const updateStatusItem = Joi.object({
-    status: Joi.string().trim().required().label('Trạng thái'),
-    progress_note: Joi.string().trim().optional().allow('').label('Ghi chú tiến độ'),
-    id_back_image: Joi.string().trim().optional().allow('').label('Ảnh sau xử lý')
+    status: Joi.string().trim().required().label('Trạng thái')
 })
 
-export const closeItem = Joi.object({
-    closing_note: Joi.string().trim().optional().allow('').label('Ghi chú đóng')
-})
+export const closeItem = Joi.object({})
 
 export const rateItem = Joi.object({
     rating: Joi.number().min(1).max(5).required().label('Đánh giá'),

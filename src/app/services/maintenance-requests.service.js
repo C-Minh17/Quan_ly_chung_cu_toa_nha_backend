@@ -76,12 +76,6 @@ export const updateStatusMaintenance_requests = async (id, data) => {
     const updateData = {
         status: data.status
     }
-    if (typeof data.progress_note !== 'undefined') {
-        updateData.progress_note = data.progress_note
-    }
-    if (typeof data.back_maintenance_images !== 'undefined') {
-        updateData.back_maintenance_images = data.back_maintenance_images
-    }
 
     const res = await MaintenanceRequests.findByIdAndUpdate(id, updateData, { new: true }).populate('resident_id')
     if (!res) {
@@ -97,10 +91,7 @@ export const updateStatusMaintenance_requests = async (id, data) => {
 export const closeMaintenance_requests = async (id, data) => {
     const updateData = {
         status: 'closed',
-        closed_at: new Date()
-    }
-    if (typeof data.closing_note !== 'undefined') {
-        updateData.closing_note = data.closing_note
+        completed_at: new Date()
     }
 
     const res = await MaintenanceRequests.findByIdAndUpdate(id, updateData, { new: true }).populate('resident_id')
@@ -155,9 +146,9 @@ export const getMyMaintenance_requests = async (userId) => {
 export const getMaintenanceStats = async (filters = {}) => {
     const query = {}
     if (filters.startDate || filters.endDate) {
-        query.create_at = {}
-        if (filters.startDate) query.create_at.$gte = new Date(filters.startDate)
-        if (filters.endDate) query.create_at.$lte = new Date(filters.endDate)
+        query.created_at = {}
+        if (filters.startDate) query.created_at.$gte = new Date(filters.startDate)
+        if (filters.endDate) query.created_at.$lte = new Date(filters.endDate)
     }
 
     const stats = await MaintenanceRequests.aggregate([
@@ -169,8 +160,8 @@ export const getMaintenanceStats = async (filters = {}) => {
                 avgProcessingTimeMs: {
                     $avg: {
                         $cond: [
-                            { $and: [{ $eq: ['$status', 'closed'] }, { $ne: ['$closed_at', null] }] },
-                            { $subtract: ['$closed_at', '$create_at'] },
+                            { $and: [{ $eq: ['$status', 'closed'] }, { $ne: ['$completed_at', null] }] },
+                            { $subtract: ['$completed_at', '$created_at'] },
                             null
                         ]
                     }
