@@ -2155,3 +2155,166 @@ export const swaggerMaintenanceRequestsPaths = {
     }
 }
 
+export const swaggerUtilityReadingPaths = {
+    '/utilityreading': {
+        get: {
+            summary: 'Lấy danh sách ghi chỉ số tiện ích',
+            tags: ['Utility Reading'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'q', in: 'query', schema: { type: 'string' }, description: 'Tìm kiếm' },
+                { name: 'page', in: 'query', schema: { type: 'integer', default: 1 } },
+                { name: 'per_page', in: 'query', schema: { type: 'integer', default: 10 } },
+                { name: 'apartment_id', in: 'query', schema: { type: 'string' } },
+                { name: 'fee_type_id', in: 'query', schema: { type: 'string' } },
+                { name: 'reading_month', in: 'query', schema: { type: 'integer' } },
+                { name: 'reading_year', in: 'query', schema: { type: 'integer' } }
+            ],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    data: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                                apartment_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1a' },
+                                                fee_type_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1b' },
+                                                reading_month: { type: 'integer', example: 5 },
+                                                reading_year: { type: 'integer', example: 2024 },
+                                                previous_reading: { type: 'number', example: 100 },
+                                                current_reading: { type: 'number', example: 120 },
+                                                consumption: { type: 'number', example: 20 },
+                                                recorded_by: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1c' },
+                                                recorded_at: { type: 'string', format: 'date-time' }
+                                            }
+                                        }
+                                    },
+                                    total: { type: 'integer' },
+                                    page: { type: 'integer' },
+                                    per_page: { type: 'integer' }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        post: {
+            summary: 'Tạo mới ghi chỉ số tiện ích',
+            tags: ['Utility Reading'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                apartment_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1a' },
+                                fee_type_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1b' },
+                                reading_month: { type: 'integer', example: 5 },
+                                reading_year: { type: 'integer', example: 2024 },
+                                previous_reading: { type: 'number', example: 100 },
+                                current_reading: { type: 'number', example: 120 },
+                                recorded_by: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1c' },
+                                recorded_at: { type: 'string', format: 'date-time' }
+                            },
+                            required: ['apartment_id', 'fee_type_id', 'reading_month', 'reading_year']
+                        }
+                    }
+                }
+            },
+            responses: {
+                201: { description: 'Tạo thành công' },
+                400: { description: 'Dữ liệu không hợp lệ' }
+            }
+        }
+    },
+    '/utilityreading/{id}': {
+        get: {
+            summary: 'Lấy thông tin chi tiết ghi chỉ số',
+            tags: ['Utility Reading'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                    apartment_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1a' },
+                                    fee_type_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1b' },
+                                    reading_month: { type: 'integer', example: 5 },
+                                    reading_year: { type: 'integer', example: 2024 },
+                                    previous_reading: { type: 'number', example: 100 },
+                                    current_reading: { type: 'number', example: 120 },
+                                    consumption: { type: 'number', example: 20 },
+                                    recorded_by: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1c' },
+                                    recorded_at: { type: 'string', format: 'date-time' }
+                                }
+                            }
+                        }
+                    }
+                },
+                404: { description: 'Không tìm thấy' }
+            }
+        },
+        put: {
+            summary: 'Cập nhật thông tin ghi chỉ số',
+            tags: ['Utility Reading'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                apartment_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1a' },
+                                fee_type_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1b' },
+                                reading_month: { type: 'integer', example: 5 },
+                                reading_year: { type: 'integer', example: 2024 },
+                                previous_reading: { type: 'number', example: 100 },
+                                current_reading: { type: 'number', example: 120 },
+                                recorded_by: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1c' },
+                                recorded_at: { type: 'string', format: 'date-time' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Cập nhật thành công' },
+                400: { description: 'Dữ liệu không hợp lệ' },
+                404: { description: 'Không tìm thấy' }
+            }
+        },
+        delete: {
+            summary: 'Xóa ghi chỉ số',
+            tags: ['Utility Reading'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: {
+                200: { description: 'Xóa thành công' },
+                404: { description: 'Không tìm thấy' }
+            }
+        }
+    }
+}
