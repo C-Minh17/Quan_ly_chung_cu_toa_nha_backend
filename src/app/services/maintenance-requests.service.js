@@ -88,7 +88,7 @@ export const updateStatusMaintenance_requests = async (id, data) => {
     return res
 }
 
-export const closeMaintenance_requests = async (id, data) => {
+export const closeMaintenance_requests = async (id) => {
     const updateData = {
         status: 'closed',
         completed_at: new Date()
@@ -183,10 +183,10 @@ export const getMaintenanceStats = async (filters = {}) => {
     return stats
 }
 
-export const deleteMaintenance_requests = async (id) =>{
+export const deleteMaintenance_requests = async (id) => {
     const res = await MaintenanceRequests.findByIdAndDelete(id)
-    if (!res){
-        abort (404,'MaintenanceRequests not found')
+    if (!res) {
+        abort(404, 'MaintenanceRequests not found')
     }
     return res
 }
