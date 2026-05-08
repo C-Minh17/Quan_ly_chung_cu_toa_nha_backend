@@ -191,3 +191,11 @@ export const getMaintenanceStats = async (filters = {}) => {
 
     return stats
 }
+
+export const deleteMaintenance_requests = async (id) =>{
+    const res = await MaintenanceRequests.findByIdAndDelete(id)
+    if (!res){
+        abort (404,'MaintenanceRequests not found')
+    }
+    return res
+}

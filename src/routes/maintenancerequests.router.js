@@ -4,7 +4,7 @@ import { checkMaintenanceRequestsId } from '@/app/middleware/maintenance-request
 import { checkValidToken } from '@/app/middleware/user/auth.middleware'
 import { createItem, updateItem, assignItem, updateStatusItem, closeItem, rateItem } from '@/app/requests/maintenance-requests.request'
 
-import { getMaintenanceRequestsController, createMaintenanceRequestsController, getByIdMaintenanceRequestsController, updateMaintenanceRequestsController, assignMaintenanceRequestsController, updateStatusMaintenanceRequestsController, closeMaintenanceRequestsController, rateMaintenanceRequestsController, getMyMaintenanceRequestsController, getMaintenanceStatsController } from '@/app/controllers/maintenance-requests.controller'
+import { getMaintenanceRequestsController, createMaintenanceRequestsController, getByIdMaintenanceRequestsController, updateMaintenanceRequestsController, assignMaintenanceRequestsController, updateStatusMaintenanceRequestsController, closeMaintenanceRequestsController, rateMaintenanceRequestsController, getMyMaintenanceRequestsController, getMaintenanceStatsController, deleteMaintenanceRequestsController } from '@/app/controllers/maintenance-requests.controller'
 
 const router = Router()
 
@@ -18,5 +18,6 @@ router.patch('/:id/assign', checkMaintenanceRequestsId, validate(assignItem), as
 router.patch('/:id/status', checkMaintenanceRequestsId, validate(updateStatusItem), updateStatusMaintenanceRequestsController)
 router.patch('/:id/close', checkMaintenanceRequestsId, validate(closeItem), closeMaintenanceRequestsController)
 router.post('/:id/rate', checkMaintenanceRequestsId, validate(rateItem), rateMaintenanceRequestsController)
+router.delete('/:id',checkMaintenanceRequestsId,deleteMaintenanceRequestsController)
 
 export default router
