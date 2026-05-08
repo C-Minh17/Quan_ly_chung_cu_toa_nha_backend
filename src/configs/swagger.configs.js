@@ -1993,9 +1993,7 @@ export const swaggerMaintenanceRequestsPaths = {
                                 title: { type: 'string', example: 'Hỏng vòi nước' },
                                 description: { type: 'string', example: 'Vòi nước bồn rửa mặt bị rò rỉ' },
                                 priority: { type: 'string', enum: ['low', 'medium', 'high', 'urgent'], example: 'medium' },
-                                category: { type: 'string', example: 'Plumbing' },
-                                id_front_image: { type: 'string', example: 'image_url' },
-                                id_back_image: { type: 'string', example: 'image_url' }
+                                category: { type: 'string', example: 'Plumbing' }
                             }
                         }
                     }
@@ -2098,9 +2096,7 @@ export const swaggerMaintenanceRequestsPaths = {
                         schema: {
                             type: 'object',
                             properties: {
-                                status: { type: 'string', enum: ['pending', 'in_progress', 'completed', 'closed', 'cancelled'], example: 'in_progress' },
-                                progress_note: { type: 'string' },
-                                back_maintenance_images: { type: 'array', items: { type: 'string' } }
+                                status: { type: 'string', enum: ['pending', 'in_progress', 'completed', 'closed', 'cancelled'], example: 'in_progress' }
                             }
                         }
                     }
@@ -2120,9 +2116,7 @@ export const swaggerMaintenanceRequestsPaths = {
                     'application/json': {
                         schema: {
                             type: 'object',
-                            properties: {
-                                closing_note: { type: 'string' }
-                            }
+                            properties: {}
                         }
                     }
                 }
@@ -2155,6 +2149,17 @@ export const swaggerMaintenanceRequestsPaths = {
     }
 }
 
+export const swaggerMaintenanceSchedulesPaths = {
+    '/maintenance-schedules': {
+        get: {
+            summary: 'Lấy danh sách lịch bảo trì',
+            tags: ['Maintenance Schedules'],
+            security: [{ bearerAuth: [] }],
+            responses: { 200: { description: 'Thành công' } }
+        },
+        post: {
+            summary: 'Tạo lịch bảo trì mới',
+            tags: ['Maintenance Schedules'],
 export const swaggerUtilityReadingPaths = {
     '/utilityreading': {
         get: {
@@ -2217,6 +2222,31 @@ export const swaggerUtilityReadingPaths = {
                         schema: {
                             type: 'object',
                             properties: {
+                                title: { type: 'string', example: 'Bảo trì thang máy' },
+                                description: { type: 'string', example: 'Bảo trì định kỳ thang máy tòa nhà' },
+                                frequency: { type: 'string', enum: ['once', 'weekly', 'monthly', 'quarterly', 'yearly'], example: 'monthly' },
+                                assigned_to: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Tạo thành công' } }
+        }
+    },
+    '/maintenance-schedules/{id}': {
+        get: {
+            summary: 'Lấy chi tiết lịch bảo trì',
+            tags: ['Maintenance Schedules'],
+            security: [{ bearerAuth: [] }],
+            parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+            responses: { 200: { description: 'Thành công' } }
+        },
+        put: {
+            summary: 'Cập nhật lịch bảo trì',
+            tags: ['Maintenance Schedules'],
+            security: [{ bearerAuth: [] }],
+            parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
                                 apartment_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1a' },
                                 fee_type_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1b' },
                                 reading_month: { type: 'integer', example: 5 },
@@ -2285,6 +2315,35 @@ export const swaggerUtilityReadingPaths = {
                         schema: {
                             type: 'object',
                             properties: {
+                                title: { type: 'string' },
+                                description: { type: 'string' },
+                                frequency: { type: 'string', enum: ['once', 'weekly', 'monthly', 'quarterly', 'yearly'] },
+                                assigned_to: { type: 'string' },
+                                status: { type: 'string', enum: ['scheduled', 'completed', 'cancelled'] }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Cập nhật thành công' } }
+        },
+        delete: {
+            summary: 'Xóa lịch bảo trì',
+            tags: ['Maintenance Schedules'],
+            security: [{ bearerAuth: [] }],
+            parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+            responses: { 200: { description: 'Xóa thành công' } }
+        }
+    },
+    '/maintenance-schedules/{id}/complete': {
+        patch: {
+            summary: 'Đánh dấu hoàn thành lịch bảo trì',
+            description: 'Đánh dấu hoàn thành, tạo lịch mới cho kỳ tiếp theo',
+            tags: ['Maintenance Schedules'],
+            security: [{ bearerAuth: [] }],
+            parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+            responses: { 200: { description: 'Hoàn thành và tạo lịch tiếp theo thành công' } }
+
                                 apartment_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1a' },
                                 fee_type_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1b' },
                                 reading_month: { type: 'integer', example: 5 },

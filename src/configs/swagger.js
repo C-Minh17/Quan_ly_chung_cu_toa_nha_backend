@@ -1,5 +1,6 @@
 import swaggerUi from 'swagger-ui-express'
 // import { swaggerUserPaths, swaggerAdminPaths } from './swagger.configs'
+import { swaggerUserPaths, swaggerBuildingPaths, swaggerFloorPaths, swaggerApartmentPaths, swaggerResidentPaths, swaggerContractsPaths, swaggerVehiclesPaths, swaggerFeeTypePaths, swaggerMaintenanceRequestsPaths, swaggerMaintenanceSchedulesPaths } from './swagger.configs'
 import { swaggerUserPaths, swaggerBuildingPaths, swaggerFloorPaths, swaggerApartmentPaths, swaggerResidentPaths, swaggerContractsPaths, swaggerVehiclesPaths, swaggerFeeTypePaths, swaggerMaintenanceRequestsPaths, swaggerUtilityReadingPaths } from './swagger.configs'
 
 const swaggerDocument = {
@@ -25,6 +26,7 @@ const swaggerDocument = {
         ...swaggerVehiclesPaths,
         ...swaggerFeeTypePaths,
         ...swaggerMaintenanceRequestsPaths,
+        ...swaggerMaintenanceSchedulesPaths,
         ...swaggerUtilityReadingPaths,
         // ...swaggerAdminPaths
     },

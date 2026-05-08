@@ -9,14 +9,12 @@ const MaintenanceRequestsSchema = createModel(
         id: { type: String, required: true, unique: true },
         apartment_id: { type: mongoose.Schema.ObjectId, ref: 'Apartment', required: true },
         resident_id: { type: mongoose.Schema.ObjectId, ref: 'Resident', required: true },
-        front_maintenance_images: { type: String, default: '' },
-        back_maintenance_images: { type: String, default: '' },
-        title: { type: String, default: ' ' },
-        description: { type: String, required: true, default: ' ' },
+        title: { type: String, required: true, default: '' },
+        description: { type: String, default: '' },
         category: {
             type: String,
             enum: ['electrical', 'plumbing', 'structure', 'appliance', 'other'],
-            default: 'none'
+            default: 'other'
         },
         priority: {
             type: String,
@@ -28,15 +26,13 @@ const MaintenanceRequestsSchema = createModel(
             enum: ['new', 'assigned', 'in_progress', 'completed', 'closed'],
             default: 'new'
         },
-        progress_note: { type: String, default: '' },
-        closing_note: { type: String, default: '' },
-        closed_at: { type: Date, default: null },
-        assigned_to: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
-        rating: { type: Number, required: true },
-        feedback: { type: String, required: true, default: '' },
-        create_at: {
+        assigned_to: { type: mongoose.Schema.ObjectId, ref: 'User' },
+        rating: { type: Number },
+        feedback: { type: String, default: '' },
+        created_at: {
             type: Date, required: true, default: Date.now
-        }
+        },
+        completed_at: { type: Date, default: null }
     }
 )
 export default MaintenanceRequestsSchema
