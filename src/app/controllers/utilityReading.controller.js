@@ -56,7 +56,7 @@ export const updateUtilityReading = async (req,res) => {
         const data = await UtilityReading.updateUtilityReading(req.params.id,req.body)
         return res.status(200).json({
             success:true,
-            message:'Tạo data thành công',  
+            message:'Tạo data thành công',
             data:data
         })
     }catch(error){

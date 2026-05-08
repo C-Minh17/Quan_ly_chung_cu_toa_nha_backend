@@ -2372,3 +2372,153 @@ export const swaggerUtilityReadingPaths = {
         }
     }
 }
+
+export const swaggerInvoicesPaths = {
+    '/invoices': {
+        get: {
+            summary: 'Lấy danh sách hóa đơn đa chiều',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'status', in: 'query', schema: { type: 'string' } },
+                { name: 'apartment_id', in: 'query', schema: { type: 'string' } },
+                { name: 'billing_month', in: 'query', schema: { type: 'integer' } },
+                { name: 'billing_year', in: 'query', schema: { type: 'integer' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        },
+        post: {
+            summary: 'Tạo hóa đơn thủ công',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                apartment_id: { type: 'string' },
+                                billing_month: { type: 'integer' },
+                                billing_year: { type: 'integer' },
+                                details: {
+                                    type: 'array',
+                                    items: {
+                                        type: 'object',
+                                        properties: {
+                                            fee_type_id: { type: 'string' },
+                                            quantity: { type: 'number' }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/invoices/generate': {
+        post: {
+            summary: 'Tạo hóa đơn hàng loạt',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                billing_month: { type: 'integer' },
+                                billing_year: { type: 'integer' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/invoices/generate-monthly': {
+        post: {
+            summary: 'Tạo hóa đơn hàng loạt (alias)',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                billing_month: { type: 'integer' },
+                                billing_year: { type: 'integer' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/invoices/me': {
+        get: {
+            summary: 'Lấy danh sách hóa đơn của tôi',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/invoices/me/{id}': {
+        get: {
+            summary: 'Chi tiết hóa đơn của tôi',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/invoices/overdue': {
+        get: {
+            summary: 'Lấy danh sách hóa đơn quá hạn',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/invoices/{id}': {
+        get: {
+            summary: 'Chi tiết hóa đơn',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        },
+        delete: {
+            summary: 'Xóa hóa đơn',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/invoices/{id}/pdf': {
+        get: {
+            summary: 'Xuất PDF hóa đơn',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    }
+}

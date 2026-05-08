@@ -1,0 +1,1268 @@
+{
+  "buildings": [
+    {
+      "_id": "60d5ec49c1f4e500150000000001",
+      "id": "B1",
+      "name": "Building A",
+      "address": "123 Main St",
+      "total_floors": 10,
+      "description": "Main Building"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150000000002",
+      "id": "B2",
+      "name": "Building B",
+      "address": "125 Main St",
+      "total_floors": 8,
+      "description": "Secondary Building"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150000000003",
+      "id": "B3",
+      "name": "Building C",
+      "address": "127 Main St",
+      "total_floors": 12,
+      "description": "Premium Building"
+    }
+  ],
+  "floors": [
+    {
+      "_id": "60d5ec49c1f4e500150010000001",
+      "id": "F1",
+      "floor_number": 1,
+      "building_id": "60d5ec49c1f4e500150000000001",
+      "description": "Floor 1 of Building A"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150010000002",
+      "id": "F2",
+      "floor_number": 2,
+      "building_id": "60d5ec49c1f4e500150000000001",
+      "description": "Floor 2 of Building A"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150010000003",
+      "id": "F3",
+      "floor_number": 1,
+      "building_id": "60d5ec49c1f4e500150000000002",
+      "description": "Floor 1 of Building B"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150010000004",
+      "id": "F4",
+      "floor_number": 2,
+      "building_id": "60d5ec49c1f4e500150000000002",
+      "description": "Floor 2 of Building B"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150010000005",
+      "id": "F5",
+      "floor_number": 1,
+      "building_id": "60d5ec49c1f4e500150000000003",
+      "description": "Floor 1 of Building C"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150010000006",
+      "id": "F6",
+      "floor_number": 2,
+      "building_id": "60d5ec49c1f4e500150000000003",
+      "description": "Floor 2 of Building C"
+    }
+  ],
+  "apartments": [
+    {
+      "_id": "60d5ec49c1f4e500150020000001",
+      "id": "A1",
+      "apartment_number": "101",
+      "floor_id": "60d5ec49c1f4e500150010000001",
+      "status": "occupied",
+      "description": "Apartment 101"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150020000002",
+      "id": "A2",
+      "apartment_number": "102",
+      "floor_id": "60d5ec49c1f4e500150010000001",
+      "status": "occupied",
+      "description": "Apartment 102"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150020000003",
+      "id": "A3",
+      "apartment_number": "201",
+      "floor_id": "60d5ec49c1f4e500150010000002",
+      "status": "occupied",
+      "description": "Apartment 201"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150020000004",
+      "id": "A4",
+      "apartment_number": "202",
+      "floor_id": "60d5ec49c1f4e500150010000002",
+      "status": "occupied",
+      "description": "Apartment 202"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150020000005",
+      "id": "A5",
+      "apartment_number": "101",
+      "floor_id": "60d5ec49c1f4e500150010000003",
+      "status": "occupied",
+      "description": "Apartment 101"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150020000006",
+      "id": "A6",
+      "apartment_number": "102",
+      "floor_id": "60d5ec49c1f4e500150010000003",
+      "status": "occupied",
+      "description": "Apartment 102"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150020000007",
+      "id": "A7",
+      "apartment_number": "201",
+      "floor_id": "60d5ec49c1f4e500150010000004",
+      "status": "occupied",
+      "description": "Apartment 201"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150020000008",
+      "id": "A8",
+      "apartment_number": "202",
+      "floor_id": "60d5ec49c1f4e500150010000004",
+      "status": "occupied",
+      "description": "Apartment 202"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150020000009",
+      "id": "A9",
+      "apartment_number": "101",
+      "floor_id": "60d5ec49c1f4e500150010000005",
+      "status": "occupied",
+      "description": "Apartment 101"
+    },
+    {
+      "_id": "60d5ec49c1f4e50015002000000a",
+      "id": "A10",
+      "apartment_number": "102",
+      "floor_id": "60d5ec49c1f4e500150010000005",
+      "status": "occupied",
+      "description": "Apartment 102"
+    },
+    {
+      "_id": "60d5ec49c1f4e50015002000000b",
+      "id": "A11",
+      "apartment_number": "201",
+      "floor_id": "60d5ec49c1f4e500150010000006",
+      "status": "occupied",
+      "description": "Apartment 201"
+    },
+    {
+      "_id": "60d5ec49c1f4e50015002000000c",
+      "id": "A12",
+      "apartment_number": "202",
+      "floor_id": "60d5ec49c1f4e500150010000006",
+      "status": "occupied",
+      "description": "Apartment 202"
+    }
+  ],
+  "users": [
+    {
+      "_id": "60d5ec49c1f4e500150030000001",
+      "username": "user1",
+      "email": "user1@example.com",
+      "phone": "0900000001",
+      "full_name": "User 1",
+      "password": "hashed_password",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150030000002",
+      "username": "user2",
+      "email": "user2@example.com",
+      "phone": "0900000002",
+      "full_name": "User 2",
+      "password": "hashed_password",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150030000003",
+      "username": "user3",
+      "email": "user3@example.com",
+      "phone": "0900000003",
+      "full_name": "User 3",
+      "password": "hashed_password",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150030000004",
+      "username": "user4",
+      "email": "user4@example.com",
+      "phone": "0900000004",
+      "full_name": "User 4",
+      "password": "hashed_password",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150030000005",
+      "username": "user5",
+      "email": "user5@example.com",
+      "phone": "0900000005",
+      "full_name": "User 5",
+      "password": "hashed_password",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150030000006",
+      "username": "user6",
+      "email": "user6@example.com",
+      "phone": "0900000006",
+      "full_name": "User 6",
+      "password": "hashed_password",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150030000007",
+      "username": "user7",
+      "email": "user7@example.com",
+      "phone": "0900000007",
+      "full_name": "User 7",
+      "password": "hashed_password",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150030000008",
+      "username": "user8",
+      "email": "user8@example.com",
+      "phone": "0900000008",
+      "full_name": "User 8",
+      "password": "hashed_password",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150030000009",
+      "username": "user9",
+      "email": "user9@example.com",
+      "phone": "0900000009",
+      "full_name": "User 9",
+      "password": "hashed_password",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e50015003000000a",
+      "username": "user10",
+      "email": "user10@example.com",
+      "phone": "09000000010",
+      "full_name": "User 10",
+      "password": "hashed_password",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e50015003000000b",
+      "username": "user11",
+      "email": "user11@example.com",
+      "phone": "09000000011",
+      "full_name": "User 11",
+      "password": "hashed_password",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e50015003000000c",
+      "username": "user12",
+      "email": "user12@example.com",
+      "phone": "09000000012",
+      "full_name": "User 12",
+      "password": "hashed_password",
+      "status": "active"
+    }
+  ],
+  "residents": [
+    {
+      "_id": "60d5ec49c1f4e500150040000001",
+      "id": "R1",
+      "user_id": "60d5ec49c1f4e500150030000001",
+      "apartment_id": "60d5ec49c1f4e500150020000001",
+      "relationship": "owner",
+      "move_in_date": "2026-01-01",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150040000002",
+      "id": "R2",
+      "user_id": "60d5ec49c1f4e500150030000002",
+      "apartment_id": "60d5ec49c1f4e500150020000002",
+      "relationship": "owner",
+      "move_in_date": "2026-01-01",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150040000003",
+      "id": "R3",
+      "user_id": "60d5ec49c1f4e500150030000003",
+      "apartment_id": "60d5ec49c1f4e500150020000003",
+      "relationship": "owner",
+      "move_in_date": "2026-01-01",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150040000004",
+      "id": "R4",
+      "user_id": "60d5ec49c1f4e500150030000004",
+      "apartment_id": "60d5ec49c1f4e500150020000004",
+      "relationship": "owner",
+      "move_in_date": "2026-01-01",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150040000005",
+      "id": "R5",
+      "user_id": "60d5ec49c1f4e500150030000005",
+      "apartment_id": "60d5ec49c1f4e500150020000005",
+      "relationship": "owner",
+      "move_in_date": "2026-01-01",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150040000006",
+      "id": "R6",
+      "user_id": "60d5ec49c1f4e500150030000006",
+      "apartment_id": "60d5ec49c1f4e500150020000006",
+      "relationship": "owner",
+      "move_in_date": "2026-01-01",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150040000007",
+      "id": "R7",
+      "user_id": "60d5ec49c1f4e500150030000007",
+      "apartment_id": "60d5ec49c1f4e500150020000007",
+      "relationship": "owner",
+      "move_in_date": "2026-01-01",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150040000008",
+      "id": "R8",
+      "user_id": "60d5ec49c1f4e500150030000008",
+      "apartment_id": "60d5ec49c1f4e500150020000008",
+      "relationship": "owner",
+      "move_in_date": "2026-01-01",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150040000009",
+      "id": "R9",
+      "user_id": "60d5ec49c1f4e500150030000009",
+      "apartment_id": "60d5ec49c1f4e500150020000009",
+      "relationship": "owner",
+      "move_in_date": "2026-01-01",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e50015004000000a",
+      "id": "R10",
+      "user_id": "60d5ec49c1f4e50015003000000a",
+      "apartment_id": "60d5ec49c1f4e50015002000000a",
+      "relationship": "owner",
+      "move_in_date": "2026-01-01",
+      "status": "active"
+    }
+  ],
+  "feeTypes": [
+    {
+      "_id": "60d5ec49c1f4e500150050000001",
+      "id": "FT1",
+      "name": "Điện",
+      "unit": "kWh",
+      "is_metered": true
+    },
+    {
+      "_id": "60d5ec49c1f4e500150050000002",
+      "id": "FT2",
+      "name": "Nước",
+      "unit": "m3",
+      "is_metered": true
+    },
+    {
+      "_id": "60d5ec49c1f4e500150050000003",
+      "id": "FT3",
+      "name": "Quản lý",
+      "unit": "m2",
+      "is_metered": false
+    },
+    {
+      "_id": "60d5ec49c1f4e500150050000004",
+      "id": "FT4",
+      "name": "Gửi xe",
+      "unit": "chiếc",
+      "is_metered": false
+    },
+    {
+      "_id": "60d5ec49c1f4e500150050000005",
+      "id": "FT5",
+      "name": "Vệ sinh",
+      "unit": "tháng",
+      "is_metered": false
+    }
+  ],
+  "utilityReadings": [
+    {
+      "_id": "60d5ec49c1f4e500150060000001",
+      "apartment_id": "60d5ec49c1f4e500150020000001",
+      "fee_type_id": "60d5ec49c1f4e500150050000002",
+      "reading_date": "2026-04-30",
+      "old_value": 100,
+      "new_value": 155,
+      "consumption": 55,
+      "recorded_by": "60d5ec49c1f4e50015003000000b"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150060000002",
+      "apartment_id": "60d5ec49c1f4e500150020000002",
+      "fee_type_id": "60d5ec49c1f4e500150050000001",
+      "reading_date": "2026-04-30",
+      "old_value": 100,
+      "new_value": 160,
+      "consumption": 60,
+      "recorded_by": "60d5ec49c1f4e50015003000000b"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150060000003",
+      "apartment_id": "60d5ec49c1f4e500150020000003",
+      "fee_type_id": "60d5ec49c1f4e500150050000002",
+      "reading_date": "2026-04-30",
+      "old_value": 100,
+      "new_value": 165,
+      "consumption": 65,
+      "recorded_by": "60d5ec49c1f4e50015003000000b"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150060000004",
+      "apartment_id": "60d5ec49c1f4e500150020000004",
+      "fee_type_id": "60d5ec49c1f4e500150050000001",
+      "reading_date": "2026-04-30",
+      "old_value": 100,
+      "new_value": 170,
+      "consumption": 70,
+      "recorded_by": "60d5ec49c1f4e50015003000000b"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150060000005",
+      "apartment_id": "60d5ec49c1f4e500150020000005",
+      "fee_type_id": "60d5ec49c1f4e500150050000002",
+      "reading_date": "2026-04-30",
+      "old_value": 100,
+      "new_value": 175,
+      "consumption": 75,
+      "recorded_by": "60d5ec49c1f4e50015003000000b"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150060000006",
+      "apartment_id": "60d5ec49c1f4e500150020000006",
+      "fee_type_id": "60d5ec49c1f4e500150050000001",
+      "reading_date": "2026-04-30",
+      "old_value": 100,
+      "new_value": 180,
+      "consumption": 80,
+      "recorded_by": "60d5ec49c1f4e50015003000000b"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150060000007",
+      "apartment_id": "60d5ec49c1f4e500150020000007",
+      "fee_type_id": "60d5ec49c1f4e500150050000002",
+      "reading_date": "2026-04-30",
+      "old_value": 100,
+      "new_value": 185,
+      "consumption": 85,
+      "recorded_by": "60d5ec49c1f4e50015003000000b"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150060000008",
+      "apartment_id": "60d5ec49c1f4e500150020000008",
+      "fee_type_id": "60d5ec49c1f4e500150050000001",
+      "reading_date": "2026-04-30",
+      "old_value": 100,
+      "new_value": 190,
+      "consumption": 90,
+      "recorded_by": "60d5ec49c1f4e50015003000000b"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150060000009",
+      "apartment_id": "60d5ec49c1f4e500150020000009",
+      "fee_type_id": "60d5ec49c1f4e500150050000002",
+      "reading_date": "2026-04-30",
+      "old_value": 100,
+      "new_value": 195,
+      "consumption": 95,
+      "recorded_by": "60d5ec49c1f4e50015003000000b"
+    },
+    {
+      "_id": "60d5ec49c1f4e50015006000000a",
+      "apartment_id": "60d5ec49c1f4e50015002000000a",
+      "fee_type_id": "60d5ec49c1f4e500150050000001",
+      "reading_date": "2026-04-30",
+      "old_value": 100,
+      "new_value": 200,
+      "consumption": 100,
+      "recorded_by": "60d5ec49c1f4e50015003000000b"
+    }
+  ],
+  "invoices": [
+    {
+      "_id": "60d5ec49c1f4e500150070000001",
+      "invoice_code": "INV202604_1",
+      "id": "I1",
+      "apartment_id": "60d5ec49c1f4e500150020000001",
+      "month": 4,
+      "year": 2026,
+      "total_amount": 1050000,
+      "status": "unpaid",
+      "due_date": "2026-05-10",
+      "created_at": "2026-05-01"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150070000002",
+      "invoice_code": "INV202604_2",
+      "id": "I2",
+      "apartment_id": "60d5ec49c1f4e500150020000002",
+      "month": 4,
+      "year": 2026,
+      "total_amount": 1100000,
+      "status": "unpaid",
+      "due_date": "2026-05-10",
+      "created_at": "2026-05-01"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150070000003",
+      "invoice_code": "INV202604_3",
+      "id": "I3",
+      "apartment_id": "60d5ec49c1f4e500150020000003",
+      "month": 4,
+      "year": 2026,
+      "total_amount": 1150000,
+      "status": "unpaid",
+      "due_date": "2026-05-10",
+      "created_at": "2026-05-01"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150070000004",
+      "invoice_code": "INV202604_4",
+      "id": "I4",
+      "apartment_id": "60d5ec49c1f4e500150020000004",
+      "month": 4,
+      "year": 2026,
+      "total_amount": 1200000,
+      "status": "unpaid",
+      "due_date": "2026-05-10",
+      "created_at": "2026-05-01"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150070000005",
+      "invoice_code": "INV202604_5",
+      "id": "I5",
+      "apartment_id": "60d5ec49c1f4e500150020000005",
+      "month": 4,
+      "year": 2026,
+      "total_amount": 1250000,
+      "status": "unpaid",
+      "due_date": "2026-05-10",
+      "created_at": "2026-05-01"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150070000006",
+      "invoice_code": "INV202604_6",
+      "id": "I6",
+      "apartment_id": "60d5ec49c1f4e500150020000006",
+      "month": 4,
+      "year": 2026,
+      "total_amount": 1300000,
+      "status": "unpaid",
+      "due_date": "2026-05-10",
+      "created_at": "2026-05-01"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150070000007",
+      "invoice_code": "INV202604_7",
+      "id": "I7",
+      "apartment_id": "60d5ec49c1f4e500150020000007",
+      "month": 4,
+      "year": 2026,
+      "total_amount": 1350000,
+      "status": "unpaid",
+      "due_date": "2026-05-10",
+      "created_at": "2026-05-01"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150070000008",
+      "invoice_code": "INV202604_8",
+      "id": "I8",
+      "apartment_id": "60d5ec49c1f4e500150020000008",
+      "month": 4,
+      "year": 2026,
+      "total_amount": 1400000,
+      "status": "unpaid",
+      "due_date": "2026-05-10",
+      "created_at": "2026-05-01"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150070000009",
+      "invoice_code": "INV202604_9",
+      "id": "I9",
+      "apartment_id": "60d5ec49c1f4e500150020000009",
+      "month": 4,
+      "year": 2026,
+      "total_amount": 1450000,
+      "status": "unpaid",
+      "due_date": "2026-05-10",
+      "created_at": "2026-05-01"
+    },
+    {
+      "_id": "60d5ec49c1f4e50015007000000a",
+      "invoice_code": "INV202604_10",
+      "id": "I10",
+      "apartment_id": "60d5ec49c1f4e50015002000000a",
+      "month": 4,
+      "year": 2026,
+      "total_amount": 1500000,
+      "status": "unpaid",
+      "due_date": "2026-05-10",
+      "created_at": "2026-05-01"
+    }
+  ],
+  "invoiceDetails": [
+    {
+      "_id": "60d5ec49c1f4e500150080000001",
+      "invoice_id": "60d5ec49c1f4e500150070000001",
+      "fee_type_id": "60d5ec49c1f4e500150050000001",
+      "amount": 501000,
+      "description": "Chi phí Điện"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150080000002",
+      "invoice_id": "60d5ec49c1f4e500150070000001",
+      "fee_type_id": "60d5ec49c1f4e500150050000002",
+      "amount": 502000,
+      "description": "Chi phí Nước"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150080000003",
+      "invoice_id": "60d5ec49c1f4e500150070000002",
+      "fee_type_id": "60d5ec49c1f4e500150050000001",
+      "amount": 503000,
+      "description": "Chi phí Điện"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150080000004",
+      "invoice_id": "60d5ec49c1f4e500150070000002",
+      "fee_type_id": "60d5ec49c1f4e500150050000002",
+      "amount": 504000,
+      "description": "Chi phí Nước"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150080000005",
+      "invoice_id": "60d5ec49c1f4e500150070000003",
+      "fee_type_id": "60d5ec49c1f4e500150050000001",
+      "amount": 505000,
+      "description": "Chi phí Điện"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150080000006",
+      "invoice_id": "60d5ec49c1f4e500150070000003",
+      "fee_type_id": "60d5ec49c1f4e500150050000002",
+      "amount": 506000,
+      "description": "Chi phí Nước"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150080000007",
+      "invoice_id": "60d5ec49c1f4e500150070000004",
+      "fee_type_id": "60d5ec49c1f4e500150050000001",
+      "amount": 507000,
+      "description": "Chi phí Điện"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150080000008",
+      "invoice_id": "60d5ec49c1f4e500150070000004",
+      "fee_type_id": "60d5ec49c1f4e500150050000002",
+      "amount": 508000,
+      "description": "Chi phí Nước"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150080000009",
+      "invoice_id": "60d5ec49c1f4e500150070000005",
+      "fee_type_id": "60d5ec49c1f4e500150050000001",
+      "amount": 509000,
+      "description": "Chi phí Điện"
+    },
+    {
+      "_id": "60d5ec49c1f4e50015008000000a",
+      "invoice_id": "60d5ec49c1f4e500150070000005",
+      "fee_type_id": "60d5ec49c1f4e500150050000002",
+      "amount": 510000,
+      "description": "Chi phí Nước"
+    },
+    {
+      "_id": "60d5ec49c1f4e50015008000000b",
+      "invoice_id": "60d5ec49c1f4e500150070000006",
+      "fee_type_id": "60d5ec49c1f4e500150050000001",
+      "amount": 511000,
+      "description": "Chi phí Điện"
+    },
+    {
+      "_id": "60d5ec49c1f4e50015008000000c",
+      "invoice_id": "60d5ec49c1f4e500150070000006",
+      "fee_type_id": "60d5ec49c1f4e500150050000002",
+      "amount": 512000,
+      "description": "Chi phí Nước"
+    },
+    {
+      "_id": "60d5ec49c1f4e50015008000000d",
+      "invoice_id": "60d5ec49c1f4e500150070000007",
+      "fee_type_id": "60d5ec49c1f4e500150050000001",
+      "amount": 513000,
+      "description": "Chi phí Điện"
+    },
+    {
+      "_id": "60d5ec49c1f4e50015008000000e",
+      "invoice_id": "60d5ec49c1f4e500150070000007",
+      "fee_type_id": "60d5ec49c1f4e500150050000002",
+      "amount": 514000,
+      "description": "Chi phí Nước"
+    },
+    {
+      "_id": "60d5ec49c1f4e50015008000000f",
+      "invoice_id": "60d5ec49c1f4e500150070000008",
+      "fee_type_id": "60d5ec49c1f4e500150050000001",
+      "amount": 515000,
+      "description": "Chi phí Điện"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150080000010",
+      "invoice_id": "60d5ec49c1f4e500150070000008",
+      "fee_type_id": "60d5ec49c1f4e500150050000002",
+      "amount": 516000,
+      "description": "Chi phí Nước"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150080000011",
+      "invoice_id": "60d5ec49c1f4e500150070000009",
+      "fee_type_id": "60d5ec49c1f4e500150050000001",
+      "amount": 517000,
+      "description": "Chi phí Điện"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150080000012",
+      "invoice_id": "60d5ec49c1f4e500150070000009",
+      "fee_type_id": "60d5ec49c1f4e500150050000002",
+      "amount": 518000,
+      "description": "Chi phí Nước"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150080000013",
+      "invoice_id": "60d5ec49c1f4e50015007000000a",
+      "fee_type_id": "60d5ec49c1f4e500150050000001",
+      "amount": 519000,
+      "description": "Chi phí Điện"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150080000014",
+      "invoice_id": "60d5ec49c1f4e50015007000000a",
+      "fee_type_id": "60d5ec49c1f4e500150050000002",
+      "amount": 520000,
+      "description": "Chi phí Nước"
+    }
+  ],
+  "contracts": [
+    {
+      "_id": "60d5ec49c1f4e500150090000001",
+      "contract_code": "CONT_1",
+      "apartment_id": "60d5ec49c1f4e500150020000001",
+      "resident_id": "60d5ec49c1f4e500150040000001",
+      "start_date": "2026-01-01",
+      "end_date": "2027-01-01",
+      "status": "active",
+      "deposit": 5000000
+    },
+    {
+      "_id": "60d5ec49c1f4e500150090000002",
+      "contract_code": "CONT_2",
+      "apartment_id": "60d5ec49c1f4e500150020000002",
+      "resident_id": "60d5ec49c1f4e500150040000002",
+      "start_date": "2026-01-01",
+      "end_date": "2027-01-01",
+      "status": "active",
+      "deposit": 5000000
+    },
+    {
+      "_id": "60d5ec49c1f4e500150090000003",
+      "contract_code": "CONT_3",
+      "apartment_id": "60d5ec49c1f4e500150020000003",
+      "resident_id": "60d5ec49c1f4e500150040000003",
+      "start_date": "2026-01-01",
+      "end_date": "2027-01-01",
+      "status": "active",
+      "deposit": 5000000
+    },
+    {
+      "_id": "60d5ec49c1f4e500150090000004",
+      "contract_code": "CONT_4",
+      "apartment_id": "60d5ec49c1f4e500150020000004",
+      "resident_id": "60d5ec49c1f4e500150040000004",
+      "start_date": "2026-01-01",
+      "end_date": "2027-01-01",
+      "status": "active",
+      "deposit": 5000000
+    },
+    {
+      "_id": "60d5ec49c1f4e500150090000005",
+      "contract_code": "CONT_5",
+      "apartment_id": "60d5ec49c1f4e500150020000005",
+      "resident_id": "60d5ec49c1f4e500150040000005",
+      "start_date": "2026-01-01",
+      "end_date": "2027-01-01",
+      "status": "active",
+      "deposit": 5000000
+    },
+    {
+      "_id": "60d5ec49c1f4e500150090000006",
+      "contract_code": "CONT_6",
+      "apartment_id": "60d5ec49c1f4e500150020000006",
+      "resident_id": "60d5ec49c1f4e500150040000006",
+      "start_date": "2026-01-01",
+      "end_date": "2027-01-01",
+      "status": "active",
+      "deposit": 5000000
+    },
+    {
+      "_id": "60d5ec49c1f4e500150090000007",
+      "contract_code": "CONT_7",
+      "apartment_id": "60d5ec49c1f4e500150020000007",
+      "resident_id": "60d5ec49c1f4e500150040000007",
+      "start_date": "2026-01-01",
+      "end_date": "2027-01-01",
+      "status": "active",
+      "deposit": 5000000
+    },
+    {
+      "_id": "60d5ec49c1f4e500150090000008",
+      "contract_code": "CONT_8",
+      "apartment_id": "60d5ec49c1f4e500150020000008",
+      "resident_id": "60d5ec49c1f4e500150040000008",
+      "start_date": "2026-01-01",
+      "end_date": "2027-01-01",
+      "status": "active",
+      "deposit": 5000000
+    },
+    {
+      "_id": "60d5ec49c1f4e500150090000009",
+      "contract_code": "CONT_9",
+      "apartment_id": "60d5ec49c1f4e500150020000009",
+      "resident_id": "60d5ec49c1f4e500150040000009",
+      "start_date": "2026-01-01",
+      "end_date": "2027-01-01",
+      "status": "active",
+      "deposit": 5000000
+    },
+    {
+      "_id": "60d5ec49c1f4e50015009000000a",
+      "contract_code": "CONT_10",
+      "apartment_id": "60d5ec49c1f4e50015002000000a",
+      "resident_id": "60d5ec49c1f4e50015004000000a",
+      "start_date": "2026-01-01",
+      "end_date": "2027-01-01",
+      "status": "active",
+      "deposit": 5000000
+    }
+  ],
+  "vehicles": [
+    {
+      "_id": "60d5ec49c1f4e5001500a0000001",
+      "id": "V1",
+      "resident_id": "60d5ec49c1f4e500150040000001",
+      "vehicle_type": "motorbike",
+      "license_plate": "29A-12346",
+      "brand": "Yamaha",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e5001500a0000002",
+      "id": "V2",
+      "resident_id": "60d5ec49c1f4e500150040000002",
+      "vehicle_type": "car",
+      "license_plate": "29A-12347",
+      "brand": "Honda",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e5001500a0000003",
+      "id": "V3",
+      "resident_id": "60d5ec49c1f4e500150040000003",
+      "vehicle_type": "motorbike",
+      "license_plate": "29A-12348",
+      "brand": "Yamaha",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e5001500a0000004",
+      "id": "V4",
+      "resident_id": "60d5ec49c1f4e500150040000004",
+      "vehicle_type": "car",
+      "license_plate": "29A-12349",
+      "brand": "Honda",
+      "status": "active"
+    },
+    {
+      "_id": "60d5ec49c1f4e5001500a0000005",
+      "id": "V5",
+      "resident_id": "60d5ec49c1f4e500150040000005",
+      "vehicle_type": "motorbike",
+      "license_plate": "29A-12350",
+      "brand": "Yamaha",
+      "status": "active"
+    }
+  ],
+  "files": [
+    {
+      "_id": "60d5ec49c1f4e5001500b0000001",
+      "filename": "file_1.pdf",
+      "originalname": "Document 1.pdf",
+      "mimetype": "application/pdf",
+      "size": 1024,
+      "url": "https://example.com/files/file_1.pdf",
+      "scope": "Public"
+    },
+    {
+      "_id": "60d5ec49c1f4e5001500b0000002",
+      "filename": "file_2.pdf",
+      "originalname": "Document 2.pdf",
+      "mimetype": "application/pdf",
+      "size": 2048,
+      "url": "https://example.com/files/file_2.pdf",
+      "scope": "Public"
+    },
+    {
+      "_id": "60d5ec49c1f4e5001500b0000003",
+      "filename": "file_3.pdf",
+      "originalname": "Document 3.pdf",
+      "mimetype": "application/pdf",
+      "size": 3072,
+      "url": "https://example.com/files/file_3.pdf",
+      "scope": "Public"
+    },
+    {
+      "_id": "60d5ec49c1f4e5001500b0000004",
+      "filename": "file_4.pdf",
+      "originalname": "Document 4.pdf",
+      "mimetype": "application/pdf",
+      "size": 4096,
+      "url": "https://example.com/files/file_4.pdf",
+      "scope": "Public"
+    },
+    {
+      "_id": "60d5ec49c1f4e5001500b0000005",
+      "filename": "file_5.pdf",
+      "originalname": "Document 5.pdf",
+      "mimetype": "application/pdf",
+      "size": 5120,
+      "url": "https://example.com/files/file_5.pdf",
+      "scope": "Public"
+    }
+  ],
+  "maintenanceRequests": [
+    {
+      "_id": "60d5ec49c1f4e5001500c0000001",
+      "Maintenance_Requests_code": "REQ_1",
+      "id": "REQ1",
+      "apartment_id": "60d5ec49c1f4e500150020000001",
+      "resident_id": "60d5ec49c1f4e500150040000001",
+      "title": "Hư hỏng thiết bị 1",
+      "description": "Mô tả hư hỏng thiết bị 1",
+      "category": "plumbing",
+      "priority": "medium",
+      "status": "new",
+      "assigned_to": "60d5ec49c1f4e50015003000000c"
+    },
+    {
+      "_id": "60d5ec49c1f4e5001500c0000002",
+      "Maintenance_Requests_code": "REQ_2",
+      "id": "REQ2",
+      "apartment_id": "60d5ec49c1f4e500150020000002",
+      "resident_id": "60d5ec49c1f4e500150040000002",
+      "title": "Hư hỏng thiết bị 2",
+      "description": "Mô tả hư hỏng thiết bị 2",
+      "category": "electrical",
+      "priority": "high",
+      "status": "new",
+      "assigned_to": "60d5ec49c1f4e50015003000000c"
+    },
+    {
+      "_id": "60d5ec49c1f4e5001500c0000003",
+      "Maintenance_Requests_code": "REQ_3",
+      "id": "REQ3",
+      "apartment_id": "60d5ec49c1f4e500150020000003",
+      "resident_id": "60d5ec49c1f4e500150040000003",
+      "title": "Hư hỏng thiết bị 3",
+      "description": "Mô tả hư hỏng thiết bị 3",
+      "category": "plumbing",
+      "priority": "medium",
+      "status": "new",
+      "assigned_to": "60d5ec49c1f4e50015003000000c"
+    },
+    {
+      "_id": "60d5ec49c1f4e5001500c0000004",
+      "Maintenance_Requests_code": "REQ_4",
+      "id": "REQ4",
+      "apartment_id": "60d5ec49c1f4e500150020000004",
+      "resident_id": "60d5ec49c1f4e500150040000004",
+      "title": "Hư hỏng thiết bị 4",
+      "description": "Mô tả hư hỏng thiết bị 4",
+      "category": "electrical",
+      "priority": "high",
+      "status": "new",
+      "assigned_to": "60d5ec49c1f4e50015003000000c"
+    },
+    {
+      "_id": "60d5ec49c1f4e5001500c0000005",
+      "Maintenance_Requests_code": "REQ_5",
+      "id": "REQ5",
+      "apartment_id": "60d5ec49c1f4e500150020000005",
+      "resident_id": "60d5ec49c1f4e500150040000005",
+      "title": "Hư hỏng thiết bị 5",
+      "description": "Mô tả hư hỏng thiết bị 5",
+      "category": "plumbing",
+      "priority": "medium",
+      "status": "new",
+      "assigned_to": "60d5ec49c1f4e50015003000000c"
+    }
+  ],
+  "maintenanceSchedules": [
+    {
+      "_id": "60d5ec49c1f4e5001500d0000001",
+      "Maintenance_Schedules_id": "SCH_1",
+      "id": "SCH1",
+      "title": "Bảo trì định kỳ 1",
+      "description": "Bảo trì hệ thống 1",
+      "frequency": "monthly",
+      "scheduled_date": "2026-05-15",
+      "assigned_to": "60d5ec49c1f4e50015003000000c",
+      "status": "scheduled"
+    },
+    {
+      "_id": "60d5ec49c1f4e5001500d0000002",
+      "Maintenance_Schedules_id": "SCH_2",
+      "id": "SCH2",
+      "title": "Bảo trì định kỳ 2",
+      "description": "Bảo trì hệ thống 2",
+      "frequency": "monthly",
+      "scheduled_date": "2026-05-15",
+      "assigned_to": "60d5ec49c1f4e50015003000000c",
+      "status": "scheduled"
+    },
+    {
+      "_id": "60d5ec49c1f4e5001500d0000003",
+      "Maintenance_Schedules_id": "SCH_3",
+      "id": "SCH3",
+      "title": "Bảo trì định kỳ 3",
+      "description": "Bảo trì hệ thống 3",
+      "frequency": "monthly",
+      "scheduled_date": "2026-05-15",
+      "assigned_to": "60d5ec49c1f4e50015003000000c",
+      "status": "scheduled"
+    }
+  ],
+  "maintenanceImages": [
+    {
+      "_id": "60d5ec49c1f4e5001500e0000001",
+      "request_id": "60d5ec49c1f4e5001500c0000001",
+      "image_url": "https://example.com/images/req_1.jpg"
+    },
+    {
+      "_id": "60d5ec49c1f4e5001500e0000002",
+      "request_id": "60d5ec49c1f4e5001500c0000002",
+      "image_url": "https://example.com/images/req_2.jpg"
+    },
+    {
+      "_id": "60d5ec49c1f4e5001500e0000003",
+      "request_id": "60d5ec49c1f4e5001500c0000003",
+      "image_url": "https://example.com/images/req_3.jpg"
+    }
+  ],
+  "permissionGroups": [
+    {
+      "_id": "60d5ec49c1f4e5001500f0000001",
+      "code": "PG1",
+      "name": "Quản lý căn hộ",
+      "position": 1
+    },
+    {
+      "_id": "60d5ec49c1f4e5001500f0000002",
+      "code": "PG2",
+      "name": "Quản lý hóa đơn",
+      "position": 2
+    }
+  ],
+  "permissionTypes": [
+    {
+      "_id": "60d5ec49c1f4e500150100000001",
+      "code": "READ",
+      "name": "Xem",
+      "position": 1
+    },
+    {
+      "_id": "60d5ec49c1f4e500150100000002",
+      "code": "WRITE",
+      "name": "Ghi",
+      "position": 2
+    }
+  ],
+  "permissions": [
+    {
+      "_id": "60d5ec49c1f4e500150110000001",
+      "code": "VIEW_APT",
+      "description": "Xem căn hộ",
+      "permission_group_code": "PG1",
+      "permission_type_code": "READ"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150110000002",
+      "code": "EDIT_APT",
+      "description": "Sửa căn hộ",
+      "permission_group_code": "PG1",
+      "permission_type_code": "WRITE"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150110000003",
+      "code": "VIEW_INV",
+      "description": "Xem hóa đơn",
+      "permission_group_code": "PG2",
+      "permission_type_code": "READ"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150110000004",
+      "code": "EDIT_INV",
+      "description": "Sửa hóa đơn",
+      "permission_group_code": "PG2",
+      "permission_type_code": "WRITE"
+    }
+  ],
+  "roles": [
+    {
+      "_id": "60d5ec49c1f4e500150120000001",
+      "name": "Admin",
+      "code": "ADMIN",
+      "description": "Toàn quyền",
+      "can_delete": false,
+      "permission_ids": [
+        "60d5ec49c1f4e500150110000001",
+        "60d5ec49c1f4e500150110000002",
+        "60d5ec49c1f4e500150110000003",
+        "60d5ec49c1f4e500150110000004"
+      ]
+    },
+    {
+      "_id": "60d5ec49c1f4e500150120000002",
+      "name": "Nhân viên",
+      "code": "STAFF",
+      "description": "Quyền hạn chế",
+      "can_delete": true,
+      "permission_ids": [
+        "60d5ec49c1f4e500150110000001",
+        "60d5ec49c1f4e500150110000003"
+      ]
+    }
+  ],
+  "admins": [
+    {
+      "_id": "60d5ec49c1f4e500150130000001",
+      "name": "Admin 1",
+      "email": "admin1@example.com",
+      "phone": "0911111111",
+      "password": "hashed_password",
+      "status": "ACTIVE",
+      "role_ids": [
+        "60d5ec49c1f4e500150120000001"
+      ]
+    },
+    {
+      "_id": "60d5ec49c1f4e500150130000002",
+      "name": "Manager 1",
+      "email": "manager1@example.com",
+      "phone": "0911111112",
+      "password": "hashed_password",
+      "status": "ACTIVE",
+      "role_ids": [
+        "60d5ec49c1f4e500150120000002"
+      ]
+    }
+  ],
+  "userRoles": [
+    {
+      "_id": "60d5ec49c1f4e500150120000001",
+      "name": "Admin",
+      "code": "ADMIN",
+      "description": "Toàn quyền",
+      "can_delete": false,
+      "permission_ids": [
+        "60d5ec49c1f4e500150110000001",
+        "60d5ec49c1f4e500150110000002",
+        "60d5ec49c1f4e500150110000003",
+        "60d5ec49c1f4e500150110000004"
+      ]
+    },
+    {
+      "_id": "60d5ec49c1f4e500150120000002",
+      "name": "Nhân viên",
+      "code": "STAFF",
+      "description": "Quyền hạn chế",
+      "can_delete": true,
+      "permission_ids": [
+        "60d5ec49c1f4e500150110000001",
+        "60d5ec49c1f4e500150110000003"
+      ]
+    }
+  ],
+  "userPermissionGroups": [
+    {
+      "_id": "60d5ec49c1f4e5001500f0000001",
+      "code": "PG1",
+      "name": "Quản lý căn hộ",
+      "position": 1
+    },
+    {
+      "_id": "60d5ec49c1f4e5001500f0000002",
+      "code": "PG2",
+      "name": "Quản lý hóa đơn",
+      "position": 2
+    }
+  ],
+  "userPermissions": [
+    {
+      "_id": "60d5ec49c1f4e500150110000001",
+      "code": "VIEW_APT",
+      "description": "Xem căn hộ",
+      "permission_group_code": "PG1",
+      "permission_type_code": "READ"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150110000002",
+      "code": "EDIT_APT",
+      "description": "Sửa căn hộ",
+      "permission_group_code": "PG1",
+      "permission_type_code": "WRITE"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150110000003",
+      "code": "VIEW_INV",
+      "description": "Xem hóa đơn",
+      "permission_group_code": "PG2",
+      "permission_type_code": "READ"
+    },
+    {
+      "_id": "60d5ec49c1f4e500150110000004",
+      "code": "EDIT_INV",
+      "description": "Sửa hóa đơn",
+      "permission_group_code": "PG2",
+      "permission_type_code": "WRITE"
+    }
+  ]
+}
