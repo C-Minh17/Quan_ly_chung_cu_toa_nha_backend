@@ -12,6 +12,7 @@ import vehicleRouter from './vehicles.router'
 import feeTypeRouter from './feeType.router'
 import maintenanceRequestsRouter from './maintenancerequests.router'
 import maintenanceSchedulesRouter from './maintenance-schedules.router'
+import utilityReadingRouter from './utilityReading.router'
 
 function route(app) {
     app.use('/admin', admin)
@@ -28,6 +29,7 @@ function route(app) {
     app.use('/feeType', feeTypeRouter)
     app.use('/maintenancerequests', maintenanceRequestsRouter)
     app.use('/maintenance-schedules', maintenanceSchedulesRouter)
+    app.use('/utilityreading', utilityReadingRouter)
 }
 
 

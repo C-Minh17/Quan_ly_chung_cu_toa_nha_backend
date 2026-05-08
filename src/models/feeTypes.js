@@ -5,6 +5,7 @@ const feeTypesSchema = createModel(
     'feeTypes',
     {
         name:{type:String},
+        fee_category:{type:String , enum:['fixed' , 'metered' , 'parking']},
         fee_category:{type:String , enum:['fixed | metered | parking']},
         unit_price:{type:Number},
         unit:{type:String},
