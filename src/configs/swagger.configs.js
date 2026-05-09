@@ -2155,11 +2155,93 @@ export const swaggerMaintenanceSchedulesPaths = {
             summary: 'Lấy danh sách lịch bảo trì',
             tags: ['Maintenance Schedules'],
             security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'q', in: 'query', schema: { type: 'string' }, description: 'Tìm kiếm theo tiêu đề' },
+                { name: 'page', in: 'query', schema: { type: 'integer', default: 1 } },
+                { name: 'per_page', in: 'query', schema: { type: 'integer', default: 10 } }
+            ],
             responses: { 200: { description: 'Thành công' } }
         },
         post: {
             summary: 'Tạo lịch bảo trì mới',
             tags: ['Maintenance Schedules'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                title: { type: 'string', example: 'Bảo trì thang máy' },
+                                description: { type: 'string', example: 'Bảo trì định kỳ thang máy tòa A' },
+                                frequency: { type: 'string', enum: ['once', 'weekly', 'monthly', 'quarterly', 'yearly'], example: 'monthly' },
+                                scheduled_date: { type: 'string', format: 'date-time', example: '2026-05-10T08:00:00.000Z' },
+                                assigned_to: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Tạo lịch bảo trì thành công' } }
+        }
+    },
+    '/maintenance-schedules/{id}': {
+        get: {
+            summary: 'Lấy thông tin chi tiết lịch bảo trì',
+            tags: ['Maintenance Schedules'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        },
+        put: {
+            summary: 'Cập nhật lịch bảo trì',
+            tags: ['Maintenance Schedules'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                title: { type: 'string', example: 'Bảo trì thang máy' },
+                                description: { type: 'string', example: 'Bảo trì định kỳ thang máy tòa A' },
+                                frequency: { type: 'string', enum: ['once', 'weekly', 'monthly', 'quarterly', 'yearly'], example: 'monthly' },
+                                scheduled_date: { type: 'string', format: 'date-time', example: '2026-05-10T08:00:00.000Z' },
+                                assigned_to: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                status: { type: 'string', enum: ['scheduled', 'completed', 'cancelled'], example: 'scheduled' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Cập nhật thành công' } }
+        },
+        delete: {
+            summary: 'Xóa lịch bảo trì',
+            tags: ['Maintenance Schedules'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Xóa thành công' } }
+        }
+    },
+    '/maintenance-schedules/{id}/complete': {
+        patch: {
+            summary: 'Hoàn thành lịch bảo trì',
+            tags: ['Maintenance Schedules'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Hoàn thành lịch bảo trì thành công' } }
         }
     }
 }
