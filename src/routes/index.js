@@ -14,6 +14,7 @@ import maintenanceRequestsRouter from './maintenancerequests.router'
 import maintenanceSchedulesRouter from './maintenance-schedules.router'
 import utilityReadingRouter from './utilityReading.router'
 import invoicesRouter from './invoices.router'
+import paymentsRouter from './payments.router'
 
 function route(app) {
     app.use('/admin', admin)
@@ -32,6 +33,7 @@ function route(app) {
     app.use('/maintenance-schedules', maintenanceSchedulesRouter)
     app.use('/utilityreading', utilityReadingRouter)
     app.use('/invoices', invoicesRouter)
+    app.use('/payments', paymentsRouter)
 }
 
 

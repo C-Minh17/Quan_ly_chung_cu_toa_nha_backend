@@ -326,7 +326,7 @@ export const getOverdueInvoices = async () => {
 }
 
 export const exportInvoicePDF = async (id) => {
-    const invoice = await getInvoiceById(id)
+    await getInvoiceById(id)
     // Ở đây hệ thống hiện tại chưa cài đặt thư viện PDF (như puppeteer hoặc pdfkit)
     // Thay vào đó, API này có thể trả về HTML template đã được render bằng ejs
     // Hoặc trả về thông báo lỗi 501

@@ -2522,3 +2522,100 @@ export const swaggerInvoicesPaths = {
         }
     }
 }
+
+export const swaggerPaymentsPaths = {
+    '/payments/lookup': {
+        post: {
+            summary: 'Tra cứu thông tin hóa đơn',
+            tags: ['Payments'],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                invoice_code: { type: 'string', example: 'INV-2024-5-APT1' },
+                                apartment_id: { type: 'string', example: '662b2e88a38a7c2e39130001' },
+                                billing_month: { type: 'integer', example: 5 },
+                                billing_year: { type: 'integer', example: 2024 }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/payments': {
+        post: {
+            summary: 'Thanh toán hóa đơn',
+            tags: ['Payments'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                invoice_id: { type: 'string', example: '662b2e88a38a7c2e39130002' },
+                                amount: { type: 'number', example: 500000 },
+                                payment_method: { type: 'string', example: 'bank_transfer', description: 'cash | bank_transfer | momo | vnpay' },
+                                transaction_code: { type: 'string', example: 'FT24125ABCDE' },
+                                note: { type: 'string', example: 'Chuyển khoản thanh toán phí tháng 5' },
+                                received_by: { type: 'string', description: 'ID nhân viên thu tiền' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Thanh toán thành công' } }
+        },
+        get: {
+            summary: 'Lấy danh sách thanh toán',
+            tags: ['Payments'],
+            parameters: [
+                { name: 'payment_method', in: 'query', schema: { type: 'string' } },
+                { name: 'invoice_id', in: 'query', schema: { type: 'string' } },
+                { name: 'received_by', in: 'query', schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/payments/cron-overdue': {
+        post: {
+            summary: 'Cập nhật trạng thái nợ hạn (Cron Job)',
+            tags: ['Payments'],
+            responses: { 200: { description: 'Cập nhật thành công' } }
+        }
+    },
+    '/payments/me': {
+        get: {
+            summary: 'Lịch sử thanh toán của tôi',
+            tags: ['Payments'],
+            security: [{ bearerAuth: [] }],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/payments/invoice/{invoiceId}': {
+        get: {
+            summary: 'Lịch sử thanh toán của 1 hóa đơn',
+            tags: ['Payments'],
+            parameters: [
+                { name: 'invoiceId', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/payments/{id}': {
+        get: {
+            summary: 'Chi tiết 1 giao dịch thanh toán',
+            tags: ['Payments'],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    }
+}
