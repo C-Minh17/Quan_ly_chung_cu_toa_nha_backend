@@ -2604,3 +2604,162 @@ export const swaggerInvoicesPaths = {
         }
     }
 }
+
+export const swaggerAmenitiesPaths = {
+    '/amenities': {
+        get: {
+            summary: 'Lấy danh sách tiện ích',
+            tags: ['Amenities'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                        amenities_code: { type: 'string', example: 'AMN001' },
+                                        name: { type: 'string', example: 'Hồ bơi' },
+                                        id: { type: 'string', example: 'HB01' },
+                                        description: { type: 'string', example: 'Hồ bơi ngoài trời' },
+                                        capacity: { type: 'integer', example: 50 },
+                                        open_time: { type: 'string', format: 'date-time', example: '2024-01-01T06:00:00.000Z' },
+                                        close_time: { type: 'string', format: 'date-time', example: '2024-01-01T22:00:00.000Z' },
+                                        is_active: { type: 'boolean', example: true },
+                                        created_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        post: {
+            summary: 'Tạo tiện ích mới',
+            tags: ['Amenities'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                amenities_code: { type: 'string', example: 'AMN001' },
+                                name: { type: 'string', example: 'Hồ bơi' },
+                                id: { type: 'string', example: 'HB01' },
+                                description: { type: 'string', example: 'Hồ bơi ngoài trời' },
+                                capacity: { type: 'integer', example: 50 },
+                                open_time: { type: 'string', format: 'date-time', example: '2024-01-01T06:00:00.000Z' },
+                                close_time: { type: 'string', format: 'date-time', example: '2024-01-01T22:00:00.000Z' },
+                                is_active: { type: 'boolean', example: true }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/amenities/{id}': {
+        get: {
+            summary: 'Lấy chi tiết tiện ích',
+            tags: ['Amenities'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                    amenities_code: { type: 'string', example: 'AMN001' },
+                                    name: { type: 'string', example: 'Hồ bơi' },
+                                    id: { type: 'string', example: 'HB01' },
+                                    description: { type: 'string', example: 'Hồ bơi ngoài trời' },
+                                    capacity: { type: 'integer', example: 50 },
+                                    open_time: { type: 'string', format: 'date-time', example: '2024-01-01T06:00:00.000Z' },
+                                    close_time: { type: 'string', format: 'date-time', example: '2024-01-01T22:00:00.000Z' },
+                                    is_active: { type: 'boolean', example: true },
+                                    created_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        put: {
+            summary: 'Cập nhật tiện ích',
+            tags: ['Amenities'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                amenities_code: { type: 'string', example: 'AMN001' },
+                                name: { type: 'string', example: 'Hồ bơi' },
+                                id: { type: 'string', example: 'HB01' },
+                                description: { type: 'string', example: 'Hồ bơi ngoài trời' },
+                                capacity: { type: 'integer', example: 50 },
+                                open_time: { type: 'string', format: 'date-time', example: '2024-01-01T06:00:00.000Z' },
+                                close_time: { type: 'string', format: 'date-time', example: '2024-01-01T22:00:00.000Z' },
+                                is_active: { type: 'boolean', example: true }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Thành công' } }
+        },
+        delete: {
+            summary: 'Xóa tiện ích',
+            tags: ['Amenities'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/amenities/{id}/status': {
+        patch: {
+            summary: 'Cập nhật trạng thái tiện ích',
+            tags: ['Amenities'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                is_active: { type: 'boolean', example: true }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Thành công' } }
+        }
+    }
+}
