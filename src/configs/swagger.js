@@ -1,7 +1,6 @@
 import swaggerUi from 'swagger-ui-express'
 // import { swaggerUserPaths, swaggerAdminPaths } from './swagger.configs'
 import { swaggerUserPaths, swaggerBuildingPaths, swaggerFloorPaths, swaggerApartmentPaths, swaggerResidentPaths, swaggerContractsPaths, swaggerVehiclesPaths, swaggerFeeTypePaths, swaggerMaintenanceRequestsPaths, swaggerMaintenanceSchedulesPaths, swaggerUtilityReadingPaths, swaggerInvoicesPaths, swaggerPaymentsPaths } from './swagger.configs'
-import { swaggerUserPaths, swaggerBuildingPaths, swaggerFloorPaths, swaggerApartmentPaths, swaggerResidentPaths, swaggerContractsPaths, swaggerVehiclesPaths, swaggerFeeTypePaths, swaggerMaintenanceRequestsPaths, swaggerMaintenanceSchedulesPaths, swaggerUtilityReadingPaths, swaggerInvoicesPaths, swaggerAmenitiesPaths } from './swagger.configs'
 
 const swaggerDocument = {
     openapi: '3.0.0',
@@ -30,7 +29,6 @@ const swaggerDocument = {
         ...swaggerUtilityReadingPaths,
         ...swaggerInvoicesPaths,
         ...swaggerPaymentsPaths,
-        ...swaggerAmenitiesPaths,
         // ...swaggerAdminPaths
     },
     components: {
