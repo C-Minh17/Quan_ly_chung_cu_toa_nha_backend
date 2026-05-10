@@ -2688,8 +2688,7 @@ export const swaggerAmenitiesPaths = {
                         }
                     }
                 }
-            },
-            responses: { 200: { description: 'Thành công' } }
+            }
         },
         post: {
             summary: 'Tạo tiện ích mới',
