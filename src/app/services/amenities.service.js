@@ -1,4 +1,4 @@
-import { Amenities } from '@/models'
+import { Amenities, AmenityBooking } from '@/models'
 import { abort } from '@/utils/helpers'
 
 export const getAmenities = async () => {
@@ -34,19 +34,14 @@ export const createAmenities = async (data) => {
         }
     }
 
-    if (!data.id) {
-        const lastAmenityId = await Amenities.findOne()
-            .collation({ locale: 'en_US', numericOrdering: true })
-            .sort({ id: -1 })
-            .lean()
-            
-        if (lastAmenityId && lastAmenityId.id) {
-            data.id = (parseInt(lastAmenityId.id) + 1).toString().padStart(3, '0')
-        } else {
-            data.id = '001'
-        }
-    }
+    const lastAmenities = await Amenities.findOne().collation({ locale: 'en_US', numericOrdering: true }).sort({ id: -1 })
+    const nextId = lastAmenities ? (parseInt(lastAmenities.id) + 1).toString().padStart(3, '0') : '001'
+    data.id = nextId
+
     const res = await Amenities.create(data)
+    if (!res) {
+        abort(400, 'Create Amenities failed')
+    }
     return res
 }
 
@@ -75,4 +70,37 @@ export const deleteAmenities = async (id) => {
         abort(404, 'delete amenities failed')
     }
     return res
+}
+
+export const getAmenitiesSchedule = async (id, query = {}) => {
+    const filter = {
+        amenity_id: id,
+        status: { $in: ['approved', 'pending'] }
+    }
+
+    if (query.date) {
+        const startOfDay = new Date(query.date)
+        startOfDay.setUTCHours(0, 0, 0, 0)
+        const endOfDay = new Date(query.date)
+        endOfDay.setUTCHours(23, 59, 59, 999)
+
+        filter.booking_date = {
+            $gte: startOfDay,
+            $lte: endOfDay
+        }
+    }
+
+    const res = await AmenityBooking.find(filter)
+        .populate('amenity_id')
+        .populate('resident_id')
+        .sort({ start_time: 1 })
+        .lean()
+
+    return res.map(booking => {
+        booking.amenity = booking.amenity_id
+        booking.amenity_id = booking.amenity ? booking.amenity._id : null
+        booking.resident = booking.resident_id
+        booking.resident_id = booking.resident ? booking.resident._id : null
+        return booking
+    })
 }

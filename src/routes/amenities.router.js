@@ -9,7 +9,8 @@ import {
     getByIdAmenities,
     updateAmenities,
     updateStatusAmenities,
-    deleteAmenities
+    deleteAmenities,
+    getAmenitiesSchedule
 } from '@/app/controllers/amenities.controller'
 
 const router = Router()
@@ -22,6 +23,6 @@ router.patch('/:id/status', checkAmenitiesId, validate(updateStatusItem), update
 router.delete('/:id', checkAmenitiesId, deleteAmenities)
 
 // Lịch đặt chỗ (bạn có thể mở comment khi nào làm xong controller)
-// router.get('/:id/schedule', checkAmenitiesId, getAmenitiesSchedule)
+router.get('/:id/schedule', checkAmenitiesId, getAmenitiesSchedule)
 
 export default router
