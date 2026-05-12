@@ -2812,5 +2812,153 @@ export const swaggerAmenitiesPaths = {
             },
             responses: { 200: { description: 'Thành công' } }
         }
+    },
+    '/amenities/{id}/schedule': {
+        get: {
+            summary: 'Lấy lịch sử dụng tiện ích',
+            tags: ['Amenities'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } },
+                { name: 'date', in: 'query', schema: { type: 'string', example: '2026-05-12' }, description: 'Lọc theo ngày cụ thể (YYYY-MM-DD)' }
+            ],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        _id: { type: 'string', example: '662b2e88a38a7c2e39130001' },
+                                        amenity_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                        resident_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j2l' },
+                                        booking_date: { type: 'string', format: 'date', example: '2026-05-12' },
+                                        start_time: { type: 'string', format: 'date-time', example: '2026-05-12T08:00:00.000Z' },
+                                        end_time: { type: 'string', format: 'date-time', example: '2026-05-12T10:00:00.000Z' },
+                                        num_people: { type: 'integer', example: 5 },
+                                        status: { type: 'string', example: 'approved' }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+export const swaggerAmenityBookingsPaths = {
+    '/amenity-bookings': {
+        get: {
+            summary: 'Lấy danh sách tất cả lượt đặt tiện ích',
+            tags: ['Amenity Bookings'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        _id: { type: 'string', example: '662b2e88a38a7c2e39130001' },
+                                        amenities_code: { type: 'string', example: 'B01' },
+                                        amenity_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                        resident_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j2l' },
+                                        booking_date: { type: 'string', format: 'date', example: '2026-05-12' },
+                                        start_time: { type: 'string', format: 'date-time', example: '2026-05-12T08:00:00.000Z' },
+                                        end_time: { type: 'string', format: 'date-time', example: '2026-05-12T10:00:00.000Z' },
+                                        num_people: { type: 'integer', example: 5 },
+                                        status: { type: 'string', example: 'approved' },
+                                        created_at: { type: 'string', format: 'date-time', example: '2026-05-12T07:00:00.000Z' }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        post: {
+            summary: 'Tạo mới lượt đặt tiện ích',
+            tags: ['Amenity Bookings'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                amenities_code: { type: 'string', example: 'B01' },
+                                amenity_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                resident_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j2l' },
+                                booking_date: { type: 'string', format: 'date', example: '2026-05-12' },
+                                start_time: { type: 'string', format: 'date-time', example: '2026-05-12T08:00:00.000Z' },
+                                end_time: { type: 'string', format: 'date-time', example: '2026-05-12T10:00:00.000Z' },
+                                num_people: { type: 'integer', example: 5 }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/amenity-bookings/me': {
+        get: {
+            summary: 'Lấy danh sách lượt đặt tiện ích của tôi',
+            tags: ['Amenity Bookings'],
+            security: [{ bearerAuth: [] }],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/amenity-bookings/{id}': {
+        get: {
+            summary: 'Xem chi tiết lượt đặt tiện ích',
+            tags: ['Amenity Bookings'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        },
+        delete: {
+            summary: 'Xóa lượt đặt tiện ích',
+            tags: ['Amenity Bookings'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/amenity-bookings/{id}/approve': {
+        patch: {
+            summary: 'Duyệt lượt đặt tiện ích',
+            tags: ['Amenity Bookings'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/amenity-bookings/{id}/reject': {
+        patch: {
+            summary: 'Từ chối lượt đặt tiện ích',
+            tags: ['Amenity Bookings'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
     }
 }
