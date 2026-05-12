@@ -91,14 +91,14 @@ export const generateMonthlyInvoices = async ({ billing_month, billing_year }) =
             // Sinh invoice_code theo format INV-{year}-{month}-APT{apartment_id}
             const invoiceCode = `INV-${billing_year}-${String(billing_month).padStart(2, '0')}-APT${apartment.id || apartment._id}`
 
-            // Tính due_date = ngày 15 tháng kế tiếp
+            // Tính due_date = ngày 10 tháng kế tiếp
             let dueMonth = billing_month + 1
             let dueYear = billing_year
             if (dueMonth > 12) {
                 dueMonth = 1
                 dueYear += 1
             }
-            const dueDate = new Date(dueYear, dueMonth - 1, 15)
+            const dueDate = new Date(dueYear, dueMonth - 1, 10)
 
             // Tạo hóa đơn sử dụng new + save() thay vì create() để tương thích với transaction
             const newInvoice = new Invoices({
@@ -156,7 +156,14 @@ export const getInvoices = async (query) => {
         .sort(sort || { created_at: -1 })
         .lean()
 
-    return invoices
+    // Transform: tách apartment_id (object) thành apartment (object) + apartment_id (ID string)
+    const transformedInvoices = invoices.map(invoice => ({
+        ...invoice,
+        apartment: invoice.apartment_id,  // object đầy đủ
+        apartment_id: invoice.apartment_id._id  // chỉ lấy ID
+    }))
+
+    return transformedInvoices
 }
 
 export const createInvoice = async (data) => {
@@ -204,7 +211,7 @@ export const createInvoice = async (data) => {
             dueMonth = 1
             dueYear += 1
         }
-        const dueDate = new Date(dueYear, dueMonth - 1, 15)
+        const dueDate = new Date(dueYear, dueMonth - 1, 10)
 
         const [newInvoice] = await Invoices.create([{
             apartment_id,
@@ -249,8 +256,14 @@ export const getInvoiceById = async (id) => {
         .populate('fee_type_id')
         .lean()
 
-    invoice.details = details
-    return invoice
+    // Transform: tách apartment_id (object) thành apartment (object) + apartment_id (ID string)
+    const transformedInvoice = {
+        ...invoice,
+        apartment: invoice.apartment_id,
+        apartment_id: invoice.apartment_id._id
+    }
+    transformedInvoice.details = details
+    return transformedInvoice
 }
 
 export const deleteInvoice = async (id) => {
@@ -287,18 +300,34 @@ export const getMyInvoices = async (user_id) => {
     }
 
     const invoices = await Invoices.find({ apartment_id: { $in: apartmentIds } })
-        .populate('apartment_id')
+        .populate({
+            path: 'apartment_id',
+            populate: { path: 'floor_id', populate: { path: 'building_id' } }
+        })
         .sort({ created_at: -1 })
         .lean()
 
-    return invoices
+    // Transform: tách apartment_id (object) thành apartment (object) + apartment_id (ID string)
+    const transformedInvoices = invoices.map(invoice => ({
+        ...invoice,
+        apartment: invoice.apartment_id,
+        apartment_id: invoice.apartment_id._id
+    }))
+
+    return transformedInvoices
 }
 
 export const getMyInvoiceById = async (user_id, invoice_id) => {
     const residents = await Resident.find({ user_id }).lean()
     const apartmentIds = residents.map(r => r.apartment_id.toString())
 
-    const invoice = await Invoices.findById(invoice_id).populate('apartment_id').lean()
+    const invoice = await Invoices.findById(invoice_id)
+        .populate({
+            path: 'apartment_id',
+            populate: { path: 'floor_id', populate: { path: 'building_id' } }
+        })
+        .lean()
+    
     if (!invoice) abort(404, 'Invoice not found')
 
     if (!apartmentIds.includes(invoice.apartment_id._id.toString())) {
@@ -306,9 +335,16 @@ export const getMyInvoiceById = async (user_id, invoice_id) => {
     }
 
     const details = await InvoiceDetails.find({ invoice_id: invoice._id }).populate('fee_type_id').lean()
-    invoice.details = details
+    
+    // Transform: tách apartment_id (object) thành apartment (object) + apartment_id (ID string)
+    const transformedInvoice = {
+        ...invoice,
+        apartment: invoice.apartment_id,
+        apartment_id: invoice.apartment_id._id
+    }
+    transformedInvoice.details = details
 
-    return invoice
+    return transformedInvoice
 }
 
 export const getOverdueInvoices = async () => {
@@ -324,7 +360,14 @@ export const getOverdueInvoices = async () => {
         .sort({ due_date: 1 })
         .lean()
 
-    return invoices
+    // Transform: tách apartment_id (object) thành apartment (object) + apartment_id (ID string)
+    const transformedInvoices = invoices.map(invoice => ({
+        ...invoice,
+        apartment: invoice.apartment_id,
+        apartment_id: invoice.apartment_id._id
+    }))
+
+    return transformedInvoices
 }
 
 export const exportInvoicePDF = async (id) => {
