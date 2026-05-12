@@ -104,4 +104,21 @@ export const deleteAmenities = async (req, res) => {
             error: error.message
         })
     }
-}   
+}
+
+export const getAmenitiesSchedule = async (req, res) => {
+    try {
+        const data = await amenitiesService.getAmenitiesSchedule(req.params.id, req.query)
+        return res.status(200).json({
+            success: true,
+            message: 'Get amenities schedule successfully',
+            data: data
+        })
+    } catch (error) {
+        return res.status(error.status || 500).json({
+            success: false,
+            message: error.message || 'Get amenities schedule failed',
+            error: error.message
+        })
+    }
+}
