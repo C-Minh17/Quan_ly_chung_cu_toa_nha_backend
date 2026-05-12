@@ -7,9 +7,9 @@ export const generateMonthlyInvoices = async ({ billing_month, billing_year }) =
         abort(400, 'billing_month and billing_year are required')
     }
 
-    // Lấy danh sách tất cả apartment đang active (sử dụng status: 'active' hoặc 'occupied' tuỳ hệ thống, ở đây dùng 'active')
-    // Dùng case-insensitive regex cho an toàn
-    const apartments = await Apartment.find({ status: { $regex: /^active$/i } })
+    // Lấy danh sách tất cả apartment có hợp đồng đang active
+    // Kiểm tra contract_status = 'active' để xác định apartment có hợp đồng hiệu lực
+    const apartments = await Apartment.find({ contract_status: 'active' })
 
     const results = {
         total_processed: apartments.length,
@@ -89,7 +89,7 @@ export const generateMonthlyInvoices = async ({ billing_month, billing_year }) =
             }
 
             // Sinh invoice_code theo format INV-{year}-{month}-APT{apartment_id}
-            const invoiceCode = `INV-${billing_year}-${billing_month}-APT${apartment.id || apartment._id}`
+            const invoiceCode = `INV-${billing_year}-${String(billing_month).padStart(2, '0')}-APT${apartment.id || apartment._id}`
 
             // Tính due_date = ngày 15 tháng kế tiếp
             let dueMonth = billing_month + 1
@@ -100,8 +100,8 @@ export const generateMonthlyInvoices = async ({ billing_month, billing_year }) =
             }
             const dueDate = new Date(dueYear, dueMonth - 1, 15)
 
-            // Tạo hóa đơn
-            const [newInvoice] = await Invoices.create([{
+            // Tạo hóa đơn sử dụng new + save() thay vì create() để tương thích với transaction
+            const newInvoice = new Invoices({
                 apartment_id: apartment._id,
                 invoice_code: invoiceCode,
                 billing_month,
@@ -110,7 +110,9 @@ export const generateMonthlyInvoices = async ({ billing_month, billing_year }) =
                 paid_amount: 0,
                 status: 'unpaid',
                 due_date: dueDate
-            }], { session })
+            })
+            
+            await newInvoice.save({ session })
 
             // Gán invoice_id vào chi tiết và lưu
             const detailsWithInvoiceId = invoiceDetailsToInsert.map(d => ({
