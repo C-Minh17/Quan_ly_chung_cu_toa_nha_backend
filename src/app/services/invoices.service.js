@@ -225,6 +225,11 @@ export const getInvoices = async (query) => {
     // Transform: tách apartment_id (object) thành apartment (object) + apartment_id (ID string)
     // và thêm thông tin chi tiết phí
     const transformedInvoices = await Promise.all(invoices.map(async (invoice) => {
+        // Skip if apartment_id is null (deleted apartment)
+        if (!invoice.apartment_id) {
+            return null
+        }
+
         const details = await InvoiceDetails.find({ invoice_id: invoice._id })
             .populate('fee_type_id')
             .lean()
@@ -238,7 +243,8 @@ export const getInvoices = async (query) => {
         return enrichInvoiceWithFeeBreakdown(transformedInvoice, details)
     }))
 
-    return transformedInvoices
+    // Filter out null values (deleted apartments)
+    return transformedInvoices.filter(invoice => invoice !== null)
 }
 
 export const createInvoice = async (data) => {
@@ -326,6 +332,7 @@ export const getInvoiceById = async (id) => {
         .lean()
 
     if (!invoice) abort(404, 'Invoice not found')
+    if (!invoice.apartment_id) abort(404, 'Associated apartment not found')
 
     const details = await InvoiceDetails.find({ invoice_id: invoice._id })
         .populate('fee_type_id')
@@ -386,6 +393,11 @@ export const getMyInvoices = async (user_id) => {
     // Transform: tách apartment_id (object) thành apartment (object) + apartment_id (ID string)
     // và thêm thông tin chi tiết phí
     const transformedInvoices = await Promise.all(invoices.map(async (invoice) => {
+        // Skip if apartment_id is null (deleted apartment)
+        if (!invoice.apartment_id) {
+            return null
+        }
+
         const details = await InvoiceDetails.find({ invoice_id: invoice._id })
             .populate('fee_type_id')
             .lean()
@@ -399,7 +411,8 @@ export const getMyInvoices = async (user_id) => {
         return enrichInvoiceWithFeeBreakdown(transformedInvoice, details)
     }))
 
-    return transformedInvoices
+    // Filter out null values (deleted apartments)
+    return transformedInvoices.filter(invoice => invoice !== null)
 }
 
 export const getMyInvoiceById = async (user_id, invoice_id) => {
@@ -414,6 +427,7 @@ export const getMyInvoiceById = async (user_id, invoice_id) => {
         .lean()
     
     if (!invoice) abort(404, 'Invoice not found')
+    if (!invoice.apartment_id) abort(404, 'Associated apartment not found')
 
     if (!apartmentIds.includes(invoice.apartment_id._id.toString())) {
         abort(403, 'Bạn không có quyền xem hóa đơn này')
@@ -448,6 +462,11 @@ export const getOverdueInvoices = async () => {
     // Transform: tách apartment_id (object) thành apartment (object) + apartment_id (ID string)
     // và thêm thông tin chi tiết phí
     const transformedInvoices = await Promise.all(invoices.map(async (invoice) => {
+        // Skip if apartment_id is null (deleted apartment)
+        if (!invoice.apartment_id) {
+            return null
+        }
+
         const details = await InvoiceDetails.find({ invoice_id: invoice._id })
             .populate('fee_type_id')
             .lean()
@@ -461,7 +480,8 @@ export const getOverdueInvoices = async () => {
         return enrichInvoiceWithFeeBreakdown(transformedInvoice, details)
     }))
 
-    return transformedInvoices
+    // Filter out null values (deleted apartments)
+    return transformedInvoices.filter(invoice => invoice !== null)
 }
 
 export const exportInvoicePDF = async (id) => {
