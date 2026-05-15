@@ -2,6 +2,72 @@ import { Apartment, FeeTypes, UtilityReading, Invoices, InvoiceDetails , Residen
 import { abort } from '@/utils/helpers'
 import mongoose from 'mongoose'
 
+// Helper function: Tách ID và object cho các field liên kết (building_id, floor_id, apartment_id, etc) - xử lý recursive
+const flattenRelationships = (obj) => {
+    if (!obj || typeof obj !== 'object') return obj
+    
+    const result = { ...obj }
+    
+    // Xử lý từng relationship field
+    const relationshipFields = ['building_id', 'floor_id', 'apartment_id']
+    
+    relationshipFields.forEach(field => {
+        if (result[field] && typeof result[field] === 'object') {
+            const id = result[field]._id
+            const objData = result[field]
+            result[field] = id  // Thay thế bằng ID
+            result[field.replace('_id', '')] = objData  // Tạo field mới với object
+            
+            // Xử lý nested objects bên trong (recursive)
+            if (result[field.replace('_id', '')]) {
+                result[field.replace('_id', '')] = flattenRelationships(result[field.replace('_id', '')])
+            }
+        }
+    })
+    
+    return result
+}
+
+// Helper function: Tính toán chi tiết các loại phí từ invoice details
+const enrichInvoiceWithFeeBreakdown = (invoice, details) => {
+    let fixedAmount = 0
+    let meteredAmount = 0
+    let parkingAmount = 0
+
+    // Duyệt qua từng chi tiết hóa đơn
+    details.forEach(detail => {
+        const feeType = detail.fee_type_id
+
+        // Nhóm theo fee_category
+        if (typeof feeType === 'object') {
+            const category = feeType.fee_category
+            if (category === 'fixed') {
+                fixedAmount += detail.amount
+            } else if (category === 'metered') {
+                meteredAmount += detail.amount
+            } else if (category === 'parking') {
+                parkingAmount += detail.amount
+            }
+        }
+    })
+
+    return {
+        ...invoice,
+        apartment: flattenRelationships(invoice.apartment),  // Flatten building_id, floor_id
+        fixed_amount: fixedAmount,
+        metered_amount: meteredAmount,
+        parking_amount: parkingAmount,
+        details: details.map(detail => ({
+            id: detail._id,
+            fee_type_id: typeof detail.fee_type_id === 'object' ? detail.fee_type_id._id : detail.fee_type_id,
+            fee_type: typeof detail.fee_type_id === 'object' ? detail.fee_type_id : null,
+            quantity: detail.quantity,
+            unit_price: detail.unit_price,
+            amount: detail.amount
+        }))
+    }
+}
+
 export const generateMonthlyInvoices = async ({ billing_month, billing_year }) => {
     if (!billing_month || !billing_year) {
         abort(400, 'billing_month and billing_year are required')
@@ -157,10 +223,19 @@ export const getInvoices = async (query) => {
         .lean()
 
     // Transform: tách apartment_id (object) thành apartment (object) + apartment_id (ID string)
-    const transformedInvoices = invoices.map(invoice => ({
-        ...invoice,
-        apartment: invoice.apartment_id,  // object đầy đủ
-        apartment_id: invoice.apartment_id._id  // chỉ lấy ID
+    // và thêm thông tin chi tiết phí
+    const transformedInvoices = await Promise.all(invoices.map(async (invoice) => {
+        const details = await InvoiceDetails.find({ invoice_id: invoice._id })
+            .populate('fee_type_id')
+            .lean()
+
+        const transformedInvoice = {
+            ...invoice,
+            apartment: invoice.apartment_id,  // object đầy đủ
+            apartment_id: invoice.apartment_id._id  // chỉ lấy ID
+        }
+
+        return enrichInvoiceWithFeeBreakdown(transformedInvoice, details)
     }))
 
     return transformedInvoices
@@ -262,8 +337,9 @@ export const getInvoiceById = async (id) => {
         apartment: invoice.apartment_id,
         apartment_id: invoice.apartment_id._id
     }
-    transformedInvoice.details = details
-    return transformedInvoice
+
+    // Enrich với fee breakdown
+    return enrichInvoiceWithFeeBreakdown(transformedInvoice, details)
 }
 
 export const deleteInvoice = async (id) => {
@@ -308,10 +384,19 @@ export const getMyInvoices = async (user_id) => {
         .lean()
 
     // Transform: tách apartment_id (object) thành apartment (object) + apartment_id (ID string)
-    const transformedInvoices = invoices.map(invoice => ({
-        ...invoice,
-        apartment: invoice.apartment_id,
-        apartment_id: invoice.apartment_id._id
+    // và thêm thông tin chi tiết phí
+    const transformedInvoices = await Promise.all(invoices.map(async (invoice) => {
+        const details = await InvoiceDetails.find({ invoice_id: invoice._id })
+            .populate('fee_type_id')
+            .lean()
+
+        const transformedInvoice = {
+            ...invoice,
+            apartment: invoice.apartment_id,
+            apartment_id: invoice.apartment_id._id
+        }
+
+        return enrichInvoiceWithFeeBreakdown(transformedInvoice, details)
     }))
 
     return transformedInvoices
@@ -342,9 +427,9 @@ export const getMyInvoiceById = async (user_id, invoice_id) => {
         apartment: invoice.apartment_id,
         apartment_id: invoice.apartment_id._id
     }
-    transformedInvoice.details = details
 
-    return transformedInvoice
+    // Enrich với fee breakdown
+    return enrichInvoiceWithFeeBreakdown(transformedInvoice, details)
 }
 
 export const getOverdueInvoices = async () => {
@@ -361,10 +446,19 @@ export const getOverdueInvoices = async () => {
         .lean()
 
     // Transform: tách apartment_id (object) thành apartment (object) + apartment_id (ID string)
-    const transformedInvoices = invoices.map(invoice => ({
-        ...invoice,
-        apartment: invoice.apartment_id,
-        apartment_id: invoice.apartment_id._id
+    // và thêm thông tin chi tiết phí
+    const transformedInvoices = await Promise.all(invoices.map(async (invoice) => {
+        const details = await InvoiceDetails.find({ invoice_id: invoice._id })
+            .populate('fee_type_id')
+            .lean()
+
+        const transformedInvoice = {
+            ...invoice,
+            apartment: invoice.apartment_id,
+            apartment_id: invoice.apartment_id._id
+        }
+
+        return enrichInvoiceWithFeeBreakdown(transformedInvoice, details)
     }))
 
     return transformedInvoices
