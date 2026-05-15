@@ -36,9 +36,27 @@ export const createFloor = async (data) => {
         abort(400, 'Floor already exists')
     }
 
-    const lastFloor = await Floor.findOne().collation({ locale: 'en_US', numericOrdering: true }).sort({ id: -1 })
-    const nextId = lastFloor ? (parseInt(lastFloor.id) + 1).toString().padStart(3, '0') : '001'
-    data.id = nextId
+
+    const buildingPrefix = buildingExists.name
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase())
+        .join('')
+
+    const lastFloor = await Floor.findOne({
+        building_id: data.building_id
+    })
+        .collation({ locale: 'en_US', numericOrdering: true })
+        .sort({ id: -1 })
+        .lean()
+
+    let nextNumber = 1
+
+    if (lastFloor?.id) {
+        const numberPart = lastFloor.id.slice(1)
+        nextNumber = Number(numberPart) + 1
+    }
+
+    data.id = `${buildingPrefix}${String(nextNumber).padStart(3, '0')}`
 
     const res = await Floor.create(data)
     if (!res) {

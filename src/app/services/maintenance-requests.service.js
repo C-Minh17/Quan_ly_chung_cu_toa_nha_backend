@@ -11,9 +11,17 @@ export const getMaintenance_requests = async () => {
     })
 }
 export const createMaintenance_requests = async (data) => {
-    if (!data.apartment_id || !data.resident_id) {
-        abort(404, 'Truyen apartment va resident vao maintenace_requests')
+    if (!data.resident_id) {
+        abort(404, 'Truyen resident vao maintenace_requests')
     }
+
+    const resident = await Resident.findById(data.resident_id).lean()
+    if (!resident) {
+        abort(404, 'Resident not found')
+    }
+
+    data.apartment_id = resident.apartment_id
+
     const lastMaintenace_requests = await MaintenanceRequests.findOne().collation({ locale: 'en_US', numericOrdering: true }).sort({ id: -1 })
     const nextId = lastMaintenace_requests && lastMaintenace_requests.id ? (parseInt(lastMaintenace_requests.id) + 1).toString().padStart(3, '0') : '001'
     data.id = nextId
