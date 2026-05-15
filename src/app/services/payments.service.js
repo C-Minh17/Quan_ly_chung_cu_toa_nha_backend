@@ -129,6 +129,35 @@ export const cronOverdueInvoices = async () => {
 }
 
 
+// Helper: Format payment response - tách invoice_id thành id + object, apartment_id cũng vậy
+const formatPaymentResponse = (payment) => {
+    if (!payment) return payment
+    
+    const { invoice_id, ...rest } = payment
+    
+    // Format invoice object
+    let formattedInvoice = invoice_id
+    if (invoice_id && typeof invoice_id === 'object') {
+        const { apartment_id, ...invoiceRest } = invoice_id
+        formattedInvoice = {
+            ...invoiceRest,
+            apartment_id: apartment_id?._id || apartment_id,
+            apartment: apartment_id
+        }
+    }
+    
+    return {
+        ...rest,
+        invoice_id: invoice_id?._id || invoice_id,
+        invoice: formattedInvoice
+    }
+}
+
+// Helper: Format multiple payments
+const formatPaymentsResponse = (payments) => {
+    return payments.map(formatPaymentResponse)
+}
+
 export const getPaymentsByInvoiceId = async (invoiceId) => {
     const payments = await Payments.find({ invoice_id: invoiceId })
         .populate('received_by')
@@ -136,7 +165,7 @@ export const getPaymentsByInvoiceId = async (invoiceId) => {
         .sort({ paid_at: -1 })
         .lean()
     
-    return payments
+    return formatPaymentsResponse(payments)
 }
 
 export const getMyPayments = async (user_id) => {
@@ -158,7 +187,7 @@ export const getMyPayments = async (user_id) => {
         .sort({ paid_at: -1 })
         .lean()
 
-    return payments
+    return formatPaymentsResponse(payments)
 }
 
 export const getPaymentById = async (id) => {
@@ -173,7 +202,7 @@ export const getPaymentById = async (id) => {
     if (!payment) {
         abort(404, 'Không tìm thấy giao dịch thanh toán')
     }
-    return payment
+    return formatPaymentResponse(payment)
 }
 
 export const getPayments = async (query) => {
@@ -193,6 +222,6 @@ export const getPayments = async (query) => {
         .sort(sort || { paid_at: -1 })
         .lean()
 
-    return payments
+    return formatPaymentsResponse(payments)
 }
 
