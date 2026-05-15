@@ -21,8 +21,6 @@ router.get('/:id', checkAmenitiesId, getByIdAmenities)
 router.put('/:id', checkAmenitiesId, validate(updateItem), updateAmenities)
 router.patch('/:id/status', checkAmenitiesId, validate(updateStatusItem), updateStatusAmenities)
 router.delete('/:id', checkAmenitiesId, deleteAmenities)
-
-// Lịch đặt chỗ (bạn có thể mở comment khi nào làm xong controller)
 router.get('/:id/schedule', checkAmenitiesId, getAmenitiesSchedule)
 
 export default router
