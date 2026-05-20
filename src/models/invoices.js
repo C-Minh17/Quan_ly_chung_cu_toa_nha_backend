@@ -13,6 +13,7 @@ const invoiceSchema = createModel(
         paid_amount:   { type: Number, default: 0 },
         due_date:      { type: Date },
         status:        { type: String, default: 'unpaid', enum: ['unpaid', 'partial', 'paid', 'overdue'] },
+        rental_amount: { type: Number, default: 0 },
     }
 )
 

@@ -1,4 +1,4 @@
-import { Apartment, FeeTypes, UtilityReading, Invoices, InvoiceDetails , Resident } from '@/models'
+import { Apartment, FeeTypes, UtilityReading, Invoices, InvoiceDetails , Resident, Contract } from '@/models'
 import { abort } from '@/utils/helpers'
 import mongoose from 'mongoose'
 
@@ -57,6 +57,7 @@ const enrichInvoiceWithFeeBreakdown = (invoice, details) => {
         fixed_amount: fixedAmount,
         metered_amount: meteredAmount,
         parking_amount: parkingAmount,
+        rental_amount: invoice.rental_amount || 0,  // Lấy từ invoice (đã lưu khi tạo hóa đơn)
         details: details.map(detail => ({
             id: detail._id,
             fee_type_id: typeof detail.fee_type_id === 'object' ? detail.fee_type_id._id : detail.fee_type_id,
@@ -108,6 +109,7 @@ export const generateMonthlyInvoices = async ({ billing_month, billing_year }) =
             }
 
             let totalAmount = 0
+            let rentalAmount = 0
             const invoiceDetailsToInsert = []
 
             // Duyệt qua từng loại phí
@@ -146,6 +148,23 @@ export const generateMonthlyInvoices = async ({ billing_month, billing_year }) =
                 }
             }
 
+            // Lấy phí thuê nhà từ hợp đồng đang hoạt động
+            try {
+                const activeContract = await Contract.findOne({
+                    apartment_id: apartment._id,
+                    status: 'active',
+                    contract_type: 'rent'
+                }).session(session)
+
+                if (activeContract && activeContract.monthly_price && activeContract.monthly_price > 0) {
+                    rentalAmount = activeContract.monthly_price
+                    totalAmount += rentalAmount
+                }
+            } catch (error) {
+                // Log error nhưng không dừng quá trình tạo hóa đơn
+                console.error(`Lỗi khi lấy phí thuê nhà cho căn hộ ${apartment._id}:`, error.message)
+            }
+
             // Nếu không có phí nào cần thu thì bỏ qua
             if (invoiceDetailsToInsert.length === 0) {
                 results.skipped++
@@ -175,7 +194,8 @@ export const generateMonthlyInvoices = async ({ billing_month, billing_year }) =
                 total_amount: totalAmount,
                 paid_amount: 0,
                 status: 'unpaid',
-                due_date: dueDate
+                due_date: dueDate,
+                rental_amount: rentalAmount
             })
             
             await newInvoice.save({ session })
@@ -265,10 +285,28 @@ export const createInvoice = async (data) => {
             abort(400, `Hóa đơn tháng ${billing_month}/${billing_year} cho căn hộ này đã tồn tại`)
         }
 
+        // Lấy tất cả active fee types
+        const activeFeeTypes = await FeeTypes.find({ is_active: true })
+        const fixedAndParkingFees = activeFeeTypes.filter(ft => 
+            ['fixed', 'parking'].includes(ft.fee_category)
+        )
+
+        // Merge: details từ client (metered) + tự động thêm fixed/parking
+        const clientFeeTypeIds = details.map(d => d.fee_type_id.toString())
+        const autoDetails = fixedAndParkingFees
+            .filter(ft => !clientFeeTypeIds.includes(ft._id.toString())) // tránh duplicate
+            .map(ft => ({
+                fee_type_id: ft._id.toString(),
+                quantity: 1
+            }))
+
+        const allDetails = [...details, ...autoDetails]
+
         let totalAmount = 0
+        let rentalAmount = 0
         const invoiceDetailsToInsert = []
 
-        for (const item of details) {
+        for (const item of allDetails) {
             const feeType = await FeeTypes.findById(item.fee_type_id)
             if (!feeType) abort(404, `FeeType ${item.fee_type_id} not found`)
 
@@ -284,14 +322,27 @@ export const createInvoice = async (data) => {
             })
         }
 
+        // Lấy phí thuê nhà từ hợp đồng
+        try {
+            const activeContract = await Contract.findOne({
+                apartment_id,
+                status: 'active',
+                contract_type: 'rent'
+            }).session(session)
+
+            if (activeContract && activeContract.monthly_price && activeContract.monthly_price > 0) {
+                rentalAmount = activeContract.monthly_price
+                totalAmount += rentalAmount
+            }
+        } catch (error) {
+            console.error(`Lỗi khi lấy phí thuê nhà: ${error.message}`)
+        }
+
         const invoiceCode = `INV-${billing_year}-${billing_month}-APT${apartment.id || apartment._id}-M`
         
         let dueMonth = Number(billing_month) + 1
         let dueYear = Number(billing_year)
-        if (dueMonth > 12) {
-            dueMonth = 1
-            dueYear += 1
-        }
+        if (dueMonth > 12) { dueMonth = 1; dueYear += 1 }
         const dueDate = new Date(dueYear, dueMonth - 1, 10)
 
         const [newInvoice] = await Invoices.create([{
@@ -302,7 +353,8 @@ export const createInvoice = async (data) => {
             total_amount: totalAmount,
             paid_amount: 0,
             status: 'unpaid',
-            due_date: dueDate
+            due_date: dueDate,
+            rental_amount: rentalAmount
         }], { session })
 
         const detailsWithInvoiceId = invoiceDetailsToInsert.map(d => ({
