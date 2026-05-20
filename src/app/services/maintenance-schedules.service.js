@@ -1,28 +1,37 @@
-import { MaintenanceSchedules } from '@/models'
+import { MaintenanceSchedules, User } from '@/models'
 import { abort } from '@/utils/helpers'
 
-export const getMaintenance_schedules = async () =>{
+export const getMaintenance_schedules = async () => {
     const res = await MaintenanceSchedules.find().populate('assigned_to').lean()
-    if(!res){
-        abort(404,'MaintenanceSchedules not found')
+    if (!res) {
+        abort(404, 'MaintenanceSchedules not found')
     }
-    return res.map(maintenance_schedules =>{
+    return res.map(maintenance_schedules => {
         return maintenance_schedules
-    }) 
+    })
 }
 
 export const getByIdMaintenance_schedules = async (id) => {
     const res = await MaintenanceSchedules.findById(id).populate('assigned_to').lean()
-    if(!res){
-        abort(404,'MaintenanceSchedules not found')
+    if (!res) {
+        abort(404, 'MaintenanceSchedules not found')
     }
     return res
 }
 
-export const postMaintenance_schedules = async (data) =>{
-    if(!data.assigned_to){
-        abort(404,'pass assigned number to Maintenance_schedules')
+export const postMaintenance_schedules = async (data) => {
+    if (!data.assigned_to) {
+        abort(404, 'pass assigned number to Maintenance_schedules')
     }
+
+    const assignedUser = await User.findById(data.assigned_to)
+    if (!assignedUser) {
+        abort(404, 'Assigned user not found')
+    }
+    if (assignedUser.role !== 'STAFF') {
+        abort(400, 'Assigned user must be a STAFF')
+    }
+
     const lastMaintenace_schedules = await MaintenanceSchedules.findOne().collation({ locale: 'en_US', numericOrdering: true }).sort({ id: -1 })
     const nextId = lastMaintenace_schedules && lastMaintenace_schedules.id ? (parseInt(lastMaintenace_schedules.id) + 1).toString().padStart(3, '0') : '001'
     data.id = nextId
@@ -34,32 +43,42 @@ export const postMaintenance_schedules = async (data) =>{
     const res = await MaintenanceSchedules.create(data)
     const populate = await MaintenanceSchedules.findById(res._id)
         .populate({
-            path:'assigned_to'
+            path: 'assigned_to'
         }).lean()
 
-    if(!populate){
-        populate.assigned=populate.assigned_to
+    if (!populate) {
+        populate.assigned = populate.assigned_to
         delete populate.assigned_to
     }
 }
 
-export const updateMaintenance_schedules = async (id, data) =>{
-    const res = await MaintenanceSchedules.findByIdAndUpdate(id,data,{new :true})
+export const updateMaintenance_schedules = async (id, data) => {
+    if (data.assigned_to) {
+        const assignedUser = await User.findById(data.assigned_to)
+        if (!assignedUser) {
+            abort(404, 'Assigned user not found')
+        }
+        if (assignedUser.role !== 'STAFF') {
+            abort(400, 'Assigned user must be a STAFF')
+        }
+    }
+
+    const res = await MaintenanceSchedules.findByIdAndUpdate(id, data, { new: true })
         .populate({
-            path:'assigned_to'
+            path: 'assigned_to'
         })
-    if(!res){
-        abort(404,'MaintenanceSchedules not found')
+    if (!res) {
+        abort(404, 'MaintenanceSchedules not found')
     }
     res.assigned = res.assigned_to
-    res.assigned_to = res.assigned ? res.assigned_to :null
+    res.assigned_to = res.assigned ? res.assigned_to : null
     return res
 }
 
 export const deleteMaintenance_schedules = async (id) => {
     const res = await MaintenanceSchedules.findByIdAndDelete(id)
-    if(!res){
-        abort(404,'MaintenanceSchedules not found')
+    if (!res) {
+        abort(404, 'MaintenanceSchedules not found')
     }
     return res
 }

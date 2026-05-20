@@ -2155,65 +2155,16 @@ export const swaggerMaintenanceSchedulesPaths = {
             summary: 'Lấy danh sách lịch bảo trì',
             tags: ['Maintenance Schedules'],
             security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'q', in: 'query', schema: { type: 'string' }, description: 'Tìm kiếm theo tiêu đề' },
+                { name: 'page', in: 'query', schema: { type: 'integer', default: 1 } },
+                { name: 'per_page', in: 'query', schema: { type: 'integer', default: 10 } }
+            ],
             responses: { 200: { description: 'Thành công' } }
         },
         post: {
             summary: 'Tạo lịch bảo trì mới',
             tags: ['Maintenance Schedules'],
-export const swaggerUtilityReadingPaths = {
-    '/utilityreading': {
-        get: {
-            summary: 'Lấy danh sách ghi chỉ số tiện ích',
-            tags: ['Utility Reading'],
-            security: [{ bearerAuth: [] }],
-            parameters: [
-                { name: 'q', in: 'query', schema: { type: 'string' }, description: 'Tìm kiếm' },
-                { name: 'page', in: 'query', schema: { type: 'integer', default: 1 } },
-                { name: 'per_page', in: 'query', schema: { type: 'integer', default: 10 } },
-                { name: 'apartment_id', in: 'query', schema: { type: 'string' } },
-                { name: 'fee_type_id', in: 'query', schema: { type: 'string' } },
-                { name: 'reading_month', in: 'query', schema: { type: 'integer' } },
-                { name: 'reading_year', in: 'query', schema: { type: 'integer' } }
-            ],
-            responses: {
-                200: {
-                    description: 'Thành công',
-                    content: {
-                        'application/json': {
-                            schema: {
-                                type: 'object',
-                                properties: {
-                                    data: {
-                                        type: 'array',
-                                        items: {
-                                            type: 'object',
-                                            properties: {
-                                                _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
-                                                apartment_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1a' },
-                                                fee_type_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1b' },
-                                                reading_month: { type: 'integer', example: 5 },
-                                                reading_year: { type: 'integer', example: 2024 },
-                                                previous_reading: { type: 'number', example: 100 },
-                                                current_reading: { type: 'number', example: 120 },
-                                                consumption: { type: 'number', example: 20 },
-                                                recorded_by: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1c' },
-                                                recorded_at: { type: 'string', format: 'date-time' }
-                                            }
-                                        }
-                                    },
-                                    total: { type: 'integer' },
-                                    page: { type: 'integer' },
-                                    per_page: { type: 'integer' }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        post: {
-            summary: 'Tạo mới ghi chỉ số tiện ích',
-            tags: ['Utility Reading'],
             security: [{ bearerAuth: [] }],
             requestBody: {
                 required: true,
@@ -2223,54 +2174,553 @@ export const swaggerUtilityReadingPaths = {
                             type: 'object',
                             properties: {
                                 title: { type: 'string', example: 'Bảo trì thang máy' },
-                                description: { type: 'string', example: 'Bảo trì định kỳ thang máy tòa nhà' },
+                                description: { type: 'string', example: 'Bảo trì định kỳ thang máy tòa A' },
                                 frequency: { type: 'string', enum: ['once', 'weekly', 'monthly', 'quarterly', 'yearly'], example: 'monthly' },
+                                scheduled_date: { type: 'string', format: 'date-time', example: '2026-05-10T08:00:00.000Z' },
                                 assigned_to: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' }
                             }
                         }
                     }
                 }
             },
-            responses: { 200: { description: 'Tạo thành công' } }
+            responses: { 200: { description: 'Tạo lịch bảo trì thành công' } }
         }
     },
     '/maintenance-schedules/{id}': {
         get: {
-            summary: 'Lấy chi tiết lịch bảo trì',
+            summary: 'Lấy thông tin chi tiết lịch bảo trì',
             tags: ['Maintenance Schedules'],
             security: [{ bearerAuth: [] }],
-            parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
             responses: { 200: { description: 'Thành công' } }
         },
         put: {
             summary: 'Cập nhật lịch bảo trì',
             tags: ['Maintenance Schedules'],
             security: [{ bearerAuth: [] }],
-            parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
-                                apartment_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1a' },
-                                fee_type_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1b' },
-                                reading_month: { type: 'integer', example: 5 },
-                                reading_year: { type: 'integer', example: 2024 },
-                                previous_reading: { type: 'number', example: 100 },
-                                current_reading: { type: 'number', example: 120 },
-                                recorded_by: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1c' },
-                                recorded_at: { type: 'string', format: 'date-time' }
-                            },
-                            required: ['apartment_id', 'fee_type_id', 'reading_month', 'reading_year']
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                title: { type: 'string', example: 'Bảo trì thang máy' },
+                                description: { type: 'string', example: 'Bảo trì định kỳ thang máy tòa A' },
+                                frequency: { type: 'string', enum: ['once', 'weekly', 'monthly', 'quarterly', 'yearly'], example: 'monthly' },
+                                scheduled_date: { type: 'string', format: 'date-time', example: '2026-05-10T08:00:00.000Z' },
+                                assigned_to: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                status: { type: 'string', enum: ['scheduled', 'completed', 'cancelled'], example: 'scheduled' }
+                            }
                         }
                     }
                 }
             },
+            responses: { 200: { description: 'Cập nhật thành công' } }
+        },
+        delete: {
+            summary: 'Xóa lịch bảo trì',
+            tags: ['Maintenance Schedules'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Xóa thành công' } }
+        }
+    },
+    '/maintenance-schedules/{id}/complete': {
+        patch: {
+            summary: 'Hoàn thành lịch bảo trì',
+            tags: ['Maintenance Schedules'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Hoàn thành lịch bảo trì thành công' } }
+        }
+    }
+}
+
+export const swaggerUtilityReadingPaths = {
+    '/utilityreading': {
+        get: {
+            summary: 'Lấy danh sách ghi chỉ số tiện ích',
+            tags: ['Utility Reading'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'q', in: 'query', schema: { type: 'string' } },
+                { name: 'page', in: 'query', schema: { type: 'integer', default: 1 } },
+                { name: 'per_page', in: 'query', schema: { type: 'integer', default: 10 } },
+                { name: 'apartment_id', in: 'query', schema: { type: 'string' } },
+                { name: 'fee_type_id', in: 'query', schema: { type: 'string' } },
+                { name: 'reading_month', in: 'query', schema: { type: 'integer' } },
+                { name: 'reading_year', in: 'query', schema: { type: 'integer' } }
+            ],
             responses: {
-                201: { description: 'Tạo thành công' },
-                400: { description: 'Dữ liệu không hợp lệ' }
+                200: {
+                    description: 'Thành công'
+                }
+            }
+        },
+
+        post: {
+            summary: 'Tạo mới ghi chỉ số tiện ích',
+            tags: ['Utility Reading'],
+            security: [{ bearerAuth: [] }],
+
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                apartment_id: {
+                                    type: 'string',
+                                    example: '65f0b23c4d5e6f7g8h9i0j1a'
+                                },
+
+                                fee_type_id: {
+                                    type: 'string',
+                                    example: '65f0b23c4d5e6f7g8h9i0j1b'
+                                },
+
+                                reading_month: {
+                                    type: 'integer',
+                                    example: 5
+                                },
+
+                                reading_year: {
+                                    type: 'integer',
+                                    example: 2024
+                                },
+
+                                previous_reading: {
+                                    type: 'number',
+                                    example: 100
+                                },
+
+                                current_reading: {
+                                    type: 'number',
+                                    example: 120
+                                },
+
+                                recorded_by: {
+                                    type: 'string',
+                                    example: '65f0b23c4d5e6f7g8h9i0j1c'
+                                }
+                            },
+
+                            required: [
+                                'apartment_id',
+                                'fee_type_id',
+                                'reading_month',
+                                'reading_year'
+                            ]
+                        }
+                    }
+                }
+            },
+
+            responses: {
+                201: {
+                    description: 'Tạo thành công'
+                },
+
+                400: {
+                    description: 'Dữ liệu không hợp lệ'
+                }
             }
         }
     },
+
     '/utilityreading/{id}': {
         get: {
-            summary: 'Lấy thông tin chi tiết ghi chỉ số',
+            summary: 'Lấy chi tiết ghi chỉ số',
             tags: ['Utility Reading'],
+            security: [{ bearerAuth: [] }],
+
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    schema: { type: 'string' }
+                }
+            ],
+
+            responses: {
+                200: {
+                    description: 'Thành công'
+                },
+
+                404: {
+                    description: 'Không tìm thấy'
+                }
+            }
+        },
+
+        put: {
+            summary: 'Cập nhật ghi chỉ số',
+            tags: ['Utility Reading'],
+            security: [{ bearerAuth: [] }],
+
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    schema: { type: 'string' }
+                }
+            ],
+
+            requestBody: {
+                required: true,
+
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+
+                            properties: {
+                                previous_reading: {
+                                    type: 'number',
+                                    example: 100
+                                },
+
+                                current_reading: {
+                                    type: 'number',
+                                    example: 120
+                                },
+
+                                reading_month: {
+                                    type: 'integer',
+                                    example: 5
+                                },
+
+                                reading_year: {
+                                    type: 'integer',
+                                    example: 2024
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+            responses: {
+                200: {
+                    description: 'Cập nhật thành công'
+                },
+
+                400: {
+                    description: 'Dữ liệu không hợp lệ'
+                },
+
+                404: {
+                    description: 'Không tìm thấy'
+                }
+            }
+        },
+
+        delete: {
+            summary: 'Xóa ghi chỉ số',
+            tags: ['Utility Reading'],
+            security: [{ bearerAuth: [] }],
+
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    schema: { type: 'string' }
+                }
+            ],
+
+            responses: {
+                200: {
+                    description: 'Xóa thành công'
+                },
+
+                404: {
+                    description: 'Không tìm thấy'
+                }
+            }
+        }
+    }
+}
+
+export const swaggerInvoicesPaths = {
+    '/invoices': {
+        get: {
+            summary: 'Lấy danh sách hóa đơn đa chiều',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'status', in: 'query', schema: { type: 'string' } },
+                { name: 'apartment_id', in: 'query', schema: { type: 'string' } },
+                { name: 'billing_month', in: 'query', schema: { type: 'integer' } },
+                { name: 'billing_year', in: 'query', schema: { type: 'integer' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        },
+        post: {
+            summary: 'Tạo hóa đơn thủ công',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                apartment_id: { type: 'string' },
+                                billing_month: { type: 'integer' },
+                                billing_year: { type: 'integer' },
+                                details: {
+                                    type: 'array',
+                                    items: {
+                                        type: 'object',
+                                        properties: {
+                                            fee_type_id: { type: 'string' },
+                                            quantity: { type: 'number' }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/invoices/generate': {
+        post: {
+            summary: 'Tạo hóa đơn hàng loạt',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                billing_month: { type: 'integer' },
+                                billing_year: { type: 'integer' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/invoices/generate-monthly': {
+        post: {
+            summary: 'Tạo hóa đơn hàng loạt (alias)',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                billing_month: { type: 'integer' },
+                                billing_year: { type: 'integer' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/invoices/me': {
+        get: {
+            summary: 'Lấy danh sách hóa đơn của tôi',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/invoices/me/{id}': {
+        get: {
+            summary: 'Chi tiết hóa đơn của tôi',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/invoices/overdue': {
+        get: {
+            summary: 'Lấy danh sách hóa đơn quá hạn',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/invoices/{id}': {
+        get: {
+            summary: 'Chi tiết hóa đơn',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        },
+        delete: {
+            summary: 'Xóa hóa đơn',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/invoices/{id}/pdf': {
+        get: {
+            summary: 'Xuất PDF hóa đơn',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    }
+}
+
+export const swaggerPaymentsPaths = {
+    '/payments/lookup': {
+        post: {
+            summary: 'Tra cứu thông tin hóa đơn',
+            tags: ['Payments'],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                invoice_code: { type: 'string', example: 'INV-2024-5-APT1' },
+                                apartment_id: { type: 'string', example: '662b2e88a38a7c2e39130001' },
+                                billing_month: { type: 'integer', example: 5 },
+                                billing_year: { type: 'integer', example: 2024 }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/payments': {
+        post: {
+            summary: 'Thanh toán hóa đơn',
+            tags: ['Payments'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                invoice_id: { type: 'string', example: '662b2e88a38a7c2e39130002' },
+                                amount: { type: 'number', example: 500000 },
+                                payment_method: { type: 'string', example: 'bank_transfer', description: 'cash | bank_transfer | momo | vnpay' },
+                                transaction_code: { type: 'string', example: 'FT24125ABCDE' },
+                                note: { type: 'string', example: 'Chuyển khoản thanh toán phí tháng 5' },
+                                received_by: { type: 'string', description: 'ID nhân viên thu tiền' }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+export const swaggerAmenitiesPaths = {
+    '/amenities': {
+        get: {
+            summary: 'Lấy danh sách tiện ích',
+            tags: ['Amenities'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                        amenities_code: { type: 'string', example: 'AMN001' },
+                                        name: { type: 'string', example: 'Hồ bơi' },
+                                        id: { type: 'string', example: 'HB01' },
+                                        description: { type: 'string', example: 'Hồ bơi ngoài trời' },
+                                        capacity: { type: 'integer', example: 50 },
+                                        open_time: { type: 'string', format: 'date-time', example: '2024-01-01T06:00:00.000Z' },
+                                        close_time: { type: 'string', format: 'date-time', example: '2024-01-01T22:00:00.000Z' },
+                                        is_active: { type: 'boolean', example: true },
+                                        created_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        post: {
+            summary: 'Tạo tiện ích mới',
+            tags: ['Amenities'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                amenities_code: { type: 'string', example: 'AMN001' },
+                                name: { type: 'string', example: 'Hồ bơi' },
+                                id: { type: 'string', example: 'HB01' },
+                                description: { type: 'string', example: 'Hồ bơi ngoài trời' },
+                                capacity: { type: 'integer', example: 50 },
+                                open_time: { type: 'string', format: 'date-time', example: '2024-01-01T06:00:00.000Z' },
+                                close_time: { type: 'string', format: 'date-time', example: '2024-01-01T22:00:00.000Z' },
+                                is_active: { type: 'boolean', example: true }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/amenities/{id}': {
+        get: {
+            summary: 'Lấy chi tiết tiện ích',
+            tags: ['Amenities'],
             security: [{ bearerAuth: [] }],
             parameters: [
                 { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
@@ -2284,26 +2734,25 @@ export const swaggerUtilityReadingPaths = {
                                 type: 'object',
                                 properties: {
                                     _id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
-                                    apartment_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1a' },
-                                    fee_type_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1b' },
-                                    reading_month: { type: 'integer', example: 5 },
-                                    reading_year: { type: 'integer', example: 2024 },
-                                    previous_reading: { type: 'number', example: 100 },
-                                    current_reading: { type: 'number', example: 120 },
-                                    consumption: { type: 'number', example: 20 },
-                                    recorded_by: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1c' },
-                                    recorded_at: { type: 'string', format: 'date-time' }
+                                    amenities_code: { type: 'string', example: 'AMN001' },
+                                    name: { type: 'string', example: 'Hồ bơi' },
+                                    id: { type: 'string', example: 'HB01' },
+                                    description: { type: 'string', example: 'Hồ bơi ngoài trời' },
+                                    capacity: { type: 'integer', example: 50 },
+                                    open_time: { type: 'string', format: 'date-time', example: '2024-01-01T06:00:00.000Z' },
+                                    close_time: { type: 'string', format: 'date-time', example: '2024-01-01T22:00:00.000Z' },
+                                    is_active: { type: 'boolean', example: true },
+                                    created_at: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' }
                                 }
                             }
                         }
                     }
-                },
-                404: { description: 'Không tìm thấy' }
+                }
             }
         },
         put: {
-            summary: 'Cập nhật thông tin ghi chỉ số',
-            tags: ['Utility Reading'],
+            summary: 'Cập nhật tiện ích',
+            tags: ['Amenities'],
             security: [{ bearerAuth: [] }],
             parameters: [
                 { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
@@ -2315,65 +2764,201 @@ export const swaggerUtilityReadingPaths = {
                         schema: {
                             type: 'object',
                             properties: {
-                                title: { type: 'string' },
-                                description: { type: 'string' },
-                                frequency: { type: 'string', enum: ['once', 'weekly', 'monthly', 'quarterly', 'yearly'] },
-                                assigned_to: { type: 'string' },
-                                status: { type: 'string', enum: ['scheduled', 'completed', 'cancelled'] }
+                                amenities_code: { type: 'string', example: 'AMN001' },
+                                name: { type: 'string', example: 'Hồ bơi' },
+                                id: { type: 'string', example: 'HB01' },
+                                description: { type: 'string', example: 'Hồ bơi ngoài trời' },
+                                capacity: { type: 'integer', example: 50 },
+                                open_time: { type: 'string', format: 'date-time', example: '2024-01-01T06:00:00.000Z' },
+                                close_time: { type: 'string', format: 'date-time', example: '2024-01-01T22:00:00.000Z' },
+                                is_active: { type: 'boolean', example: true }
                             }
                         }
                     }
                 }
             },
-            responses: { 200: { description: 'Cập nhật thành công' } }
+            responses: { 200: { description: 'Thành công' } }
         },
         delete: {
-            summary: 'Xóa lịch bảo trì',
-            tags: ['Maintenance Schedules'],
-            security: [{ bearerAuth: [] }],
-            parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
-            responses: { 200: { description: 'Xóa thành công' } }
-        }
-    },
-    '/maintenance-schedules/{id}/complete': {
-        patch: {
-            summary: 'Đánh dấu hoàn thành lịch bảo trì',
-            description: 'Đánh dấu hoàn thành, tạo lịch mới cho kỳ tiếp theo',
-            tags: ['Maintenance Schedules'],
-            security: [{ bearerAuth: [] }],
-            parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
-            responses: { 200: { description: 'Hoàn thành và tạo lịch tiếp theo thành công' } }
-
-                                apartment_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1a' },
-                                fee_type_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1b' },
-                                reading_month: { type: 'integer', example: 5 },
-                                reading_year: { type: 'integer', example: 2024 },
-                                previous_reading: { type: 'number', example: 100 },
-                                current_reading: { type: 'number', example: 120 },
-                                recorded_by: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1c' },
-                                recorded_at: { type: 'string', format: 'date-time' }
-                            }
-                        }
-                    }
-                }
-            },
-            responses: {
-                200: { description: 'Cập nhật thành công' },
-                400: { description: 'Dữ liệu không hợp lệ' },
-                404: { description: 'Không tìm thấy' }
-            }
-        },
-        delete: {
-            summary: 'Xóa ghi chỉ số',
-            tags: ['Utility Reading'],
+            summary: 'Xóa tiện ích',
+            tags: ['Amenities'],
             security: [{ bearerAuth: [] }],
             parameters: [
                 { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
             ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/amenities/{id}/status': {
+        patch: {
+            summary: 'Cập nhật trạng thái tiện ích',
+            tags: ['Amenities'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                is_active: { type: 'boolean', example: true }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/amenities/{id}/schedule': {
+        get: {
+            summary: 'Lấy lịch sử dụng tiện ích',
+            tags: ['Amenities'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } },
+                { name: 'date', in: 'query', schema: { type: 'string', example: '2026-05-12' }, description: 'Lọc theo ngày cụ thể (YYYY-MM-DD)' }
+            ],
             responses: {
-                200: { description: 'Xóa thành công' },
-                404: { description: 'Không tìm thấy' }
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        _id: { type: 'string', example: '662b2e88a38a7c2e39130001' },
+                                        amenity_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                        resident_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j2l' },
+                                        booking_date: { type: 'string', format: 'date', example: '2026-05-12' },
+                                        start_time: { type: 'string', format: 'date-time', example: '2026-05-12T08:00:00.000Z' },
+                                        end_time: { type: 'string', format: 'date-time', example: '2026-05-12T10:00:00.000Z' },
+                                        num_people: { type: 'integer', example: 5 },
+                                        status: { type: 'string', example: 'approved' }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
+        }
+    }
+}
+
+export const swaggerAmenityBookingsPaths = {
+    '/amenity-bookings': {
+        get: {
+            summary: 'Lấy danh sách tất cả lượt đặt tiện ích',
+            tags: ['Amenity Bookings'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        _id: { type: 'string', example: '662b2e88a38a7c2e39130001' },
+                                        amenities_code: { type: 'string', example: 'B01' },
+                                        amenity_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                        resident_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j2l' },
+                                        booking_date: { type: 'string', format: 'date', example: '2026-05-12' },
+                                        start_time: { type: 'string', format: 'date-time', example: '2026-05-12T08:00:00.000Z' },
+                                        end_time: { type: 'string', format: 'date-time', example: '2026-05-12T10:00:00.000Z' },
+                                        num_people: { type: 'integer', example: 5 },
+                                        status: { type: 'string', example: 'approved' },
+                                        created_at: { type: 'string', format: 'date-time', example: '2026-05-12T07:00:00.000Z' }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        post: {
+            summary: 'Tạo mới lượt đặt tiện ích',
+            tags: ['Amenity Bookings'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                amenities_code: { type: 'string', example: 'B01' },
+                                amenity_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j1k' },
+                                resident_id: { type: 'string', example: '65f0b23c4d5e6f7g8h9i0j2l' },
+                                booking_date: { type: 'string', format: 'date', example: '2026-05-12' },
+                                start_time: { type: 'string', format: 'date-time', example: '2026-05-12T08:00:00.000Z' },
+                                end_time: { type: 'string', format: 'date-time', example: '2026-05-12T10:00:00.000Z' },
+                                num_people: { type: 'integer', example: 5 }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/amenity-bookings/me': {
+        get: {
+            summary: 'Lấy danh sách lượt đặt tiện ích của tôi',
+            tags: ['Amenity Bookings'],
+            security: [{ bearerAuth: [] }],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/amenity-bookings/{id}': {
+        get: {
+            summary: 'Xem chi tiết lượt đặt tiện ích',
+            tags: ['Amenity Bookings'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        },
+        delete: {
+            summary: 'Xóa lượt đặt tiện ích',
+            tags: ['Amenity Bookings'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/amenity-bookings/{id}/approve': {
+        patch: {
+            summary: 'Duyệt lượt đặt tiện ích',
+            tags: ['Amenity Bookings'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
+    '/amenity-bookings/{id}/reject': {
+        patch: {
+            summary: 'Từ chối lượt đặt tiện ích',
+            tags: ['Amenity Bookings'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: { 200: { description: 'Thành công' } }
         }
     }
 }

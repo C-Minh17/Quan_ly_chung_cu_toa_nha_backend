@@ -13,6 +13,10 @@ import feeTypeRouter from './feeType.router'
 import maintenanceRequestsRouter from './maintenancerequests.router'
 import maintenanceSchedulesRouter from './maintenance-schedules.router'
 import utilityReadingRouter from './utilityReading.router'
+import invoicesRouter from './invoices.router'
+import paymentsRouter from './payments.router'
+import amenitiesRouter from './amenities.router'
+import amenityBookingsRouter from './amenity-bookings.router'
 
 function route(app) {
     app.use('/admin', admin)
@@ -30,6 +34,10 @@ function route(app) {
     app.use('/maintenancerequests', maintenanceRequestsRouter)
     app.use('/maintenance-schedules', maintenanceSchedulesRouter)
     app.use('/utilityreading', utilityReadingRouter)
+    app.use('/invoices', invoicesRouter)
+    app.use('/payments', paymentsRouter)
+    app.use('/amenities', amenitiesRouter)
+    app.use('/amenity-bookings', amenityBookingsRouter)
 }
 
 

@@ -2,7 +2,7 @@ import Joi from 'joi'
 
 export const createItem = Joi.object({
     Maintenance_Requests_code: Joi.string().trim().label('Mã sửa chữa'),
-    apartment_id: Joi.string().hex().length(24).required().label('ID Căn Hộ'),
+    apartment_id: Joi.string().hex().length(24).optional().label('ID Căn Hộ'),
     resident_id: Joi.string().hex().length(24).required().label('ID Cư Dân'),
     title: Joi.string().trim().required().label('Tiêu đề'),
     description: Joi.string().trim().optional().allow('').label('Miêu tả'),
