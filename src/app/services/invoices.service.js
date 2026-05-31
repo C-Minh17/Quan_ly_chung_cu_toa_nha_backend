@@ -1,30 +1,30 @@
-import { Apartment, FeeTypes, UtilityReading, Invoices, InvoiceDetails , Resident, Contract } from '@/models'
+import { Apartment, FeeTypes, UtilityReading, Invoices, InvoiceDetails, Resident, Contract } from '@/models'
 import { abort } from '@/utils/helpers'
 import mongoose from 'mongoose'
 
 // Helper function: Tách ID và object cho các field liên kết (building_id, floor_id, apartment_id, etc) - xử lý recursive
 const flattenRelationships = (obj) => {
     if (!obj || typeof obj !== 'object') return obj
-    
+
     const result = { ...obj }
-    
+
     // Xử lý từng relationship field
     const relationshipFields = ['building_id', 'floor_id', 'apartment_id']
-    
+
     relationshipFields.forEach(field => {
         if (result[field] && typeof result[field] === 'object') {
             const id = result[field]._id
             const objData = result[field]
             result[field] = id  // Thay thế bằng ID
             result[field.replace('_id', '')] = objData  // Tạo field mới với object
-            
+
             // Xử lý nested objects bên trong (recursive)
             if (result[field.replace('_id', '')]) {
                 result[field.replace('_id', '')] = flattenRelationships(result[field.replace('_id', '')])
             }
         }
     })
-    
+
     return result
 }
 
@@ -197,7 +197,7 @@ export const generateMonthlyInvoices = async ({ billing_month, billing_year }) =
                 due_date: dueDate,
                 rental_amount: rentalAmount
             })
-            
+
             await newInvoice.save({ session })
 
             // Gán invoice_id vào chi tiết và lưu
@@ -287,7 +287,7 @@ export const createInvoice = async (data) => {
 
         // Lấy tất cả active fee types
         const activeFeeTypes = await FeeTypes.find({ is_active: true })
-        const fixedAndParkingFees = activeFeeTypes.filter(ft => 
+        const fixedAndParkingFees = activeFeeTypes.filter(ft =>
             ['fixed', 'parking'].includes(ft.fee_category)
         )
 
@@ -339,7 +339,7 @@ export const createInvoice = async (data) => {
         }
 
         const invoiceCode = `INV-${billing_year}-${billing_month}-APT${apartment.id || apartment._id}-M`
-        
+
         let dueMonth = Number(billing_month) + 1
         let dueYear = Number(billing_year)
         if (dueMonth > 12) { dueMonth = 1; dueYear += 1 }
@@ -477,7 +477,7 @@ export const getMyInvoiceById = async (user_id, invoice_id) => {
             populate: { path: 'floor_id', populate: { path: 'building_id' } }
         })
         .lean()
-    
+
     if (!invoice) abort(404, 'Invoice not found')
     if (!invoice.apartment_id) abort(404, 'Associated apartment not found')
 
@@ -486,7 +486,7 @@ export const getMyInvoiceById = async (user_id, invoice_id) => {
     }
 
     const details = await InvoiceDetails.find({ invoice_id: invoice._id }).populate('fee_type_id').lean()
-    
+
     // Transform: tách apartment_id (object) thành apartment (object) + apartment_id (ID string)
     const transformedInvoice = {
         ...invoice,

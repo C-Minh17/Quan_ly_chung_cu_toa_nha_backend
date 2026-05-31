@@ -101,3 +101,20 @@ export const completeMaintenanceSchedulesController = async (req, res) => {
         })
     }
 }
+
+export const getByEmployeeMaintenanceSchedulesController = async (req, res) => {
+    try {
+        const data = await maintenanceSchedulesService.getMaintenanceSchedulesByEmployee(req.params.employeeId)
+        return res.status(200).json({
+            success: true,
+            message: 'Get successfully',
+            data: data
+        })
+    } catch (err) {
+        return res.status(err.status || 500).json({
+            success: false,
+            message: err.message || 'Get maintenance schedules for employee failed',
+            error: err.message
+        })
+    }
+}
