@@ -2186,6 +2186,17 @@ export const swaggerMaintenanceSchedulesPaths = {
             responses: { 200: { description: 'Tạo lịch bảo trì thành công' } }
         }
     },
+    '/maintenance-schedules/employee/{employeeId}': {
+        get: {
+            summary: 'Lấy danh sách lịch bảo trì được giao cho nhân viên',
+            tags: ['Maintenance Schedules'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'employeeId', in: 'path', required: true, schema: { type: 'string' }, description: 'ID của nhân viên (STAFF)' }
+            ],
+            responses: { 200: { description: 'Thành công' } }
+        }
+    },
     '/maintenance-schedules/{id}': {
         get: {
             summary: 'Lấy thông tin chi tiết lịch bảo trì',

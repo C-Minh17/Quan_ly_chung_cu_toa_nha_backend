@@ -131,3 +131,16 @@ export const completeMaintenance_schedules = async (id) => {
 
     return { completed: schedule }
 }
+
+export const getMaintenanceSchedulesByEmployee = async (employeeId) => {
+    const employee = await User.findById(employeeId)
+    if (!employee) {
+        abort(404, 'Employee not found')
+    }
+    if (employee.role !== 'STAFF') {
+        abort(400, 'Assigned user must be a STAFF')
+    }
+
+    const res = await MaintenanceSchedules.find({ assigned_to: employeeId }).populate('assigned_to').lean()
+    return res
+}
