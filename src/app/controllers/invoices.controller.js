@@ -86,12 +86,24 @@ export const getMyInvoiceByIdController = async (req, res) => {
 
 export const getOverdueInvoicesController = async (req, res) => {
     try {
-        const data = await invoicesService.getOverdueInvoices()
+        const limit = req.query.limit ? parseInt(req.query.limit, 10) : 5
+        const data = await invoicesService.getOverdueInvoices({ limit })
         return res.status(200).json({ success: true, data })
     } catch (err) {
         return res.status(err.status || 500).json({ success: false, message: err.message, error: err.message })
     }
 }
+
+export const getRevenueStatsController = async (req, res) => {
+    try {
+        const monthsLimit = req.query.months_limit ? parseInt(req.query.months_limit, 10) : 6
+        const data = await invoicesService.getRevenueStats({ monthsLimit })
+        return res.status(200).json({ success: true, data })
+    } catch (err) {
+        return res.status(err.status || 500).json({ success: false, message: err.message, error: err.message })
+    }
+}
+
 
 export const exportInvoicePDFController = async (req, res) => {
     try {

@@ -18,11 +18,22 @@ import paymentsRouter from './payments.router'
 import amenitiesRouter from './amenities.router'
 import amenityBookingsRouter from './amenity-bookings.router'
 import notificationRouter from './notification.router'
+import dashboardRouter from './dashboard.router'
 
 function route(app) {
     const apiPrefix = process.env.API_PREFIX || '/api/v1'
     app.use(`${apiPrefix}/notification`, notificationRouter)
     app.use('/notification', notificationRouter)
+
+    app.use(`${apiPrefix}/dashboard`, dashboardRouter)
+    app.use('/dashboard', dashboardRouter)
+
+    app.use(`${apiPrefix}/invoices`, invoicesRouter)
+    app.use('/invoices', invoicesRouter)
+
+    app.use(`${apiPrefix}/maintenance-requests`, maintenanceRequestsRouter)
+    app.use('/maintenance-requests', maintenanceRequestsRouter)
+    app.use('/maintenancerequests', maintenanceRequestsRouter)
 
     app.use('/admin', admin)
     app.use('/user', userProfileRouter)
@@ -36,10 +47,8 @@ function route(app) {
     app.use('/file', fileRouter)
     app.use('/vehicles', vehicleRouter)
     app.use('/feeType', feeTypeRouter)
-    app.use('/maintenancerequests', maintenanceRequestsRouter)
     app.use('/maintenance-schedules', maintenanceSchedulesRouter)
     app.use('/utilityreading', utilityReadingRouter)
-    app.use('/invoices', invoicesRouter)
     app.use('/payments', paymentsRouter)
     app.use('/amenities', amenitiesRouter)
     app.use('/amenity-bookings', amenityBookingsRouter)

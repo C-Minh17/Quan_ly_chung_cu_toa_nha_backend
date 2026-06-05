@@ -14,6 +14,7 @@ router.get('/me', asyncHandler(checkValidToken), asyncHandler(invoicesController
 router.get('/me/:id', asyncHandler(checkValidToken), asyncHandler(invoicesController.getMyInvoiceByIdController))
 
 router.get('/overdue', asyncHandler(invoicesController.getOverdueInvoicesController))
+router.get('/stats/revenue', asyncHandler(invoicesController.getRevenueStatsController))
 
 router.get('/:id', asyncHandler(invoicesController.getInvoiceByIdController))
 router.get('/:id/pdf', asyncHandler(invoicesController.exportInvoicePDFController))

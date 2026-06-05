@@ -2004,14 +2004,72 @@ export const swaggerMaintenanceRequestsPaths = {
     },
     '/maintenancerequests/stats': {
         get: {
-            summary: 'Thống kê yêu cầu bảo trì',
+            summary: 'Thống kê trạng thái bảo trì (Maintenance Status Stats)',
+            tags: ['Maintenance Requests'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'object',
+                                        properties: {
+                                            new: { type: 'integer', example: 4 },
+                                            in_progress: { type: 'integer', example: 6 },
+                                            completed: { type: 'integer', example: 12 },
+                                            closed: { type: 'integer', example: 2 }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/maintenancerequests/urgent': {
+        get: {
+            summary: 'Lấy danh sách yêu cầu bảo trì khẩn cấp (Urgent Maintenance)',
             tags: ['Maintenance Requests'],
             security: [{ bearerAuth: [] }],
             parameters: [
-                { name: 'startDate', in: 'query', schema: { type: 'string', format: 'date' } },
-                { name: 'endDate', in: 'query', schema: { type: 'string', format: 'date' } }
+                { name: 'limit', in: 'query', schema: { type: 'integer', default: 5 }, description: 'Số lượng bản ghi tối đa trả về' }
             ],
-            responses: { 200: { description: 'Thành công' } }
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'string', example: 'req_689f81' },
+                                                apartment_code: { type: 'string', example: 'P.1205 (Tòa A)' },
+                                                title: { type: 'string', example: 'Hỏng đường ống nước nhà vệ sinh' },
+                                                priority: { type: 'string', example: 'urgent' },
+                                                status: { type: 'string', example: 'in_progress' },
+                                                created_at: { type: 'string', example: '2026-06-05T08:00:00Z' }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     '/maintenancerequests/me': {
@@ -2577,10 +2635,89 @@ export const swaggerInvoicesPaths = {
     },
     '/invoices/overdue': {
         get: {
-            summary: 'Lấy danh sách hóa đơn quá hạn',
+            summary: 'Lấy danh sách hóa đơn quá hạn chưa thanh toán (Overdue Invoices)',
             tags: ['Invoices'],
             security: [{ bearerAuth: [] }],
-            responses: { 200: { description: 'Thành công' } }
+            parameters: [
+                { name: 'limit', in: 'query', schema: { type: 'integer', default: 5 }, description: 'Số lượng bản ghi tối đa trả về' }
+            ],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'string', example: 'inv_712a1' },
+                                                apartment_code: { type: 'string', example: 'P.1402 (Tòa A)' },
+                                                resident_name: { type: 'string', example: 'Nguyễn Văn Nam' },
+                                                due_date: { type: 'string', example: '2026-05-30' },
+                                                total_amount: { type: 'number', example: 2450000 }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/invoices/stats/revenue': {
+        get: {
+            summary: 'Thống kê doanh thu 6 tháng gần nhất (Revenue Charts)',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'months_limit', in: 'query', schema: { type: 'integer', default: 6 }, description: 'Số tháng gần nhất muốn lấy dữ liệu' }
+            ],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'object',
+                                        properties: {
+                                            categories: {
+                                                type: 'array',
+                                                items: { type: 'string' },
+                                                example: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6']
+                                            },
+                                            series: {
+                                                type: 'array',
+                                                items: {
+                                                    type: 'object',
+                                                    properties: {
+                                                        name: { type: 'string', example: 'Hóa đơn phát hành' },
+                                                        data: {
+                                                            type: 'array',
+                                                            items: { type: 'number' },
+                                                            example: [120000000, 135000000, 142000000, 150000000, 148000000, 154200000]
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     '/invoices/{id}': {
@@ -3128,4 +3265,108 @@ export const swaggerNotificationPaths = {
         }
     }
 }
+
+export const swaggerDashboardPaths = {
+    '/dashboard/metrics': {
+        get: {
+            summary: 'Lấy số liệu các thẻ chỉ số (Dashboard Metrics)',
+            tags: ['Dashboard'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'object',
+                                        properties: {
+                                            apartments: {
+                                                type: 'object',
+                                                properties: {
+                                                    total: { type: 'integer', example: 320 },
+                                                    occupied: { type: 'integer', example: 272 },
+                                                    occupied_percentage: { type: 'integer', example: 85 },
+                                                    trend_percentage: { type: 'number', example: 5 }
+                                                }
+                                            },
+                                            residents: {
+                                                type: 'object',
+                                                properties: {
+                                                    total: { type: 'integer', example: 1248 },
+                                                    permanent: { type: 'integer', example: 912 },
+                                                    temporary: { type: 'integer', example: 336 },
+                                                    trend_new: { type: 'integer', example: 12 }
+                                                }
+                                            },
+                                            finance: {
+                                                type: 'object',
+                                                properties: {
+                                                    billing_month_total: { type: 'number', example: 154200000 },
+                                                    paid_amount: { type: 'number', example: 138780000 },
+                                                    paid_percentage: { type: 'integer', example: 90 },
+                                                    trend_percentage: { type: 'number', example: 4.2 }
+                                                }
+                                            },
+                                            maintenance: {
+                                                type: 'object',
+                                                properties: {
+                                                    total_pending: { type: 'integer', example: 12 },
+                                                    urgent_count: { type: 'integer', example: 4 },
+                                                    trend_change: { type: 'integer', example: -2 }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/dashboard/activities': {
+        get: {
+            summary: 'Nhật ký hoạt động gần đây (Recent Activities)',
+            tags: ['Dashboard'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'limit', in: 'query', schema: { type: 'integer', default: 10 }, description: 'Số lượng dòng nhật ký hoạt động' }
+            ],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'integer', example: 1 },
+                                                title: { type: 'string', example: 'Thêm mới cư dân' },
+                                                description: { type: 'string', example: 'Cư dân Lê Hoài An đã đăng ký thường trú tại căn hộ P.0712 Tòa A.' },
+                                                time_ago: { type: 'string', example: '10 phút trước' },
+                                                type: { type: 'string', example: 'user' }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 
