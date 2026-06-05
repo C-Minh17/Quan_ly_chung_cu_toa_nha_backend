@@ -17,8 +17,13 @@ import invoicesRouter from './invoices.router'
 import paymentsRouter from './payments.router'
 import amenitiesRouter from './amenities.router'
 import amenityBookingsRouter from './amenity-bookings.router'
+import notificationRouter from './notification.router'
 
 function route(app) {
+    const apiPrefix = process.env.API_PREFIX || '/api/v1'
+    app.use(`${apiPrefix}/notification`, notificationRouter)
+    app.use('/notification', notificationRouter)
+
     app.use('/admin', admin)
     app.use('/user', userProfileRouter)
     app.use('/user', user)

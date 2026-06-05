@@ -1,6 +1,7 @@
 import { Apartment, FeeTypes, UtilityReading, Invoices, InvoiceDetails, Resident, Contract } from '@/models'
 import { abort } from '@/utils/helpers'
 import mongoose from 'mongoose'
+import { triggerAutomaticNotification } from './notification.service'
 
 // Helper function: Tách ID và object cho các field liên kết (building_id, floor_id, apartment_id, etc) - xử lý recursive
 const flattenRelationships = (obj) => {
@@ -210,6 +211,9 @@ export const generateMonthlyInvoices = async ({ billing_month, billing_year }) =
 
             await session.commitTransaction()
             session.endSession()
+            
+            triggerAutomaticNotification('INVOICE_CREATED', { invoice: newInvoice })
+            
             results.success++
 
         } catch (error) {
@@ -366,6 +370,8 @@ export const createInvoice = async (data) => {
 
         await session.commitTransaction()
         session.endSession()
+
+        triggerAutomaticNotification('INVOICE_CREATED', { invoice: newInvoice })
 
         return newInvoice
     } catch (error) {

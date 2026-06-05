@@ -1,6 +1,7 @@
 import { Invoices, InvoiceDetails, Payments, Resident } from '@/models'
 import { abort } from '@/utils/helpers'
 import mongoose from 'mongoose'
+import { triggerAutomaticNotification } from './notification.service'
 
 export const lookupInvoice = async ({ invoice_code, apartment_id, billing_month, billing_year }) => {
     const query = {}
@@ -99,6 +100,10 @@ export const createPayment = async (data) => {
 
         await session.commitTransaction()
         session.endSession()
+
+        if (invoice.status === 'paid') {
+            triggerAutomaticNotification('INVOICE_PAID', { invoice })
+        }
 
         return payment
     } catch (error) {

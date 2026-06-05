@@ -2973,3 +2973,159 @@ export const swaggerAmenityBookingsPaths = {
         }
     }
 }
+
+export const swaggerNotificationPaths = {
+    '/notification': {
+        post: {
+            summary: 'Tạo thông báo mới (Admin)',
+            tags: ['Notifications'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'x-data-partition-code', in: 'header', required: false, schema: { type: 'string' }, description: 'Mã phân vùng tòa nhà' }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                title: { type: 'string', example: 'Thông báo bảo trì thang máy' },
+                                description: { type: 'string', example: 'Bảo trì thang máy tòa A từ 8h - 11h' },
+                                content: { type: 'string', example: '<p>Nội dung chi tiết...</p>' },
+                                type: { type: 'string', enum: ['OneSignalService', 'Email', 'All'], example: 'OneSignalService' },
+                                receiverType: { type: 'string', enum: ['All', 'User'], example: 'All' },
+                                userList: {
+                                    type: 'array',
+                                    items: {
+                                        type: 'object',
+                                        properties: {
+                                            ssoId: { type: 'string', example: 'user_id_1' },
+                                            username: { type: 'string', example: 'dan_cu_A' },
+                                            fullname: { type: 'string', example: 'Nguyễn Văn A' }
+                                        }
+                                    }
+                                },
+                                imageUrl: { type: 'string', example: 'https://...' },
+                                taiLieuDinhKem: { type: 'array', items: { type: 'string' }, example: ['https://...'] },
+                                thoiGianHieuLuc: { type: 'string', format: 'date-time', example: '2026-06-10T00:00:00.000Z' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Tạo thông báo thành công' }
+            }
+        }
+    },
+    '/notification/page': {
+        get: {
+            summary: 'Lấy danh sách thông báo phân trang (Admin)',
+            tags: ['Notifications'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'x-data-partition-code', in: 'header', required: false, schema: { type: 'string' } },
+                { name: 'page', in: 'query', schema: { type: 'integer', default: 1 } },
+                { name: 'limit', in: 'query', schema: { type: 'integer', default: 10 } },
+                { name: 'condition', in: 'query', schema: { type: 'string' }, description: 'JSON string. E.g. {"notificationInternal": false}' },
+                { name: 'sort', in: 'query', schema: { type: 'string' }, description: 'JSON string. E.g. {"createdAt": -1}' }
+            ],
+            responses: {
+                200: { description: 'Thành công' }
+            }
+        }
+    },
+    '/notification/{id}': {
+        delete: {
+            summary: 'Xóa thông báo (Admin)',
+            tags: ['Notifications'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: {
+                200: { description: 'Thành công' }
+            }
+        }
+    },
+    '/notification/{id}/receiver/page': {
+        get: {
+            summary: 'Lấy danh sách người nhận của thông báo (Admin)',
+            tags: ['Notifications'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } },
+                { name: 'page', in: 'query', schema: { type: 'integer', default: 1 } },
+                { name: 'limit', in: 'query', schema: { type: 'integer', default: 10 } }
+            ],
+            responses: {
+                200: { description: 'Thành công' }
+            }
+        }
+    },
+    '/notification/onesignal/init': {
+        post: {
+            summary: 'Đăng ký/Cập nhật OneSignal Player ID (Client)',
+            tags: ['Notifications'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                playerId: { type: 'string', example: 'onesignal-player-id-here' },
+                                deviceType: { type: 'string', enum: ['Web', 'Android', 'iOS'], example: 'Web' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Thành công' }
+            }
+        }
+    },
+    '/notification/me/page': {
+        get: {
+            summary: 'Lấy danh sách thông báo cá nhân (Client)',
+            tags: ['Notifications'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'x-data-partition-code', in: 'header', required: false, schema: { type: 'string' } },
+                { name: 'page', in: 'query', schema: { type: 'integer', default: 1 } },
+                { name: 'limit', in: 'query', schema: { type: 'integer', default: 10 } }
+            ],
+            responses: {
+                200: { description: 'Thành công' }
+            }
+        }
+    },
+    '/notification/read': {
+        post: {
+            summary: 'Đánh dấu đã đọc thông báo (Client)',
+            tags: ['Notifications'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                type: { type: 'string', enum: ['ONE', 'ALL'], example: 'ONE' },
+                                notificationId: { type: 'string', example: 'receiver_record_id' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Thành công' }
+            }
+        }
+    }
+}
+

@@ -1,5 +1,6 @@
 import { MaintenanceRequests, Resident } from '@/models'
 import { abort } from '@/utils/helpers'
+import { triggerAutomaticNotification } from './notification.service'
 
 export const getMaintenance_requests = async () => {
     const res = await MaintenanceRequests.find().populate('resident_id').lean()
@@ -32,6 +33,7 @@ export const createMaintenance_requests = async (data) => {
 
 
     const res = await MaintenanceRequests.create(data)
+    triggerAutomaticNotification('MAINTENANCE_CREATED', { request: res })
     const populate = await MaintenanceRequests.findById(res._id)
         .populate([
             { path: 'apartment_id' },
@@ -75,6 +77,7 @@ export const assignMaintenance_requests = async (id, data) => {
     if (!res) {
         abort(404, 'MaintenanceRequests not found')
     }
+    triggerAutomaticNotification('MAINTENANCE_ASSIGNED', { request: res })
     res.resident = res.resident_id
     res.resident_id = res.resident ? res.resident._id : null
     return res
