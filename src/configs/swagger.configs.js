@@ -2004,14 +2004,72 @@ export const swaggerMaintenanceRequestsPaths = {
     },
     '/maintenancerequests/stats': {
         get: {
-            summary: 'Thống kê yêu cầu bảo trì',
+            summary: 'Thống kê trạng thái bảo trì (Maintenance Status Stats)',
+            tags: ['Maintenance Requests'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'object',
+                                        properties: {
+                                            new: { type: 'integer', example: 4 },
+                                            in_progress: { type: 'integer', example: 6 },
+                                            completed: { type: 'integer', example: 12 },
+                                            closed: { type: 'integer', example: 2 }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/maintenancerequests/urgent': {
+        get: {
+            summary: 'Lấy danh sách yêu cầu bảo trì khẩn cấp (Urgent Maintenance)',
             tags: ['Maintenance Requests'],
             security: [{ bearerAuth: [] }],
             parameters: [
-                { name: 'startDate', in: 'query', schema: { type: 'string', format: 'date' } },
-                { name: 'endDate', in: 'query', schema: { type: 'string', format: 'date' } }
+                { name: 'limit', in: 'query', schema: { type: 'integer', default: 5 }, description: 'Số lượng bản ghi tối đa trả về' }
             ],
-            responses: { 200: { description: 'Thành công' } }
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'string', example: 'req_689f81' },
+                                                apartment_code: { type: 'string', example: 'P.1205 (Tòa A)' },
+                                                title: { type: 'string', example: 'Hỏng đường ống nước nhà vệ sinh' },
+                                                priority: { type: 'string', example: 'urgent' },
+                                                status: { type: 'string', example: 'in_progress' },
+                                                created_at: { type: 'string', example: '2026-06-05T08:00:00Z' }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     '/maintenancerequests/me': {
@@ -2184,6 +2242,17 @@ export const swaggerMaintenanceSchedulesPaths = {
                 }
             },
             responses: { 200: { description: 'Tạo lịch bảo trì thành công' } }
+        }
+    },
+    '/maintenance-schedules/employee/{employeeId}': {
+        get: {
+            summary: 'Lấy danh sách lịch bảo trì được giao cho nhân viên',
+            tags: ['Maintenance Schedules'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'employeeId', in: 'path', required: true, schema: { type: 'string' }, description: 'ID của nhân viên (STAFF)' }
+            ],
+            responses: { 200: { description: 'Thành công' } }
         }
     },
     '/maintenance-schedules/{id}': {
@@ -2566,10 +2635,89 @@ export const swaggerInvoicesPaths = {
     },
     '/invoices/overdue': {
         get: {
-            summary: 'Lấy danh sách hóa đơn quá hạn',
+            summary: 'Lấy danh sách hóa đơn quá hạn chưa thanh toán (Overdue Invoices)',
             tags: ['Invoices'],
             security: [{ bearerAuth: [] }],
-            responses: { 200: { description: 'Thành công' } }
+            parameters: [
+                { name: 'limit', in: 'query', schema: { type: 'integer', default: 5 }, description: 'Số lượng bản ghi tối đa trả về' }
+            ],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'string', example: 'inv_712a1' },
+                                                apartment_code: { type: 'string', example: 'P.1402 (Tòa A)' },
+                                                resident_name: { type: 'string', example: 'Nguyễn Văn Nam' },
+                                                due_date: { type: 'string', example: '2026-05-30' },
+                                                total_amount: { type: 'number', example: 2450000 }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/invoices/stats/revenue': {
+        get: {
+            summary: 'Thống kê doanh thu 6 tháng gần nhất (Revenue Charts)',
+            tags: ['Invoices'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'months_limit', in: 'query', schema: { type: 'integer', default: 6 }, description: 'Số tháng gần nhất muốn lấy dữ liệu' }
+            ],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'object',
+                                        properties: {
+                                            categories: {
+                                                type: 'array',
+                                                items: { type: 'string' },
+                                                example: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6']
+                                            },
+                                            series: {
+                                                type: 'array',
+                                                items: {
+                                                    type: 'object',
+                                                    properties: {
+                                                        name: { type: 'string', example: 'Hóa đơn phát hành' },
+                                                        data: {
+                                                            type: 'array',
+                                                            items: { type: 'number' },
+                                                            example: [120000000, 135000000, 142000000, 150000000, 148000000, 154200000]
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     '/invoices/{id}': {
@@ -2962,3 +3110,620 @@ export const swaggerAmenityBookingsPaths = {
         }
     }
 }
+
+export const swaggerNotificationPaths = {
+    '/notification': {
+        post: {
+            summary: 'Tạo thông báo mới (Admin)',
+            tags: ['Notifications'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'x-data-partition-code', in: 'header', required: false, schema: { type: 'string' }, description: 'Mã phân vùng tòa nhà' }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                title: { type: 'string', example: 'Thông báo bảo trì thang máy' },
+                                description: { type: 'string', example: 'Bảo trì thang máy tòa A từ 8h - 11h' },
+                                content: { type: 'string', example: '<p>Nội dung chi tiết...</p>' },
+                                type: { type: 'string', enum: ['OneSignalService', 'Email', 'All'], example: 'OneSignalService' },
+                                receiverType: { type: 'string', enum: ['All', 'User'], example: 'All' },
+                                userList: {
+                                    type: 'array',
+                                    items: {
+                                        type: 'object',
+                                        properties: {
+                                            ssoId: { type: 'string', example: 'user_id_1' },
+                                            username: { type: 'string', example: 'dan_cu_A' },
+                                            fullname: { type: 'string', example: 'Nguyễn Văn A' }
+                                        }
+                                    }
+                                },
+                                imageUrl: { type: 'string', example: 'https://...' },
+                                taiLieuDinhKem: { type: 'array', items: { type: 'string' }, example: ['https://...'] },
+                                thoiGianHieuLuc: { type: 'string', format: 'date-time', example: '2026-06-10T00:00:00.000Z' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Tạo thông báo thành công' }
+            }
+        }
+    },
+    '/notification/page': {
+        get: {
+            summary: 'Lấy danh sách thông báo phân trang (Admin)',
+            tags: ['Notifications'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'x-data-partition-code', in: 'header', required: false, schema: { type: 'string' } },
+                { name: 'page', in: 'query', schema: { type: 'integer', default: 1 } },
+                { name: 'limit', in: 'query', schema: { type: 'integer', default: 10 } },
+                { name: 'condition', in: 'query', schema: { type: 'string' }, description: 'JSON string. E.g. {"notificationInternal": false}' },
+                { name: 'sort', in: 'query', schema: { type: 'string' }, description: 'JSON string. E.g. {"createdAt": -1}' }
+            ],
+            responses: {
+                200: { description: 'Thành công' }
+            }
+        }
+    },
+    '/notification/{id}': {
+        delete: {
+            summary: 'Xóa thông báo (Admin)',
+            tags: ['Notifications'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            responses: {
+                200: { description: 'Thành công' }
+            }
+        }
+    },
+    '/notification/{id}/receiver/page': {
+        get: {
+            summary: 'Lấy danh sách người nhận của thông báo (Admin)',
+            tags: ['Notifications'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } },
+                { name: 'page', in: 'query', schema: { type: 'integer', default: 1 } },
+                { name: 'limit', in: 'query', schema: { type: 'integer', default: 10 } }
+            ],
+            responses: {
+                200: { description: 'Thành công' }
+            }
+        }
+    },
+    '/notification/onesignal/init': {
+        post: {
+            summary: 'Đăng ký/Cập nhật OneSignal Player ID (Client)',
+            tags: ['Notifications'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                playerId: { type: 'string', example: 'onesignal-player-id-here' },
+                                deviceType: { type: 'string', enum: ['Web', 'Android', 'iOS'], example: 'Web' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Thành công' }
+            }
+        }
+    },
+    '/notification/me/page': {
+        get: {
+            summary: 'Lấy danh sách thông báo cá nhân (Client)',
+            tags: ['Notifications'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'x-data-partition-code', in: 'header', required: false, schema: { type: 'string' } },
+                { name: 'page', in: 'query', schema: { type: 'integer', default: 1 } },
+                { name: 'limit', in: 'query', schema: { type: 'integer', default: 10 } }
+            ],
+            responses: {
+                200: { description: 'Thành công' }
+            }
+        }
+    },
+    '/notification/read': {
+        post: {
+            summary: 'Đánh dấu đã đọc thông báo (Client)',
+            tags: ['Notifications'],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                type: { type: 'string', enum: ['ONE', 'ALL'], example: 'ONE' },
+                                notificationId: { type: 'string', example: 'receiver_record_id' }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: 'Thành công' }
+            }
+        }
+    }
+}
+
+export const swaggerDashboardPaths = {
+    '/dashboard/metrics': {
+        get: {
+            summary: 'Lấy số liệu các thẻ chỉ số (Dashboard Metrics)',
+            tags: ['Dashboard'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'object',
+                                        properties: {
+                                            apartments: {
+                                                type: 'object',
+                                                properties: {
+                                                    total: { type: 'integer', example: 320 },
+                                                    occupied: { type: 'integer', example: 272 },
+                                                    occupied_percentage: { type: 'integer', example: 85 },
+                                                    trend_percentage: { type: 'number', example: 5 }
+                                                }
+                                            },
+                                            residents: {
+                                                type: 'object',
+                                                properties: {
+                                                    total: { type: 'integer', example: 1248 },
+                                                    permanent: { type: 'integer', example: 912 },
+                                                    temporary: { type: 'integer', example: 336 },
+                                                    trend_new: { type: 'integer', example: 12 }
+                                                }
+                                            },
+                                            finance: {
+                                                type: 'object',
+                                                properties: {
+                                                    billing_month_total: { type: 'number', example: 154200000 },
+                                                    paid_amount: { type: 'number', example: 138780000 },
+                                                    paid_percentage: { type: 'integer', example: 90 },
+                                                    trend_percentage: { type: 'number', example: 4.2 }
+                                                }
+                                            },
+                                            maintenance: {
+                                                type: 'object',
+                                                properties: {
+                                                    total_pending: { type: 'integer', example: 12 },
+                                                    urgent_count: { type: 'integer', example: 4 },
+                                                    trend_change: { type: 'integer', example: -2 }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/dashboard/activities': {
+        get: {
+            summary: 'Nhật ký hoạt động gần đây (Recent Activities)',
+            tags: ['Dashboard'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'limit', in: 'query', schema: { type: 'integer', default: 10 }, description: 'Số lượng dòng nhật ký hoạt động' }
+            ],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'integer', example: 1 },
+                                                title: { type: 'string', example: 'Thêm mới cư dân' },
+                                                description: { type: 'string', example: 'Cư dân Lê Hoài An đã đăng ký thường trú tại căn hộ P.0712 Tòa A.' },
+                                                time_ago: { type: 'string', example: '10 phút trước' },
+                                                type: { type: 'string', example: 'user' }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+export const swaggerResidentDashboardPaths = {
+    '/resident/dashboard/metrics': {
+        get: {
+            summary: 'Lấy thông tin cá nhân & Số liệu thẻ nhanh (Dashboard Metrics)',
+            tags: ['Resident Dashboard'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'object',
+                                        properties: {
+                                            resident_info: {
+                                                type: 'object',
+                                                properties: {
+                                                    name: { type: 'string', example: 'Nguyễn Văn An' },
+                                                    apartment_code: { type: 'string', example: 'P.1205' },
+                                                    floor: { type: 'string', example: 'Tầng 12' },
+                                                    building: { type: 'string', example: 'Tòa Tháp A (Ruby Tower)' },
+                                                    members_count: { type: 'integer', example: 4 },
+                                                    vehicles_summary: { type: 'string', example: '1 Ô tô • 2 Xe máy' }
+                                                }
+                                            },
+                                            metrics: {
+                                                type: 'object',
+                                                properties: {
+                                                    unpaid_amount: { type: 'number', example: 1430000 },
+                                                    total_bills_count: { type: 'integer', example: 5 },
+                                                    paid_bills_count: { type: 'integer', example: 3 },
+                                                    pending_maintenance_count: { type: 'integer', example: 1 },
+                                                    upcoming_bookings_count: { type: 'integer', example: 1 },
+                                                    contract_status: { type: 'string', example: 'active' },
+                                                    contract_expiry_date: { type: 'string', example: '2028-12-31' }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/resident/dashboard/bills': {
+        get: {
+            summary: 'Danh sách chi tiết phí dịch vụ tháng hiện tại (Current Bills)',
+            tags: ['Resident Dashboard'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'string', example: 'bill_01' },
+                                                service: { type: 'string', example: 'Phí quản lý vận hành' },
+                                                amount: { type: 'number', example: 855000 },
+                                                status: { type: 'string', example: 'paid' }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/resident/dashboard/bookings': {
+        get: {
+            summary: 'Danh sách đặt tiện ích sắp tới (Upcoming Bookings)',
+            tags: ['Resident Dashboard'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'string', example: 'book_01' },
+                                                amenity_name: { type: 'string', example: 'Bếp nướng BBQ ngoài trời (Khu công viên)' },
+                                                time_slot: { type: 'string', example: '18:00 - 21:00, Thứ Bảy 06/06/2026' },
+                                                status: { type: 'string', example: 'approved' }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/resident/dashboard/maintenance': {
+        get: {
+            summary: 'Tiến trình xử lý báo hỏng kỹ thuật (Maintenance Requests)',
+            tags: ['Resident Dashboard'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'string', example: 'req-01' },
+                                                title: { type: 'string', example: 'Thay vòi nước bồn rửa bát bị rò rỉ' },
+                                                date: { type: 'string', example: '2026-06-03' },
+                                                status: { type: 'string', example: 'in_progress' },
+                                                status_text: { type: 'string', example: 'Đang xử lý' }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+export const swaggerStaffDashboardPaths = {
+    '/staff/dashboard/metrics': {
+        get: {
+            summary: 'Lấy thông tin nhân viên & Số liệu thống kê nhanh (Dashboard Metrics & Info)',
+            tags: ['Staff Dashboard'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'object',
+                                        properties: {
+                                            staff_info: {
+                                                type: 'object',
+                                                properties: {
+                                                    name: { type: 'string', example: 'Trần Minh Quân' },
+                                                    role: { type: 'string', example: 'Nhân viên vận hành' },
+                                                    phone: { type: 'string', example: '0987.654.321' }
+                                                }
+                                            },
+                                            metrics: {
+                                                type: 'object',
+                                                properties: {
+                                                    recorded_meters: { type: 'integer', example: 42 },
+                                                    total_meters: { type: 'integer', example: 120 },
+                                                    pending_repairs: { type: 'integer', example: 5 },
+                                                    occupied_apartments: { type: 'integer', example: 112 },
+                                                    total_apartments: { type: 'integer', example: 120 },
+                                                    today_tasks_done: { type: 'integer', example: 3 },
+                                                    today_tasks_total: { type: 'integer', example: 6 }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/staff/dashboard/tasks': {
+        get: {
+            summary: 'Lấy danh sách nhiệm vụ ca trực (Daily Checklist)',
+            tags: ['Staff Dashboard'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'string', example: '662b2e88a38a7c2e39130001' },
+                                                text: { type: 'string', example: 'Ghi chỉ số nước khu vực tầng 1 - 5 tòa A' },
+                                                completed: { type: 'boolean', example: true },
+                                                priority: { type: 'string', example: 'high' },
+                                                category: { type: 'string', example: 'Điện nước' }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/staff/dashboard/tasks/{id}': {
+        put: {
+            summary: 'Cập nhật trạng thái công việc checklist (Toggle Task Status)',
+            tags: ['Staff Dashboard'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                completed: { type: 'boolean', example: true }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    message: { type: 'string', example: 'Cập nhật trạng thái công việc thành công' }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        patch: {
+            summary: 'Cập nhật trạng thái công việc checklist (Toggle Task Status)',
+            tags: ['Staff Dashboard'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                completed: { type: 'boolean', example: true }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    message: { type: 'string', example: 'Cập nhật trạng thái công việc thành công' }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/staff/dashboard/recent-logs': {
+        get: {
+            summary: 'Lấy nhật ký ghi chỉ số điện nước gần đây (Recent Recording Logs)',
+            tags: ['Staff Dashboard'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'limit', in: 'query', required: false, schema: { type: 'integer', default: 5 }, description: 'Giới hạn số lượng bản ghi trả về' }
+            ],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'string', example: '662b2e88a38a7c2e39130001' },
+                                                apartment: { type: 'string', example: 'A-302' },
+                                                type: { type: 'string', example: 'Điện' },
+                                                value: { type: 'string', example: '1,245 kWh' },
+                                                time: { type: 'string', example: '06/06/2026 09:45' },
+                                                status: { type: 'string', example: 'saved' }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+

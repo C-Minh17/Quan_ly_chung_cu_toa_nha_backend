@@ -1,5 +1,6 @@
 import { MaintenanceRequests, Resident } from '@/models'
 import { abort } from '@/utils/helpers'
+import { triggerAutomaticNotification } from './notification.service'
 
 export const getMaintenance_requests = async () => {
     const res = await MaintenanceRequests.find().populate('resident_id').lean()
@@ -32,6 +33,7 @@ export const createMaintenance_requests = async (data) => {
 
 
     const res = await MaintenanceRequests.create(data)
+    triggerAutomaticNotification('MAINTENANCE_CREATED', { request: res })
     const populate = await MaintenanceRequests.findById(res._id)
         .populate([
             { path: 'apartment_id' },
@@ -75,6 +77,7 @@ export const assignMaintenance_requests = async (id, data) => {
     if (!res) {
         abort(404, 'MaintenanceRequests not found')
     }
+    triggerAutomaticNotification('MAINTENANCE_ASSIGNED', { request: res })
     res.resident = res.resident_id
     res.resident_id = res.resident ? res.resident._id : null
     return res
@@ -198,3 +201,57 @@ export const deleteMaintenance_requests = async (id) => {
     }
     return res
 }
+
+export const getMaintenanceStatusStats = async () => {
+    const counts = await MaintenanceRequests.aggregate([
+        {
+            $group: {
+                _id: '$status',
+                count: { $sum: 1 }
+            }
+        }
+    ])
+
+    const result = {
+        new: 0,
+        in_progress: 0,
+        completed: 0,
+        closed: 0
+    }
+
+    counts.forEach(c => {
+        const status = c._id
+        const count = c.count
+        if (status === 'new') {
+            result.new = count
+        } else if (status === 'assigned' || status === 'in_progress') {
+            result.in_progress += count
+        } else if (status === 'completed') {
+            result.completed = count
+        } else if (status === 'closed') {
+            result.closed = count
+        }
+    })
+
+    return result
+}
+
+export const getUrgentMaintenanceRequests = async ({ limit = 5 } = {}) => {
+    const requests = await MaintenanceRequests.find({
+        status: { $in: ['new', 'assigned', 'in_progress'] },
+        priority: { $in: ['urgent', 'high'] }
+    })
+        .populate('apartment_id')
+        .sort({ created_at: -1 })
+        .limit(limit)
+        .lean()
+
+    return requests.map(req => ({
+        id: req._id.toString(),
+        apartment_code: req.apartment_id ? req.apartment_id.apartment_code : '',
+        title: req.title || '',
+        priority: req.priority,
+        status: req.status,
+        created_at: req.created_at
+    }))
+}

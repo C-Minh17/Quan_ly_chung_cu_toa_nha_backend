@@ -155,11 +155,10 @@ export const getMyMaintenanceRequestsController = async (req, res) => {
 
 export const getMaintenanceStatsController = async (req, res) => {
     try {
-        const data = await maintenaceRequestsService.getMaintenanceStats(req.query)
+        const data = await maintenaceRequestsService.getMaintenanceStatusStats()
         return res.status(200).json({
             success: true,
-            message: 'Get stats successfully',
-            data: data
+            data
         })
     } catch (err) {
         return res.status(err.status || 500).json({
@@ -169,6 +168,24 @@ export const getMaintenanceStatsController = async (req, res) => {
         })
     }
 }
+
+export const getUrgentMaintenanceRequestsController = async (req, res) => {
+    try {
+        const limit = req.query.limit ? parseInt(req.query.limit, 10) : 5
+        const data = await maintenaceRequestsService.getUrgentMaintenanceRequests({ limit })
+        return res.status(200).json({
+            success: true,
+            data
+        })
+    } catch (err) {
+        return res.status(err.status || 500).json({
+            success: false,
+            message: err.message || 'Get urgent requests failed',
+            error: err.message
+        })
+    }
+}
+
 
 export const deleteMaintenanceRequestsController = async (req,res) => {
     try {

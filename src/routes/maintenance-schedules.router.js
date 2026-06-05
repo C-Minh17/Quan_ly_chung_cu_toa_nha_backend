@@ -3,11 +3,12 @@ import validate from '@/app/middleware/admin/validate'
 import { checkMaintenanceSchedulesId } from '@/app/middleware/maintenance-schedules.middleware'
 import { createItem, updateItem, completeItem } from '@/app/requests/maintenance-schedules.request'
 
-import { getMaintenanceSchedulesController, postMaintenanceSchedulesController, getByIdMaintenanceSchedulesController, updateMaintenanceSchedulesController, deleteMaintenanceSchedulesController, completeMaintenanceSchedulesController } from '@/app/controllers/maintenance-schedules.controller'
+import { getMaintenanceSchedulesController, postMaintenanceSchedulesController, getByIdMaintenanceSchedulesController, updateMaintenanceSchedulesController, deleteMaintenanceSchedulesController, completeMaintenanceSchedulesController, getByEmployeeMaintenanceSchedulesController } from '@/app/controllers/maintenance-schedules.controller'
 
 const router = Router()
 
 router.get('/', getMaintenanceSchedulesController)
+router.get('/employee/:employeeId', getByEmployeeMaintenanceSchedulesController)
 router.post('/', validate(createItem), postMaintenanceSchedulesController)
 router.get('/:id', checkMaintenanceSchedulesId, getByIdMaintenanceSchedulesController)
 router.put('/:id', checkMaintenanceSchedulesId, validate(updateItem), updateMaintenanceSchedulesController)
