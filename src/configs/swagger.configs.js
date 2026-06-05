@@ -3369,4 +3369,161 @@ export const swaggerDashboardPaths = {
     }
 }
 
+export const swaggerResidentDashboardPaths = {
+    '/resident/dashboard/metrics': {
+        get: {
+            summary: 'Lấy thông tin cá nhân & Số liệu thẻ nhanh (Dashboard Metrics)',
+            tags: ['Resident Dashboard'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'object',
+                                        properties: {
+                                            resident_info: {
+                                                type: 'object',
+                                                properties: {
+                                                    name: { type: 'string', example: 'Nguyễn Văn An' },
+                                                    apartment_code: { type: 'string', example: 'P.1205' },
+                                                    floor: { type: 'string', example: 'Tầng 12' },
+                                                    building: { type: 'string', example: 'Tòa Tháp A (Ruby Tower)' },
+                                                    members_count: { type: 'integer', example: 4 },
+                                                    vehicles_summary: { type: 'string', example: '1 Ô tô • 2 Xe máy' }
+                                                }
+                                            },
+                                            metrics: {
+                                                type: 'object',
+                                                properties: {
+                                                    unpaid_amount: { type: 'number', example: 1430000 },
+                                                    total_bills_count: { type: 'integer', example: 5 },
+                                                    paid_bills_count: { type: 'integer', example: 3 },
+                                                    pending_maintenance_count: { type: 'integer', example: 1 },
+                                                    upcoming_bookings_count: { type: 'integer', example: 1 },
+                                                    contract_status: { type: 'string', example: 'active' },
+                                                    contract_expiry_date: { type: 'string', example: '2028-12-31' }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/resident/dashboard/bills': {
+        get: {
+            summary: 'Danh sách chi tiết phí dịch vụ tháng hiện tại (Current Bills)',
+            tags: ['Resident Dashboard'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'string', example: 'bill_01' },
+                                                service: { type: 'string', example: 'Phí quản lý vận hành' },
+                                                amount: { type: 'number', example: 855000 },
+                                                status: { type: 'string', example: 'paid' }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/resident/dashboard/bookings': {
+        get: {
+            summary: 'Danh sách đặt tiện ích sắp tới (Upcoming Bookings)',
+            tags: ['Resident Dashboard'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'string', example: 'book_01' },
+                                                amenity_name: { type: 'string', example: 'Bếp nướng BBQ ngoài trời (Khu công viên)' },
+                                                time_slot: { type: 'string', example: '18:00 - 21:00, Thứ Bảy 06/06/2026' },
+                                                status: { type: 'string', example: 'approved' }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/resident/dashboard/maintenance': {
+        get: {
+            summary: 'Tiến trình xử lý báo hỏng kỹ thuật (Maintenance Requests)',
+            tags: ['Resident Dashboard'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'string', example: 'req-01' },
+                                                title: { type: 'string', example: 'Thay vòi nước bồn rửa bát bị rò rỉ' },
+                                                date: { type: 'string', example: '2026-06-03' },
+                                                status: { type: 'string', example: 'in_progress' },
+                                                status_text: { type: 'string', example: 'Đang xử lý' }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 
