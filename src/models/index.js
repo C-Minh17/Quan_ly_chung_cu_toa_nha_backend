@@ -28,5 +28,7 @@ export { default as AmenityBooking } from './amenity-bookings'
 export { default as Notification } from './notification'
 export { default as NotificationReceiver } from './notification-receiver'
 export { default as UserDevice } from './user-device'
+export { default as StaffTask } from './staff-task'
+
 
 

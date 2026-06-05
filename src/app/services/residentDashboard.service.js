@@ -1,4 +1,4 @@
-import { Resident, Apartment, Invoices, InvoiceDetails, AmenityBooking, MaintenanceRequests, Vehicle, Contract } from '@/models'
+import { Resident, Invoices, InvoiceDetails, AmenityBooking, MaintenanceRequests, Vehicle, Contract } from '@/models'
 import { abort } from '@/utils/helpers'
 
 const formatTimeSlot = (startTime, endTime) => {

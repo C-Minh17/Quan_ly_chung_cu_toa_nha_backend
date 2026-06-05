@@ -3525,5 +3525,205 @@ export const swaggerResidentDashboardPaths = {
     }
 }
 
+export const swaggerStaffDashboardPaths = {
+    '/staff/dashboard/metrics': {
+        get: {
+            summary: 'Lấy thông tin nhân viên & Số liệu thống kê nhanh (Dashboard Metrics & Info)',
+            tags: ['Staff Dashboard'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'object',
+                                        properties: {
+                                            staff_info: {
+                                                type: 'object',
+                                                properties: {
+                                                    name: { type: 'string', example: 'Trần Minh Quân' },
+                                                    role: { type: 'string', example: 'Nhân viên vận hành' },
+                                                    phone: { type: 'string', example: '0987.654.321' }
+                                                }
+                                            },
+                                            metrics: {
+                                                type: 'object',
+                                                properties: {
+                                                    recorded_meters: { type: 'integer', example: 42 },
+                                                    total_meters: { type: 'integer', example: 120 },
+                                                    pending_repairs: { type: 'integer', example: 5 },
+                                                    occupied_apartments: { type: 'integer', example: 112 },
+                                                    total_apartments: { type: 'integer', example: 120 },
+                                                    today_tasks_done: { type: 'integer', example: 3 },
+                                                    today_tasks_total: { type: 'integer', example: 6 }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/staff/dashboard/tasks': {
+        get: {
+            summary: 'Lấy danh sách nhiệm vụ ca trực (Daily Checklist)',
+            tags: ['Staff Dashboard'],
+            security: [{ bearerAuth: [] }],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'string', example: '662b2e88a38a7c2e39130001' },
+                                                text: { type: 'string', example: 'Ghi chỉ số nước khu vực tầng 1 - 5 tòa A' },
+                                                completed: { type: 'boolean', example: true },
+                                                priority: { type: 'string', example: 'high' },
+                                                category: { type: 'string', example: 'Điện nước' }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/staff/dashboard/tasks/{id}': {
+        put: {
+            summary: 'Cập nhật trạng thái công việc checklist (Toggle Task Status)',
+            tags: ['Staff Dashboard'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                completed: { type: 'boolean', example: true }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    message: { type: 'string', example: 'Cập nhật trạng thái công việc thành công' }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        patch: {
+            summary: 'Cập nhật trạng thái công việc checklist (Toggle Task Status)',
+            tags: ['Staff Dashboard'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                completed: { type: 'boolean', example: true }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    message: { type: 'string', example: 'Cập nhật trạng thái công việc thành công' }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/staff/dashboard/recent-logs': {
+        get: {
+            summary: 'Lấy nhật ký ghi chỉ số điện nước gần đây (Recent Recording Logs)',
+            tags: ['Staff Dashboard'],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                { name: 'limit', in: 'query', required: false, schema: { type: 'integer', default: 5 }, description: 'Giới hạn số lượng bản ghi trả về' }
+            ],
+            responses: {
+                200: {
+                    description: 'Thành công',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean', example: true },
+                                    data: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'string', example: '662b2e88a38a7c2e39130001' },
+                                                apartment: { type: 'string', example: 'A-302' },
+                                                type: { type: 'string', example: 'Điện' },
+                                                value: { type: 'string', example: '1,245 kWh' },
+                                                time: { type: 'string', example: '06/06/2026 09:45' },
+                                                status: { type: 'string', example: 'saved' }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 

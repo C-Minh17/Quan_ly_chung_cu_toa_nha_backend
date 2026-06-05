@@ -20,11 +20,15 @@ import amenityBookingsRouter from './amenity-bookings.router'
 import notificationRouter from './notification.router'
 import dashboardRouter from './dashboard.router'
 import residentDashboardRouter from './residentDashboard.router'
+import staffDashboardRouter from './staffDashboard.router'
 
 function route(app) {
     const apiPrefix = process.env.API_PREFIX || '/api/v1'
     app.use(`${apiPrefix}/resident/dashboard`, residentDashboardRouter)
     app.use('/resident/dashboard', residentDashboardRouter)
+
+    app.use(`${apiPrefix}/staff/dashboard`, staffDashboardRouter)
+    app.use('/staff/dashboard', staffDashboardRouter)
 
     app.use(`${apiPrefix}/notification`, notificationRouter)
     app.use('/notification', notificationRouter)
