@@ -45,15 +45,15 @@ export const createFloor = async (data) => {
     const lastFloor = await Floor.findOne({
         building_id: data.building_id
     })
-        .collation({ locale: 'en_US', numericOrdering: true })
+       
         .sort({ id: -1 })
         .lean()
 
     let nextNumber = 1
 
     if (lastFloor?.id) {
-        const numberPart = lastFloor.id.slice(1)
-        nextNumber = Number(numberPart) + 1
+        const numberPart = lastFloor.id.slice(buildingPrefix.length)
+        nextNumber = Number(numberPart, 10) + 1
     }
 
     data.id = `${buildingPrefix}${String(nextNumber).padStart(3, '0')}`
