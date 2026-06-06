@@ -38,7 +38,26 @@ export const createApartment = async (data) => {
             const lastCodeSuffix = parseInt(lastApartment.apartment_code.slice(-2))
             data.apartment_code = `${floorExists.floor_number}${String(lastCodeSuffix + 1).padStart(2, '0')}`
         } else {
-            data.apartment_code = `${floorExists.floor_number}01`
+            const defaultCode = `${floorExists.floor_number}01`
+            const codeExists = await Apartment.findOne({ apartment_code: defaultCode }).lean()
+
+            if (codeExists) {
+                // Nếu mã "101" đã tồn tại ở tòa khác, tìm mã lớn nhất có tiền tố là số tầng này trên TOÀN HỆ THỐNG để tăng tiến lên
+                const globalLastApartment = await Apartment.findOne({ 
+                    apartment_code: new RegExp(`^${floorExists.floor_number}\\d{2}$`) 
+                })
+                    .sort({ apartment_code: -1 })
+                    .lean()
+
+                if (globalLastApartment) {
+                    const lastCodeSuffix = parseInt(globalLastApartment.apartment_code.slice(-2))
+                    data.apartment_code = `${floorExists.floor_number}${String(lastCodeSuffix + 1).padStart(2, '0')}`
+                } else {
+                    data.apartment_code = defaultCode
+                }
+            } else {
+                data.apartment_code = defaultCode
+            }
         }
     }
 
