@@ -5,9 +5,10 @@ const apartmentSchema = createModel(
     'Apartment',
     'apartments',
     {
-        apartment_code: { type: String, required: true, unique: true },
+        apartment_code: { type: String },
         id: { type: String, required: true, unique: true },
         floor_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Floor', required: true },
+        building_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Building', required: true },
         area: { type: Number, required: true },
         num_bedrooms: { type: Number, required: true },
         num_bathrooms: { type: Number, required: true },
@@ -32,5 +33,6 @@ const apartmentSchema = createModel(
         }
     }
 )
+apartmentSchema.schema.index({ building_id: 1, apartment_code: 1 }, { unique: true })
 
 export default apartmentSchema

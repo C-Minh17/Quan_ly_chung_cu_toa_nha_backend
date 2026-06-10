@@ -15,6 +15,8 @@ export const getApartment = async () => {
 }
 
 export const createApartment = async (data) => {
+
+    await Apartment.syncIndexes()
     if (!data.building_id || !data.floor_id) {
         abort(400, 'Phải truyền building_id và floor_id')
     }
@@ -30,12 +32,17 @@ export const createApartment = async (data) => {
     }
 
     if (!data.apartment_code) {
-        const lastApartment = await Apartment.findOne({ floor_id: data.floor_id })
+        const floorsInBuilding = await Floor.find({ building_id: data.building_id }).select('_id').lean()
+        const floorIds = floorsInBuilding.map(f => f._id)
+        const lastApartmentInBuilding = await Apartment.findOne({
+            floor_id: { $in: floorIds },
+            apartment_code: new RegExp(`^${floorExists.floor_number}\\d{2}$`)
+        })
             .sort({ apartment_code: -1 })
             .lean()
 
-        if (lastApartment) {
-            const lastCodeSuffix = parseInt(lastApartment.apartment_code.slice(-2))
+        if (lastApartmentInBuilding) {
+            const lastCodeSuffix = parseInt(lastApartmentInBuilding.apartment_code.slice(-2))
             data.apartment_code = `${floorExists.floor_number}${String(lastCodeSuffix + 1).padStart(2, '0')}`
         } else {
             data.apartment_code = `${floorExists.floor_number}01`
@@ -67,7 +74,16 @@ export const createApartment = async (data) => {
         return populated
     } catch (error) {
         if (error.code === 11000) {
-            abort(400, 'Mã căn hộ này đã tồn tại trong tòa nhà này')
+            console.log('=== LỖI MONGODB E11000 ===')
+            console.log('Trường bị trùng:', error.keyValue)
+            if (error.keyPattern && error.keyPattern.id) {
+                abort(400, `Lỗi hệ thống: ID ${error.keyValue.id} đã tồn tại! Hãy kiểm tra lại logic sinh ID.`)
+            }
+            if (error.keyPattern && error.keyPattern.apartment_code) {
+                abort(400, `Mã căn hộ ${error.keyValue.apartment_code} đã tồn tại trong tòa nhà này!`)
+            }
+
+            abort(400, 'Dữ liệu bị trùng lặp (Duplicate Key)')
         }
         throw error
     }
