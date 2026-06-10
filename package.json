@@ -13,7 +13,8 @@
     "build": "del-cli build && cross-env NODE_ENV=build babel src -d build -D",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "babel-node test.js"
+    "test": "babel-node test.js",
+    "start:prod": "node build/main.js"
   },
   "dependencies": {
     "@babel/runtime": "^7.24.7",
